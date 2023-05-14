@@ -1,1 +1,4 @@
-console.log ('Hello Worl 131654!');
+import { Board } from './models/board'
+
+const board = new Board()
+board.debug()
