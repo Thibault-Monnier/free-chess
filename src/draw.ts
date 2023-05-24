@@ -3,53 +3,53 @@ import { Board } from './models/board'
 const canvas = document.getElementById('board') as HTMLCanvasElement
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
-function getSquareColors() {
-    const lightSquares = '#f0d9b5'
-    const darkSquares = '#b58863'
-    const squareColors = []
+const squareSize = 80
+const lightSquares = '#f0d9b5'
+const darkSquares = '#b58863'
 
-    for (let i = 0; i < 64; i++) {
-        let square = new Board().squares[i]
-        let squareColor = ((i >> 3) + i) % 2 === 0 ? darkSquares : lightSquares
-        //@ts-ignore
-        squareColors.push(squareColor)
-    }
-    return squareColors
+export function initCanvas() {
+    canvas.height = squareSize * 8
+    canvas.width = squareSize * 8
 }
 
 export function drawBoard() {
-    const squareSize = 80
+    for (let squareNb = 0; squareNb < 64; squareNb++) {
+        const y =
+            canvas.height - squareSize - squareSize * Math.floor(squareNb / 8)
+        const x = squareSize * (squareNb % 8)
 
-    canvas.height = squareSize * 8
-    canvas.width = squareSize * 8
-
-    for (let i = 0; i < 64; i++) {
-        let squareColor = getSquareColors()[i]
-        let y = canvas.height - squareSize - squareSize * Math.floor(i / 8)
-        let x = squareSize * (i % 8)
-
-        ctx.fillStyle = squareColor
+        ctx.fillStyle =
+            getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
         ctx.fillRect(x, y, squareSize, squareSize)
     }
-    drawCoordinates(squareSize)
+    drawCoordinates()
 }
 
-function drawCoordinates(interval = 80) {
-    const fontSize = 18
-    const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    const numbers = ['8', '7', '6', '5', '4', '3', '2', '1']
+function getSquareColor(squareNb: number) {
+    return ((squareNb >> 3) + squareNb) % 2 === 0 ? 'dark' : 'light'
+}
 
+function drawCoordinates() {
+    const fontSize = 18
     ctx.font = `${fontSize}px Arial`
 
     for (let i = 0; i < 8; i++) {
         ctx.fillStyle =
-            i === 0 ? getSquareColors()[i + 1] : getSquareColors()[i - 1]
+            getSquareColor(i) === 'dark' ? lightSquares : darkSquares
         ctx.fillText(
-            letters[i],
-            interval * (i + 1) - fontSize,
+            String.fromCharCode(97 + i),
+            squareSize * (i + 1) - fontSize,
             canvas.height - fontSize * 0.4
         )
-        ctx.fillStyle = i === 0 ? getSquareColors()[i] : getSquareColors()[i]
-        ctx.fillText(numbers[i], fontSize * 0.4, interval * i + fontSize * 1.2)
+    }
+
+    for (let i = 0; i < 8; i++) {
+        ctx.fillStyle =
+            getSquareColor(i * 8) === 'dark' ? lightSquares : darkSquares
+        ctx.fillText(
+            String(i + 1),
+            fontSize * 0.4,
+            squareSize * (7 - i) + fontSize * 1.2
+        )
     }
 }

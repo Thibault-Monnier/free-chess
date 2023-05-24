@@ -1,7 +1,7 @@
 import { Board } from './models/board'
-import { drawBoard } from './draw'
+import { drawBoard, initCanvas } from './draw'
 
-const board = new Board()
-board.debug()
+new Board().debug()
 
+initCanvas()
 drawBoard()

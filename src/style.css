@@ -1,4 +1,11 @@
 body {
-  background-color: #333333;
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
+canvas {
+    border: 5px solid black;
+}
