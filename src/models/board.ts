@@ -1,7 +1,7 @@
-import { King } from './king'
+import { Piece } from './utils'
 
 export class Board {
-    squares: (King | null)[]
+    squares: (Piece | null)[]
 
     constructor() {
         this.squares = []
@@ -11,17 +11,17 @@ export class Board {
     }
 
     debug() {
-        let board = []
+        let debugBoard = []
 
         for (let row = 0; row < 8; row++) {
             //@ts-ignore
-            board[row] = []
+            debugBoard[row] = []
             for (let column = 0; column < 8; column++) {
                 //@ts-ignore
-                board[row].push(this.squares[row * 8 + column])
+                debugBoard[row].push(this.squares[row * 8 + column])
             }
         }
 
-        console.log(board)
+        console.log(debugBoard)
     }
 }

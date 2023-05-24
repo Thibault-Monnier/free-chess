@@ -1,11 +1,22 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Chess</title>
-    <script data-main="dist/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-    <link rel="stylesheet" href="src/style.css" />
-  </head>
-  <body>
-    <canvas id="board"></canvas>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <title>Chess</title>
+        <script
+            data-main="dist/main"
+            src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
+        ></script>
+        <link rel="stylesheet" href="src/style.css" />
+        <style>
+            canvas {
+                border: 5px solid black;
+                position: absolute;
+                left: 30%;
+                top: 2%;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="board"></canvas>
+    </body>
 </html>
