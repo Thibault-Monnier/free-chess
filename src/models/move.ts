@@ -5,8 +5,8 @@ export class Move {
     constructor(
         public piece: Piece,
         public startPosition: number,
-        public endBoard: Board,
-        public notation: string
+        //public endBoard: Board,
+        //public notation: string
     ) {}
 }
 
