@@ -4,7 +4,8 @@ import { Piece } from './utils'
 export class Move {
     constructor(
         public piece: Piece,
-        public startPosition: number,
+        public startSquareNb: number,
+        public endSquareNb: number,
         //public endBoard: Board,
         //public notation: string
     ) {}
