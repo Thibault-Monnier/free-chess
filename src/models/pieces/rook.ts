@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { PieceColor, PieceName } from '../utils'
+import { PieceColor, PieceName } from '../types'
 
 export class Rook {
     public readonly name: PieceName = 'rook'
