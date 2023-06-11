@@ -1,7 +1,8 @@
 import { Board } from './models/board'
 import { drawBoard, initCanvas } from './draw'
-
-const board = new Board()
+import { Chess } from './chess'
 
 initCanvas()
-drawBoard(board)
+
+const chess = new Chess()
+chess.draw()

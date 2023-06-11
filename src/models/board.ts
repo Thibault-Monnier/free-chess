@@ -17,7 +17,7 @@ export class Board {
         this.startingSetup()
     }
 
-    startingSetup(): void {
+    private startingSetup(): void {
         const color = (i: number): PieceColor => (i < 32 ? 'white' : 'black')
 
         for (let i of [0, 7, 56, 63]) this.squares[i] = new Rook(color(i))

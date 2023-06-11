@@ -77,12 +77,17 @@ function squareNbToXY(squareNb: number): { x: number; y: number } {
     }
 }
 
-export function drawBoard(board: Board) {
+export function drawBoard(board: Board, selectedSquareNb: number | null) {
     for (let squareNb = 0; squareNb < 64; squareNb++) {
         const { x, y } = squareNbToXY(squareNb)
         ctx.fillStyle =
             getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
         ctx.fillRect(x, y, squareSize, squareSize)
+
+        if (selectedSquareNb === squareNb) {
+            ctx.fillStyle = 'rgba(200, 200, 30, 0.6)'
+            ctx.fillRect(x, y, squareSize, squareSize)
+        }
     }
     drawCoordinates()
     drawPieces(board)

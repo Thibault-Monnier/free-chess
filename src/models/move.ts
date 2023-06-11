@@ -6,7 +6,7 @@ export class Move {
         public piece: Piece,
         public startSquareNb: number,
         public endSquareNb: number,
-        //public endBoard: Board,
+        public endBoard: Board,
         //public notation: string
     ) {}
 }

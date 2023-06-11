@@ -1,4 +1,5 @@
 import { Board } from '../board'
+import { Game } from '../game'
 import { Move } from '../move'
 import { PieceColor, PieceName } from '../types'
 
@@ -7,9 +8,12 @@ export class King {
 
     constructor(public color: PieceColor) {}
 
-    possibleMoves(startSquareNb: number, board: Board): Move[] {
+    // TODO: captures, castling, checks
+    possibleMoves(startSquareNb: number, game: Game): Move[] {
         const OFFSETS = [-9, -8, -7, -1, 1, 7, 8, 9]
         const moves: Move[] = []
+        const startBoard: Board = game.currentBoard
+
         for (let offset of OFFSETS) {
             const endSquareNb = startSquareNb + offset
 
@@ -21,7 +25,11 @@ export class King {
             )
                 continue
 
-            moves.push(new Move(this, startSquareNb, endSquareNb))
+            const endBoard: Board = Object.assign({}, startBoard)
+            endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
+            endBoard.squares[startSquareNb] = null
+
+            moves.push(new Move(this, startSquareNb, endSquareNb, endBoard))
         }
         return moves
     }
