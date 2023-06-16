@@ -16,9 +16,14 @@ export class Chess {
             Math.floor(x / squareSize) +
             Math.floor((squareSize * 8 - (y + 1)) / squareSize) * 8
 
-        if (this.game.currentBoard.squares[squareNb] !== null) {
+        if (squareNb === this.selectedSquareNb) {
+            this.selectedSquareNb = null
+        } else if (this.game.currentBoard.squares[squareNb] === null) {
+            this.selectedSquareNb = null
+        } else {
             this.selectedSquareNb = squareNb
-            this.draw()
         }
+
+        this.draw()
     }
 }
