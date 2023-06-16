@@ -1,13 +1,14 @@
-import { Board } from '../board'
+import { Game } from '../game'
 import { Move } from '../move'
 import { PieceColor, PieceName } from '../types'
+import { Piece } from './piece'
 
-export class Pawn {
-    public readonly name: PieceName = 'pawn'
+export class Pawn extends Piece {
+    constructor(color: PieceColor) {
+        super('pawn', color)
+    }
 
-    constructor(public color: PieceColor) {}
-
-    possibleMoves(startPosition: number, board: Board): Move[] {
+    possibleMoves(startSquareNb: number, game: Game): Move[] {
         return []
     }
 }

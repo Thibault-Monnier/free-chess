@@ -1,5 +1,5 @@
 import { Board } from './board'
-import { Piece } from './types'
+import { Piece } from './pieces/piece';
 
 export class Move {
     constructor(

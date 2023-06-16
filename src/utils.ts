@@ -1,4 +1,4 @@
-export function logWithTimestamp(...message) {
+export function logWithTimestamp(...message: any[]) {
     const timestamp = new Date().toISOString()
     console.log(`[${timestamp}]`, ...message)
 }

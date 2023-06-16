@@ -2,11 +2,12 @@ import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
 import { PieceColor, PieceName } from '../types'
+import { Piece } from './piece'
 
-export class King {
-    public readonly name: PieceName = 'king'
-
-    constructor(public color: PieceColor) {}
+export class King extends Piece {
+    constructor(color: PieceColor) {
+        super('king', color)
+    }
 
     // TODO: captures, castling, checks
     possibleMoves(startSquareNb: number, game: Game): Move[] {

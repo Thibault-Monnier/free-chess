@@ -2,9 +2,10 @@ import { Bishop } from './pieces/bishop'
 import { King } from './pieces/king'
 import { Knight } from './pieces/knight'
 import { Pawn } from './pieces/pawn'
+import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { Piece, PieceColor } from './types'
+import { PieceColor } from './types'
 
 export class Board {
     squares: (Piece | null)[]
