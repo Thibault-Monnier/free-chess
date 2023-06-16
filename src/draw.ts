@@ -2,10 +2,10 @@ import { Board } from './models/board'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
-const canvas = document.getElementById('board') as HTMLCanvasElement
+export const canvas = document.getElementById('board') as HTMLCanvasElement
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
-const squareSize = 75
+export const squareSize = 75
 const pieceSize = squareSize * 0.9
 const lightSquares = '#f0d9b5'
 const darkSquares = '#b58863'
@@ -85,7 +85,7 @@ export function drawBoard(board: Board, selectedSquareNb: number | null) {
         ctx.fillRect(x, y, squareSize, squareSize)
 
         if (selectedSquareNb === squareNb) {
-            ctx.fillStyle = 'rgba(200, 200, 30, 0.6)'
+            ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'
             ctx.fillRect(x, y, squareSize, squareSize)
         }
     }
