@@ -78,15 +78,18 @@ function squareNbToXY(squareNb: number): { x: number; y: number } {
     }
 }
 
-export function drawBoard(game: Game, selectedSquareNb: number | null) {
+export function drawBoard(game: Game, selectedSquareNb: number | null, highlightedSquareNbs: boolean[]): void {
     for (let squareNb = 0; squareNb < 64; squareNb++) {
         const { x, y } = squareNbToXY(squareNb)
-        ctx.fillStyle =
-            getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
+        ctx.fillStyle = getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
         ctx.fillRect(x, y, squareSize, squareSize)
 
         if (selectedSquareNb === squareNb) {
             ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'
+            ctx.fillRect(x, y, squareSize, squareSize)
+        }
+        if (highlightedSquareNbs[squareNb]) {
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
             ctx.fillRect(x, y, squareSize, squareSize)
         }
     }
@@ -104,16 +107,8 @@ function drawPossibleMoves(game: Game, selectedSquareNb: number) {
         const isOccupied = game.currentBoard.squares[move.endSquareNb] !== null
 
         ctx.beginPath()
-        ctx.arc(
-            x + squareSize / 2,
-            y + squareSize / 2,
-            isOccupied ? squareSize / 2 : squareSize / 8,
-            0,
-            Math.PI * 2
-        )
-        ctx.fillStyle = isOccupied
-            ? 'rgba(30, 0, 100, 0.25)'
-            : 'rgba(0, 0, 0, 0.2)'
+        ctx.arc(x + squareSize / 2, y + squareSize / 2, isOccupied ? squareSize / 2 : squareSize / 8, 0, Math.PI * 2)
+        ctx.fillStyle = isOccupied ? 'rgba(30, 0, 100, 0.25)' : 'rgba(0, 0, 0, 0.2)'
         ctx.fill()
     }
 }
@@ -127,8 +122,7 @@ function drawCoordinates() {
     ctx.font = `${fontSize}px Arial`
 
     for (let column = 0; column < 8; column++) {
-        ctx.fillStyle =
-            getSquareColor(column) === 'dark' ? lightSquares : darkSquares
+        ctx.fillStyle = getSquareColor(column) === 'dark' ? lightSquares : darkSquares
         ctx.fillText(
             String.fromCharCode(97 + column),
             squareSize * (column + 1) - fontSize,
@@ -137,13 +131,8 @@ function drawCoordinates() {
     }
 
     for (let row = 0; row < 8; row++) {
-        ctx.fillStyle =
-            getSquareColor(row * 8) === 'dark' ? lightSquares : darkSquares
-        ctx.fillText(
-            String(row + 1),
-            fontSize * 0.4,
-            squareSize * (7 - row) + fontSize * 1.2
-        )
+        ctx.fillStyle = getSquareColor(row * 8) === 'dark' ? lightSquares : darkSquares
+        ctx.fillText(String(row + 1), fontSize * 0.4, squareSize * (7 - row) + fontSize * 1.2)
     }
 }
 
