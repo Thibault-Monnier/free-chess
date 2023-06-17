@@ -22,11 +22,14 @@ export class King extends Piece {
             if (
                 Math.abs(
                     Math.floor(startSquareNb / 8) - Math.floor(endSquareNb / 8)
+                ) >= 2 ||
+                Math.abs(
+                    Math.floor(startSquareNb % 8) - Math.floor(endSquareNb % 8)
                 ) >= 2
             )
                 continue
 
-            const endBoard: Board = Object.assign({}, startBoard)
+            const endBoard: Board = new Board(startBoard)
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 

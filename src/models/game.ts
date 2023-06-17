@@ -3,7 +3,7 @@ import { Move } from './move'
 
 export class Game {
     public startingBoard: Board = new Board()
-    public moves: Move[] = []
+    private moves: Move[] = []
     private moveNb: number = 0
 
     get currentBoard(): Board {
@@ -12,5 +12,10 @@ export class Game {
         } else {
             return this.startingBoard
         }
+    }
+
+    addMove(move: Move): void {
+        this.moves.push(move)
+        this.moveNb++
     }
 }

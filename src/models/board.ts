@@ -10,12 +10,16 @@ import { PieceColor } from './types'
 export class Board {
     squares: (Piece | null)[]
 
-    constructor() {
-        this.squares = []
-        for (let i = 0; i < 64; i++) {
-            this.squares.push(null)
+    constructor(board?: Board) {
+        if (board) {
+            this.squares = [...board.squares]
+        } else {
+            this.squares = []
+            for (let i = 0; i < 64; i++) {
+                this.squares.push(null)
+            }
+            this.startingSetup()
         }
-        this.startingSetup()
     }
 
     private startingSetup(): void {

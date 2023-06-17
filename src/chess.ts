@@ -1,5 +1,6 @@
 import { drawBoard, squareSize } from './draw'
 import { Game } from './models/game'
+import { Move } from './models/move'
 
 export class Chess {
     private game: Game = new Game()
@@ -17,6 +18,9 @@ export class Chess {
 
         if (squareNb === this.selectedSquareNb) {
             this.selectedSquareNb = null
+        } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
+            this.game.addMove(this.getMove(squareNb)!)
+            this.selectedSquareNb = null
         } else if (this.game.currentBoard.squares[squareNb] === null) {
             this.selectedSquareNb = null
         } else {
@@ -24,5 +28,15 @@ export class Chess {
         }
 
         this.draw()
+    }
+
+    private getMove(endSquareNb: number): Move | undefined {
+        if (this.selectedSquareNb === null) return
+        const piece = this.game.currentBoard.squares[this.selectedSquareNb]
+        const possibleMoves = piece!.possibleMoves(
+            this.selectedSquareNb,
+            this.game
+        )
+        return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 }

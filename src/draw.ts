@@ -97,7 +97,25 @@ export function drawBoard(game: Game, selectedSquareNb: number | null) {
 
 function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     const piece = game.currentBoard.squares[selectedSquareNb]!
-    piece.possibleMoves(selectedSquareNb, game)
+    const moves = piece.possibleMoves(selectedSquareNb, game)
+
+    for (let move of moves) {
+        const { x, y } = squareNbToXY(move.endSquareNb)
+        const isOccupied = game.currentBoard.squares[move.endSquareNb] !== null
+
+        ctx.beginPath()
+        ctx.arc(
+            x + squareSize / 2,
+            y + squareSize / 2,
+            isOccupied ? squareSize / 2 : squareSize / 8,
+            0,
+            Math.PI * 2
+        )
+        ctx.fillStyle = isOccupied
+            ? 'rgba(30, 0, 100, 0.25)'
+            : 'rgba(0, 0, 0, 0.2)'
+        ctx.fill()
+    }
 }
 
 function getSquareColor(squareNb: number) {
