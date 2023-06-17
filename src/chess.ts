@@ -7,8 +7,7 @@ export class Chess {
     //public mode: "1v1" | "1vC" | "CvC"
 
     draw() {
-        const board = this.game.currentBoard
-        drawBoard(board, this.selectedSquareNb)
+        drawBoard(this.game, this.selectedSquareNb)
     }
 
     clickedSquare(x: number, y: number) {

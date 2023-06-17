@@ -1,4 +1,5 @@
 import { Board } from './models/board'
+import { Game } from './models/game'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
@@ -77,7 +78,7 @@ function squareNbToXY(squareNb: number): { x: number; y: number } {
     }
 }
 
-export function drawBoard(board: Board, selectedSquareNb: number | null) {
+export function drawBoard(game: Game, selectedSquareNb: number | null) {
     for (let squareNb = 0; squareNb < 64; squareNb++) {
         const { x, y } = squareNbToXY(squareNb)
         ctx.fillStyle =
@@ -90,7 +91,13 @@ export function drawBoard(board: Board, selectedSquareNb: number | null) {
         }
     }
     drawCoordinates()
-    drawPieces(board)
+    drawPieces(game)
+    if (selectedSquareNb !== null) drawPossibleMoves(game, selectedSquareNb)
+}
+
+function drawPossibleMoves(game: Game, selectedSquareNb: number) {
+    const piece = game.currentBoard.squares[selectedSquareNb]!
+    piece.possibleMoves(selectedSquareNb, game)
 }
 
 function getSquareColor(squareNb: number) {
@@ -122,13 +129,13 @@ function drawCoordinates() {
     }
 }
 
-async function drawPieces(board: Board) {
+async function drawPieces(game: Game) {
     while (imagesLoading > 0) {
         await waitOneMillisecondAsync()
     }
 
     for (let squareNb = 0; squareNb < 64; squareNb++) {
-        const piece = board.squares[squareNb]
+        const piece = game.currentBoard.squares[squareNb]
         if (!piece) continue
         const { x, y } = squareNbToXY(squareNb)
 
