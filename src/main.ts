@@ -6,21 +6,12 @@ initCanvas()
 const chess = new Chess()
 chess.draw()
 
-canvas.onclick = (event: MouseEvent) => {
-    const { x, y } = mouseXY(event)
+canvas.onmousedown = (event: MouseEvent) => {
+    const x = event.clientX - canvas.getBoundingClientRect().x - canvas.clientLeft
+    const y = event.clientY - canvas.getBoundingClientRect().y - canvas.clientTop
     if (x >= 0 && y >= 0 && x < 600 && y < 600) {
-        chess.clickedSquare(x, y, 'left')
+        chess.clickedSquare(x, y, event.button === 0 ? 'left' : 'right')
     }
 }
 
-window.addEventListener('contextmenu', (event: MouseEvent) => {
-    event.preventDefault()
-    const { x, y } = mouseXY(event)
-    chess.clickedSquare(x, y, 'right')
-})
-
-function mouseXY(event: MouseEvent): { x: number; y: number } {
-    const x = event.clientX - canvas.getBoundingClientRect().x - canvas.clientLeft
-    const y = event.clientY - canvas.getBoundingClientRect().y - canvas.clientTop
-    return { x: x, y: y }
-}
+window.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
