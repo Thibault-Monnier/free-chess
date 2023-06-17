@@ -18,14 +18,15 @@ export class Chess {
         if (clickType === 'left') {
             this.highlightedSquareNbs.fill(false)
 
+            const piece = this.game.currentBoard.squares[squareNb]
             if (squareNb === this.selectedSquareNb) {
                 this.selectedSquareNb = null
             } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
                 this.game.addMove(this.getMove(squareNb)!)
                 this.selectedSquareNb = null
-            } else if (this.game.currentBoard.squares[squareNb] === null) {
+            } else if (piece === null) {
                 this.selectedSquareNb = null
-            } else {
+            } else if (piece.color === this.game.nextPlayerColor) {
                 this.selectedSquareNb = squareNb
             }
         } else {
