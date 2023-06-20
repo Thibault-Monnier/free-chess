@@ -1,6 +1,6 @@
 import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, PieceName } from '../types'
+import { PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Bishop extends Piece {
@@ -9,6 +9,15 @@ export class Bishop extends Piece {
     }
 
     possibleMoves(startSquareNb: number, game: Game): Move[] {
-        return []
+        return this.createMovesForRepeatedOffsets(
+            startSquareNb,
+            [
+                { column: 1, row: 1 },
+                { column: 1, row: -1 },
+                { column: -1, row: 1 },
+                { column: -1, row: -1 },
+            ],
+            game
+        )
     }
 }

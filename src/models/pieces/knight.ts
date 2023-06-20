@@ -1,3 +1,4 @@
+import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
 import { PieceColor, PieceName } from '../types'
@@ -9,6 +10,23 @@ export class Knight extends Piece {
     }
 
     possibleMoves(startSquareNb: number, game: Game): Move[] {
-        return []
+        const OFFSETS: { column: number; row: number }[] = [
+            { column: 1, row: 2 },
+            { column: 2, row: 1 },
+            { column: 2, row: -1 },
+            { column: 1, row: -2 },
+            { column: -1, row: -2 },
+            { column: -2, row: -1 },
+            { column: -2, row: 1 },
+            { column: -1, row: 2 },
+        ]
+        const moves: Move[] = []
+        const startBoard: Board = game.currentBoard
+
+        for (let offset of OFFSETS) {
+            const endSquareNb = this.addOffset(startSquareNb, offset)
+            this.createMove(moves, startSquareNb, endSquareNb, game)
+        }
+        return moves
     }
 }

@@ -89,7 +89,7 @@ export function drawBoard(game: Game, selectedSquareNb: number | null, highlight
             ctx.fillRect(x, y, squareSize, squareSize)
         }
         if (highlightedSquareNbs[squareNb]) {
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
+            ctx.fillStyle = 'rgba(255, 80, 70, 0.75)'
             ctx.fillRect(x, y, squareSize, squareSize)
         }
     }

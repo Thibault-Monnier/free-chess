@@ -9,6 +9,19 @@ export class Queen extends Piece {
     }
 
     possibleMoves(startSquareNb: number, game: Game): Move[] {
-        return []
+        return this.createMovesForRepeatedOffsets(
+            startSquareNb,
+            [
+                { column: 1, row: 1 },
+                { column: 1, row: 0 },
+                { column: 1, row: -1 },
+                { column: 0, row: 1 },
+                { column: 0, row: -1 },
+                { column: -1, row: 1 },
+                { column: -1, row: 0 },
+                { column: -1, row: -1 },
+            ],
+            game
+        )
     }
 }
