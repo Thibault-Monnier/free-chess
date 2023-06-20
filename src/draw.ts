@@ -1,4 +1,3 @@
-import { Board } from './models/board'
 import { Game } from './models/game'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'

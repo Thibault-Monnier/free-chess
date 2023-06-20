@@ -1,11 +1,60 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
+
 body {
-    background-color: #333333;
+    background-color: #0e0e0e;
+    color: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    font-family: Poppins, sans-serif;
 }
 
-canvas {
-    border: 15px solid black;
+.chess {
+    display: grid;
+    grid-template-areas: 'next_player moves' 'board moves' 'board actions';
+    grid-template-columns: 1fr 25rem;
+    gap: 1.5rem;
+}
+
+.next_player {
+    grid-area: next_player;
+    display: flex;
+}
+
+.white_to_move,
+.black_to_move {
+    display: flex;
+    gap: 0.5rem;
+    background-color: #222;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.square {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.75rem;
+}
+.white_to_move .square {
+    background-color: white;
+}
+.black_to_move .square {
+    background-color: #000;
+}
+
+.board {
+    grid-area: board;
+    border-radius: 1rem;
+}
+
+.moves {
+    grid-area: moves;
+    background-color: #222;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.actions {
+    grid-area: actions;
 }

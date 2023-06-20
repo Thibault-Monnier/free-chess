@@ -23,6 +23,7 @@ export class Chess {
                 this.selectedSquareNb = null
             } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
                 this.game.addMove(this.getMove(squareNb)!)
+                this.toggleNextPlayer()
                 this.selectedSquareNb = null
             } else if (piece === null) {
                 this.selectedSquareNb = null
@@ -42,5 +43,11 @@ export class Chess {
         const piece = this.game.currentBoard.squares[this.selectedSquareNb]
         const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game)
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
+    }
+
+    private toggleNextPlayer() {
+        const isWhite = this.game.nextPlayerColor === 'white'
+        document.getElementById('white_to_move')!.setAttribute('style', isWhite ? '' : 'display: none;')
+        document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
     }
 }

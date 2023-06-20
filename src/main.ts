@@ -14,4 +14,4 @@ canvas.onmousedown = (event: MouseEvent) => {
     }
 }
 
-window.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
+canvas.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
