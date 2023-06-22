@@ -6,6 +6,7 @@ import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
 import { PieceColor } from './types'
+import { columnRowToSquareNb } from './utils'
 
 export class Board {
     squares: (Piece | null)[]
@@ -18,22 +19,40 @@ export class Board {
             for (let i = 0; i < 64; i++) {
                 this.squares.push(null)
             }
-            this.startingSetup()
+            this.loadBoardSetup()
         }
     }
 
-    private startingSetup(): void {
-        const color = (i: number): PieceColor => (i < 32 ? 'white' : 'black')
+    public loadBoardSetup(): void {
+        this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+    }
 
-        for (let i of [0, 7, 56, 63]) this.squares[i] = new Rook(color(i))
-        for (let i of [1, 6, 57, 62]) this.squares[i] = new Knight(color(i))
-        for (let i of [2, 5, 58, 61]) this.squares[i] = new Bishop(color(i))
-        for (let i of [3, 59]) this.squares[i] = new Queen(color(i))
-        for (let i of [4, 60]) this.squares[i] = new King(color(i))
-        for (let i of [
-            8, 9, 10, 11, 12, 13, 14, 15, 48, 49, 50, 51, 52, 53, 54, 55,
-        ])
-            this.squares[i] = new Pawn(color(i))
+    public importFEN(fen: string) {
+        const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
+        const placement = fen.split(' ')[0]
+
+        placement.split('/').forEach((rowPlacement, index) => {
+            const row = 7 - index
+            let column = 0
+            for (let char of rowPlacement) {
+                if (char > '8') {
+                    const c = char.toLowerCase()
+                    if (c !== 'r' && c !== 'n' && c !== 'b' && c !== 'q' && c !== 'k' && c !== 'p')
+                        throw 'Invalid piece'
+
+                    const Piece = piecesId[c]
+                    this.squares[columnRowToSquareNb({ column, row })] = new Piece(char === c ? 'black' : 'white')
+                    column++
+                } else {
+                    let number = Number(char)
+                    while (number > 0) {
+                        this.squares[columnRowToSquareNb({ column, row })] = null
+                        number--
+                        column++
+                    }
+                }
+            }
+        })
     }
 
     debug() {
