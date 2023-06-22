@@ -10,12 +10,6 @@ const pieceSize = squareSize * 0.9
 const lightSquares = '#f0d9b5'
 const darkSquares = '#b58863'
 
-export function initCanvas() {
-    canvas.height = squareSize * 8
-    canvas.width = squareSize * 8
-    canvas.setAttribute('style', '')
-}
-
 //https://commons.wikimedia.org/wiki/Category:PNG_chess_pieces/Standard_transparent
 //https://www.base64-image.de/
 let imagesLoading = 0

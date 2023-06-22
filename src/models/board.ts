@@ -15,16 +15,9 @@ export class Board {
         if (board) {
             this.squares = [...board.squares]
         } else {
-            this.squares = []
-            for (let i = 0; i < 64; i++) {
-                this.squares.push(null)
-            }
-            this.loadBoardSetup()
+            this.squares = new Array(64).fill(null)
+            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
         }
-    }
-
-    public loadBoardSetup(): void {
-        this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
     }
 
     public importFEN(fen: string) {
