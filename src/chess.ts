@@ -19,15 +19,25 @@ export class Chess {
             this.highlightedSquareNbs.fill(false)
 
             const piece = this.game.currentBoard.squares[squareNb]
+            //Deselects the square if it was already selected
             if (squareNb === this.selectedSquareNb) {
                 this.selectedSquareNb = null
-            } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
-                this.game.addMove(this.getMove(squareNb)!)
+            }
+            //Makes a move if possible
+            else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
+                const move = this.getMove(squareNb)!
+                this.game.addMove(move)
+                this.game.lastMove = move
+                console.log('lastMove: ' + move.endSquareNb)
                 this.toggleNextPlayer()
                 this.selectedSquareNb = null
-            } else if (piece === null) {
+            }
+            //Deselects the square if it is empty
+            else if (piece === null) {
                 this.selectedSquareNb = null
-            } else if (piece.color === this.game.nextPlayerColor) {
+            }
+            //Selects the square if it contains a piece of the current player
+            else if (piece.color === this.game.currentPlayerColor) {
                 this.selectedSquareNb = squareNb
             }
         } else {
@@ -38,6 +48,7 @@ export class Chess {
         this.draw()
     }
 
+    //Calls the possibleMoves() method of the piece on the selected square
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
         const piece = this.game.currentBoard.squares[this.selectedSquareNb]
@@ -46,7 +57,7 @@ export class Chess {
     }
 
     private toggleNextPlayer() {
-        const isWhite = this.game.nextPlayerColor === 'white'
+        const isWhite = this.game.currentPlayerColor === 'white'
         document.getElementById('white_to_move')!.setAttribute('style', isWhite ? '' : 'display: none;')
         document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
     }

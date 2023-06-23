@@ -4,10 +4,11 @@ import { PieceColor } from './types'
 
 export class Game {
     public startingBoard: Board = new Board()
+    public lastMove: Move | null = null
     private moves: Move[] = []
     private moveNb: number = 0
 
-    get nextPlayerColor(): PieceColor {
+    get currentPlayerColor(): PieceColor {
         return this.moveNb % 2 === 0 ? 'white' : 'black'
     }
 

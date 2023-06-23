@@ -37,7 +37,7 @@ export abstract class Piece {
         return moves
     }
 
-    createMove(moves: Move[], startSquareNb: number, endSquareNb: number | null, game: Game): void {
+    createMove(moves: Move[], startSquareNb: number, endSquareNb: number | null, game: Game, enPassant?: boolean): void {
         if (endSquareNb === null) return
 
         const startBoard = game.currentBoard
@@ -50,6 +50,10 @@ export abstract class Piece {
             endBoard.squares[startSquareNb] = null
 
             moves.push(new Move(this, startSquareNb, endSquareNb, endBoard))
+
+            if (enPassant) {
+                endBoard.squares[endSquareNb + (this.color === 'white' ? -8 : 8)] = null
+            }
         }
     }
 }
