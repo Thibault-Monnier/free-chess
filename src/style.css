@@ -2,7 +2,7 @@
 
 body {
     background-color: #0e0e0e;
-    color: #f0f0f0;
+    color: whitesmoke;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,9 +12,12 @@ body {
 
 .chess {
     display: grid;
-    grid-template-areas: 'next_player moves' 'board moves' 'board actions';
+    grid-template-areas: 'next_player panel' 'board panel';
     grid-template-columns: 1fr 25rem;
     gap: 1.5rem;
+
+    /*Very bad code to limit the size, to change if possible!*/
+    grid-template-rows: 2.5rem 640px;
 }
 
 .next_player {
@@ -37,7 +40,7 @@ body {
     border-radius: 0.75rem;
 }
 .white_to_move .square {
-    background-color: white;
+    background-color: whitesmoke;
 }
 .black_to_move .square {
     background-color: #000;
@@ -48,13 +51,42 @@ body {
     border-radius: 1rem;
 }
 
+.panel {
+    grid-area: panel;
+    display: flex;
+    flex-direction: column;
+}
+
 .moves {
-    grid-area: moves;
+    flex-grow: 1;
     background-color: #222;
     border-radius: 1rem;
     padding: 1.5rem;
+    overflow-y: auto;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 3rem;
+    width: max-content;
+    margin-top: 1rem;
 }
 
-.actions {
-    grid-area: actions;
+.actions button {
+    /*Draw the button background*/
+    background-color: #222;
+    border: none;
+    padding: 0.2rem 3rem;
+    border-radius: 1.5rem;
+
+    /*Draw the text*/
+    color: whitesmoke;
+    font-size: 2.5rem;
+
+    /*color: #f0f0f0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;*/
 }
