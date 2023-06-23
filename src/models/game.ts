@@ -4,7 +4,6 @@ import { PieceColor } from './types'
 
 export class Game {
     public startingBoard: Board = new Board()
-    public lastMove: Move | null = null
     private moves: Move[] = []
     private moveNb: number = 0
 
@@ -20,8 +19,29 @@ export class Game {
         }
     }
 
+    get lastMove(): Move | undefined {
+        return this.moves[this.moveNb - 1]
+    }
+
     addMove(move: Move): void {
+        this.moves = this.moves.slice(0, this.moveNb)
         this.moves.push(move)
         this.moveNb++
+    }
+
+    undo(): void {
+        if (this.canUndo) this.moveNb--
+    }
+
+    get canUndo(): boolean {
+        return this.moveNb > 0
+    }
+
+    redo(): void {
+        if (this.canRedo) this.moveNb++
+    }
+
+    get canRedo(): boolean {
+        return this.moveNb < this.moves.length
     }
 }

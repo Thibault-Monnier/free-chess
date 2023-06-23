@@ -8,7 +8,12 @@ export class Chess {
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     //public mode: "1v1" | "1vC" | "CvC"
 
-    draw() {
+    constructor() {
+        this.draw()
+    }
+
+    private draw() {
+        this.toggleActions()
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
     }
 
@@ -27,8 +32,6 @@ export class Chess {
             else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
                 const move = this.getMove(squareNb)!
                 this.game.addMove(move)
-                this.game.lastMove = move
-                console.log('lastMove: ' + move.endSquareNb)
                 this.toggleNextPlayer()
                 this.selectedSquareNb = null
             }
@@ -60,5 +63,31 @@ export class Chess {
         const isWhite = this.game.currentPlayerColor === 'white'
         document.getElementById('white_to_move')!.setAttribute('style', isWhite ? '' : 'display: none;')
         document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
+    }
+
+    undo(): void {
+        this.selectedSquareNb = null
+        this.game.undo()
+        this.draw()
+    }
+
+    redo(): void {
+        this.selectedSquareNb = null
+        this.game.redo()
+        this.draw()
+    }
+
+    reset(): void {
+        this.selectedSquareNb = null
+        this.game = new Game()
+        this.draw()
+    }
+
+    private toggleActions(): void {
+        if (this.game.canUndo) document.getElementById('undo')!.removeAttribute('disabled')
+        else document.getElementById('undo')!.setAttribute('disabled', '')
+
+        if (this.game.canRedo) document.getElementById('redo')!.removeAttribute('disabled')
+        else document.getElementById('redo')!.setAttribute('disabled', '')
     }
 }

@@ -2,13 +2,15 @@ import { Game } from './models/game'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
-export const canvas = document.getElementById('board') as HTMLCanvasElement
-const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-
 export const squareSize = 80
 const pieceSize = squareSize * 0.9
 const lightSquares = '#f0d9b5'
 const darkSquares = '#b58863'
+
+export const canvas = document.getElementById('board') as HTMLCanvasElement
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+canvas.width = squareSize * 8
+canvas.height = squareSize * 8
 
 //https://commons.wikimedia.org/wiki/Category:PNG_chess_pieces/Standard_transparent
 //https://www.base64-image.de/

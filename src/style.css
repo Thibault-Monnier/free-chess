@@ -8,6 +8,8 @@ body {
     align-items: center;
     overflow: hidden;
     font-family: Poppins, sans-serif;
+
+    --square-size: 80px;
 }
 
 .chess {
@@ -17,7 +19,7 @@ body {
     gap: 1.5rem;
 
     /*Very bad code to limit the size, to change if possible!*/
-    grid-template-rows: 2.5rem 640px;
+    grid-template-rows: 2.5rem calc(var(--square-size) * 8);
 }
 
 .next_player {
@@ -49,6 +51,8 @@ body {
 .board {
     grid-area: board;
     border-radius: 1rem;
+    width: calc(var(--square-size) * 8);
+    height: calc(var(--square-size) * 8);
 }
 
 .panel {
@@ -74,19 +78,24 @@ body {
 }
 
 .actions button {
+    cursor: pointer;
+
     /*Draw the button background*/
     background-color: #222;
-    border: none;
+    border: 1px solid #222;
     padding: 0.2rem 3rem;
     border-radius: 1.5rem;
 
     /*Draw the text*/
     color: whitesmoke;
     font-size: 2.5rem;
+}
 
-    /*color: #f0f0f0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;*/
+.actions button:disabled {
+    color: rgb(119, 119, 119);
+}
+
+.actions button:hover:not(:disabled) {
+    background-color: #444;
+    border: 1px solid #888;
 }
