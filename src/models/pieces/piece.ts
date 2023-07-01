@@ -37,7 +37,7 @@ export abstract class Piece {
         return moves
     }
 
-    createMove(moves: Move[], startSquareNb: number, endSquareNb: number | null, game: Game): void {
+    createMove(moves: Move[], startSquareNb: number, endSquareNb: number | null, game: Game): Move | undefined {
         if (endSquareNb === null) return
 
         const startBoard = game.currentBoard
@@ -49,7 +49,9 @@ export abstract class Piece {
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 
-            moves.push(new Move(this, startSquareNb, endSquareNb, endBoard))
+            const move = new Move(this, startSquareNb, endSquareNb, endBoard)
+            moves.push(move)
+            return move
         }
     }
 }

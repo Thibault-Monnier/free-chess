@@ -8,7 +8,14 @@ import { Rook } from './pieces/rook'
 import { columnRowToSquareNb } from './utils'
 
 export class Board {
-    squares: (Piece | null)[]
+    public squares: (Piece | null)[]
+    public canCastle: {
+        white: { queenSide: boolean; kingSide: boolean }
+        black: { queenSide: boolean; kingSide: boolean }
+    } = {
+        white: { queenSide: true, kingSide: true },
+        black: { queenSide: true, kingSide: true },
+    }
 
     constructor(board?: Board) {
         if (board) {

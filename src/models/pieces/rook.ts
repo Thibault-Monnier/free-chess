@@ -1,7 +1,6 @@
-import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, PieceName } from '../types'
+import { PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
@@ -10,7 +9,7 @@ export class Rook extends Piece {
     }
 
     possibleMoves(startSquareNb: number, game: Game): Move[] {
-        return this.createMovesForRepeatedOffsets(
+        const moves = this.createMovesForRepeatedOffsets(
             startSquareNb,
             [
                 { column: 1, row: 0 },
@@ -20,5 +19,15 @@ export class Rook extends Piece {
             ],
             game
         )
+
+        const isQueenSquare = (this.color === 'white' ? 0 : 56) === startSquareNb
+        const isKingSquare = (this.color === 'white' ? 7 : 63) === startSquareNb
+        if (isQueenSquare || isKingSquare) {
+            moves.forEach((move) => {
+                move.endBoard.canCastle[this.color][isQueenSquare ? 'queenSide' : 'kingSide'] = false
+            })
+        }
+
+        return moves
     }
 }
