@@ -5,7 +5,6 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { PieceColor } from './types'
 import { columnRowToSquareNb } from './utils'
 
 export class Board {

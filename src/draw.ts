@@ -3,9 +3,9 @@ import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
 export const squareSize = 80
-const pieceSize = squareSize * 0.9
-const lightSquares = '#f0d9b5'
-const darkSquares = '#b58863'
+const pieceSize = squareSize * 0.97
+const lightSquares = '#efdfc5'
+const darkSquares = '#ae7c66'
 
 export const canvas = document.getElementById('board') as HTMLCanvasElement
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D

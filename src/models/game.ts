@@ -3,13 +3,9 @@ import { Move } from './move'
 import { PieceColor } from './types'
 
 export class Game {
-    public startingBoard: Board = new Board()
+    private startingBoard: Board = new Board()
     private moves: Move[] = []
     private moveNb: number = 0
-
-    get currentPlayerColor(): PieceColor {
-        return this.moveNb % 2 === 0 ? 'white' : 'black'
-    }
 
     get currentBoard(): Board {
         if (this.moveNb > 0) {
@@ -17,6 +13,10 @@ export class Game {
         } else {
             return this.startingBoard
         }
+    }
+
+    get currentPlayerColor(): PieceColor {
+        return this.moveNb % 2 === 0 ? 'white' : 'black'
     }
 
     get lastMove(): Move | undefined {
@@ -29,19 +29,19 @@ export class Game {
         this.moveNb++
     }
 
-    undo(): void {
-        if (this.canUndo) this.moveNb--
-    }
-
     get canUndo(): boolean {
         return this.moveNb > 0
     }
 
-    redo(): void {
-        if (this.canRedo) this.moveNb++
+    undo(): void {
+        if (this.canUndo) this.moveNb--
     }
 
     get canRedo(): boolean {
         return this.moveNb < this.moves.length
+    }
+
+    redo(): void {
+        if (this.canRedo) this.moveNb++
     }
 }

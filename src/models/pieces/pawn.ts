@@ -10,7 +10,7 @@ export class Pawn extends Piece {
         super('pawn', color)
     }
 
-    // TODO: en passant, promotion, capture
+    // TODO:  promotion
     possibleMoves(startSquareNb: number, game: Game): Move[] {
         const startBoard: Board = game.currentBoard
         const moves: Move[] = []
