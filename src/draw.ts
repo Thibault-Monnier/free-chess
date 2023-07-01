@@ -2,7 +2,7 @@ import { Game } from './models/game'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
-export const squareSize = 80
+export const squareSize = 85
 const pieceSize = squareSize * 0.97
 const lightSquares = '#efdfc5'
 const darkSquares = '#ae7c66'

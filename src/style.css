@@ -9,7 +9,7 @@ body {
     overflow: hidden;
     font-family: Poppins, sans-serif;
 
-    --square-size: 80px;
+    --square-size: 85px;
 }
 
 .chess {
