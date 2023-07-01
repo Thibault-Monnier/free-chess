@@ -5,7 +5,7 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { columnRowToSquareNb } from './utils'
+import { fileRankToSquareNb } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
@@ -31,8 +31,8 @@ export class Board {
         const placement = fen.split(' ')[0]
 
         placement.split('/').forEach((rowPlacement, index) => {
-            const row = 7 - index
-            let column = 0
+            const rank = 7 - index
+            let file = 0
             for (let char of rowPlacement) {
                 if (char > '8') {
                     const c = char.toLowerCase()
@@ -40,14 +40,14 @@ export class Board {
                         throw 'Invalid piece'
 
                     const Piece = piecesId[c]
-                    this.squares[columnRowToSquareNb({ column, row })] = new Piece(char === c ? 'black' : 'white')
-                    column++
+                    this.squares[fileRankToSquareNb({ file, rank })] = new Piece(char === c ? 'black' : 'white')
+                    file++
                 } else {
                     let number = Number(char)
                     while (number > 0) {
-                        this.squares[columnRowToSquareNb({ column, row })] = null
+                        this.squares[fileRankToSquareNb({ file, rank })] = null
                         number--
-                        column++
+                        file++
                     }
                 }
             }
@@ -57,12 +57,12 @@ export class Board {
     debug() {
         let debugBoard = []
 
-        for (let row = 0; row < 8; row++) {
+        for (let rank = 0; rank < 8; rank++) {
             //@ts-ignore
-            debugBoard[row] = []
-            for (let column = 0; column < 8; column++) {
+            debugBoard[rank] = []
+            for (let file = 0; file < 8; file++) {
                 //@ts-ignore
-                debugBoard[row].push(this.squares[row * 8 + column])
+                debugBoard[rank].push(this.squares[rank * 8 + file])
             }
         }
 

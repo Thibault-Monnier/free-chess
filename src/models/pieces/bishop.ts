@@ -12,10 +12,10 @@ export class Bishop extends Piece {
         return this.createMovesForRepeatedOffsets(
             startSquareNb,
             [
-                { column: 1, row: 1 },
-                { column: 1, row: -1 },
-                { column: -1, row: 1 },
-                { column: -1, row: -1 },
+                { file: 1, rank: 1 },
+                { file: 1, rank: -1 },
+                { file: -1, rank: 1 },
+                { file: -1, rank: -1 },
             ],
             game
         )

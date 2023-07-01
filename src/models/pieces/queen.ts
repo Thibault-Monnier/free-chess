@@ -12,14 +12,14 @@ export class Queen extends Piece {
         return this.createMovesForRepeatedOffsets(
             startSquareNb,
             [
-                { column: 1, row: 1 },
-                { column: 1, row: 0 },
-                { column: 1, row: -1 },
-                { column: 0, row: 1 },
-                { column: 0, row: -1 },
-                { column: -1, row: 1 },
-                { column: -1, row: 0 },
-                { column: -1, row: -1 },
+                { file: 1, rank: 1 },
+                { file: 1, rank: 0 },
+                { file: 1, rank: -1 },
+                { file: 0, rank: 1 },
+                { file: 0, rank: -1 },
+                { file: -1, rank: 1 },
+                { file: -1, rank: 0 },
+                { file: -1, rank: -1 },
             ],
             game
         )

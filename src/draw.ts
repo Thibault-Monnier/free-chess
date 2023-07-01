@@ -116,18 +116,18 @@ function drawCoordinates() {
     const fontSize = 14
     ctx.font = `${fontSize}px Arial`
 
-    for (let column = 0; column < 8; column++) {
-        ctx.fillStyle = getSquareColor(column) === 'dark' ? lightSquares : darkSquares
+    for (let file = 0; file < 8; file++) {
+        ctx.fillStyle = getSquareColor(file) === 'dark' ? lightSquares : darkSquares
         ctx.fillText(
-            String.fromCharCode(97 + column),
-            squareSize * (column + 1) - fontSize,
+            String.fromCharCode(97 + file),
+            squareSize * (file + 1) - fontSize,
             canvas.height - fontSize * 0.4
         )
     }
 
-    for (let row = 0; row < 8; row++) {
-        ctx.fillStyle = getSquareColor(row * 8) === 'dark' ? lightSquares : darkSquares
-        ctx.fillText(String(row + 1), fontSize * 0.4, squareSize * (7 - row) + fontSize * 1.2)
+    for (let rank = 0; rank < 8; rank++) {
+        ctx.fillStyle = getSquareColor(rank * 8) === 'dark' ? lightSquares : darkSquares
+        ctx.fillText(String(rank + 1), fontSize * 0.4, squareSize * (7 - rank) + fontSize * 1.2)
     }
 }
 

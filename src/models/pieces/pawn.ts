@@ -1,8 +1,8 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { ColumnRow, PieceColor, PieceName } from '../types'
-import { columnRowToSquareNb, squareNbToColumnRow } from '../utils'
+import { fileRank, PieceColor } from '../types'
+import { fileRankToSquareNb, squareNbTofilerank } from '../utils'
 import { Piece } from './piece'
 
 export class Pawn extends Piece {
@@ -25,18 +25,18 @@ export class Pawn extends Piece {
             this.createMove(moves, startSquareNb, moveOneSquare, game)
 
             // Advance two squares
-            const { row } = squareNbToColumnRow(startSquareNb)
+            const { rank } = squareNbTofilerank(startSquareNb)
             if (
                 startBoard.squares[moveTwoSquares] === null &&
-                ((this.color === 'white' && row === 1) || (this.color === 'black' && row === 6))
+                ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
                 this.createMove(moves, startSquareNb, moveTwoSquares, game)
             }
         }
 
-        const captures: ColumnRow[] = [
-            { column: -1, row: direction },
-            { column: 1, row: direction },
+        const captures: fileRank[] = [
+            { file: -1, rank: direction },
+            { file: 1, rank: direction },
         ]
 
         // Basic captures
@@ -54,18 +54,18 @@ export class Pawn extends Piece {
 
         // En passant captures
         if (game.lastMove?.piece.name === 'pawn') {
-            const { column, row } = squareNbToColumnRow(startSquareNb)
-            const { column: opponentColumn, row: opponentRow } = squareNbToColumnRow(game.lastMove.endSquareNb)
-            const { row: opponentStartRow } = squareNbToColumnRow(game.lastMove.startSquareNb)
+            const { file, rank } = squareNbTofilerank(startSquareNb)
+            const { file: opponentfile, rank: opponentrank } = squareNbTofilerank(game.lastMove.endSquareNb)
+            const { rank: opponentStartrank } = squareNbTofilerank(game.lastMove.startSquareNb)
 
             if (
                 (this.color === 'white'
-                    ? opponentStartRow === 6 && opponentRow === 4
-                    : opponentStartRow === 1 && opponentRow === 3) &&
-                row === opponentRow &&
-                Math.abs(column - opponentColumn) === 1
+                    ? opponentStartrank === 6 && opponentrank === 4
+                    : opponentStartrank === 1 && opponentrank === 3) &&
+                rank === opponentrank &&
+                Math.abs(file - opponentfile) === 1
             ) {
-                const endSquareNb = columnRowToSquareNb({ column: opponentColumn, row: row + direction })
+                const endSquareNb = fileRankToSquareNb({ file: opponentfile, rank: rank + direction })
                 this.createMove(moves, startSquareNb, endSquareNb, game)
                 moves[moves.length - 1].endBoard.squares[game.lastMove.endSquareNb] = null
             }

@@ -10,15 +10,15 @@ export class Knight extends Piece {
     }
 
     possibleMoves(startSquareNb: number, game: Game): Move[] {
-        const OFFSETS: { column: number; row: number }[] = [
-            { column: 1, row: 2 },
-            { column: 2, row: 1 },
-            { column: 2, row: -1 },
-            { column: 1, row: -2 },
-            { column: -1, row: -2 },
-            { column: -2, row: -1 },
-            { column: -2, row: 1 },
-            { column: -1, row: 2 },
+        const OFFSETS: { file: number; rank: number }[] = [
+            { file: 1, rank: 2 },
+            { file: 2, rank: 1 },
+            { file: 2, rank: -1 },
+            { file: 1, rank: -2 },
+            { file: -1, rank: -2 },
+            { file: -2, rank: -1 },
+            { file: -2, rank: 1 },
+            { file: -1, rank: 2 },
         ]
         const moves: Move[] = []
         const startBoard: Board = game.currentBoard

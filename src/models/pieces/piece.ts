@@ -1,26 +1,26 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { ColumnRow, PieceColor, PieceName } from '../types'
-import { squareNbToColumnRow } from '../utils'
+import { fileRank, PieceColor, PieceName } from '../types'
+import { squareNbTofilerank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
     abstract possibleMoves(startSquareNb: number, game: Game): Move[]
 
-    addOffset(startSquareNb: number, offset: ColumnRow): number | null {
-        const endSquareNb = startSquareNb + offset.column + offset.row * 8
-        const { column } = squareNbToColumnRow(startSquareNb)
+    addOffset(startSquareNb: number, offset: fileRank): number | null {
+        const endSquareNb = startSquareNb + offset.file + offset.rank * 8
+        const { file } = squareNbTofilerank(startSquareNb)
 
         if (endSquareNb < 0 || endSquareNb > 63) return null
-        if (column + offset.column < 0) return null
-        if (column + offset.column > 7) return null
+        if (file + offset.file < 0) return null
+        if (file + offset.file > 7) return null
 
         return endSquareNb
     }
 
-    createMovesForRepeatedOffsets(startSquareNb: number, offsets: ColumnRow[], game: Game): Move[] {
+    createMovesForRepeatedOffsets(startSquareNb: number, offsets: fileRank[], game: Game): Move[] {
         const moves: Move[] = []
         const startBoard: Board = game.currentBoard
 

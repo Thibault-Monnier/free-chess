@@ -1,12 +1,16 @@
-import { ColumnRow } from './types'
+import { fileRank, Coordinate } from './types'
 
-export function squareNbToColumnRow(squareNb: number): ColumnRow {
+export function squareNbTofilerank(squareNb: number): fileRank {
     return {
-        column: squareNb % 8,
-        row: Math.floor(squareNb / 8),
+        file: squareNb % 8,
+        rank: Math.floor(squareNb / 8),
     }
 }
 
-export function columnRowToSquareNb({ column, row }: ColumnRow): number {
-    return row * 8 + column
+export function fileRankToSquareNb({ file, rank }: fileRank): number {
+    return rank * 8 + file
+}
+
+export function squareNbToCoordinates(squareNb: number): void {
+    const fileRank = squareNbTofilerank(squareNb)
 }
