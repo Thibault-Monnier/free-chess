@@ -1,12 +1,12 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { fileRank, PieceColor, pieceLetter } from '../types'
+import { fileRank, PieceColor, PieceLetter } from '../types'
 import { fileRankToSquareNb, squareNbTofilerank } from '../utils'
 import { Piece } from './piece'
 
 export class Pawn extends Piece {
-    private pieceLetter: pieceLetter = ''
+    private static LETTER: PieceLetter = ''
 
     constructor(color: PieceColor) {
         super('pawn', color)
@@ -24,7 +24,7 @@ export class Pawn extends Piece {
         const moveTwoSquares = startSquareNb + 16 * direction
         if (moveOneSquare >= 0 && moveOneSquare <= 63 && startBoard.squares[moveOneSquare] === null) {
             // Advance one square
-            this.createMove(moves, startSquareNb, moveOneSquare, game, this.pieceLetter)
+            this.createMove(moves, startSquareNb, moveOneSquare, game, Pawn.LETTER)
 
             // Advance two squares
             const { rank } = squareNbTofilerank(startSquareNb)
@@ -32,7 +32,7 @@ export class Pawn extends Piece {
                 startBoard.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                this.createMove(moves, startSquareNb, moveTwoSquares, game, this.pieceLetter)
+                this.createMove(moves, startSquareNb, moveTwoSquares, game, Pawn.LETTER)
             }
         }
 
@@ -50,7 +50,7 @@ export class Pawn extends Piece {
                 startBoard.squares[endSquareNb] &&
                 startBoard.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
+                this.createMove(moves, startSquareNb, endSquareNb, game, Pawn.LETTER)
             }
         }
 
@@ -68,7 +68,7 @@ export class Pawn extends Piece {
                 Math.abs(file - opponentfile) === 1
             ) {
                 const endSquareNb = fileRankToSquareNb({ file: opponentfile, rank: rank + direction })
-                this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
+                this.createMove(moves, startSquareNb, endSquareNb, game, Pawn.LETTER)
                 moves[moves.length - 1].endBoard.squares[game.lastMove.endSquareNb] = null
             }
         }

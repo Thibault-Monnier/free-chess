@@ -1,11 +1,9 @@
 import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, pieceLetter } from '../types'
+import { PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Bishop extends Piece {
-    private pieceLetter: pieceLetter = 'B'
-
     constructor(color: PieceColor) {
         super('bishop', color)
     }
@@ -19,7 +17,7 @@ export class Bishop extends Piece {
                 { file: -1, rank: 1 },
                 { file: -1, rank: -1 },
             ],
-            game, this.pieceLetter
+            game, 'B'
         )
     }
 }

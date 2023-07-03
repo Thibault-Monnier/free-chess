@@ -1,7 +1,7 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { fileRank, PieceColor, pieceLetter, PieceName } from '../types'
+import { fileRank, PieceColor, PieceLetter, PieceName } from '../types'
 import { squareNbToCoordinates, squareNbTofilerank } from '../utils'
 
 export abstract class Piece {
@@ -24,7 +24,7 @@ export abstract class Piece {
         startSquareNb: number,
         offsets: fileRank[],
         game: Game,
-        pieceLetter: pieceLetter
+        PieceLetter: PieceLetter
     ): Move[] {
         const moves: Move[] = []
         const startBoard: Board = game.currentBoard
@@ -35,7 +35,7 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, game, pieceLetter)
+                this.createMove(moves, startSquareNb, endSquareNb, game, PieceLetter)
                 if (startBoard.squares[endSquareNb]) break
             }
         }
@@ -47,7 +47,7 @@ export abstract class Piece {
         startSquareNb: number,
         endSquareNb: number | null,
         game: Game,
-        pieceLetter: pieceLetter
+        PieceLetter: PieceLetter
     ): Move | undefined {
         if (endSquareNb === null) return
 
@@ -65,18 +65,18 @@ export abstract class Piece {
                 startSquareNb,
                 endSquareNb,
                 endBoard,
-                this.encodeMove(pieceLetter, endSquarePiece ? true : false, endSquareNb)
+                this.encodeMove(PieceLetter, endSquarePiece ? true : false, endSquareNb)
             )
             moves.push(move)
             return move
         }
     }
 
-    encodeMove(pieceLetter: string, isCapture: boolean, endSquareNb: number): string {
+    encodeMove(PieceLetter: string, isCapture: boolean, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''
         const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
 
-        console.log(`${pieceLetter}${captureSymbol}${endSquareCoordinates}`)
-        return `${pieceLetter}${captureSymbol}${endSquareCoordinates}`
+        console.log(`${PieceLetter}${captureSymbol}${endSquareCoordinates}`)
+        return `${PieceLetter}${captureSymbol}${endSquareCoordinates}`
     }
 }

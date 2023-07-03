@@ -1,12 +1,10 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, pieceLetter } from '../types'
+import { PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Knight extends Piece {
-    private pieceLetter: pieceLetter = 'N'
-
     constructor(color: PieceColor) {
         super('knight', color)
     }
@@ -27,7 +25,7 @@ export class Knight extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
+            this.createMove(moves, startSquareNb, endSquareNb, game, 'N')
         }
         return moves
     }
