@@ -14,12 +14,21 @@ body {
 
 .chess {
     display: grid;
-    grid-template-areas: 'next_player panel' 'board panel';
-    grid-template-columns: 1fr 25rem;
+    grid-template-areas: '. next_player panel' 'improvements board panel';
     gap: 1.5rem;
-
-    /*Very bad code to limit the size, to change if possible!*/
+    grid-template-columns: 20rem calc(var(--square-size) * 8) 25rem;
     grid-template-rows: 2.5rem calc(var(--square-size) * 8);
+}
+
+.improvements {
+    grid-area: improvements;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+    background-color: #222;
+    border-radius: 1rem;
+    padding: 2.5rem;
 }
 
 .next_player {

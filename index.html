@@ -10,6 +10,23 @@
     </head>
     <body>
         <div class="chess">
+            <div class="improvements">
+                <style>
+                    lar{font-size: 1.5rem;}
+                    lit{font-size: 1.1rem;}
+                </style>
+                
+                <lar><b>Work in progress: </b></lar><lit><i>Moves Panel</i></lit><p>
+                <lar><b>TODO: </b></lar><br/><br/>
+                <lit><i> 
+                    Bot <br/><br/>
+                    – Checks<br />
+                    – Pawn Promotion<br />
+                    – Game End</i
+                > <br /><br />
+                    <i>Arrows?</i><lit/> 
+            </div>
+
             <div class="next_player">
                 <div id="white_to_move" class="white_to_move">
                     <div class="square"></div>
@@ -21,38 +38,11 @@
                 </div>
             </div>
 
+
             <canvas id="board" class="board"> </canvas>
 
             <div class="panel">
-                <div id="moves" class="moves">
-                    1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nc3 Nf6 5. Bb5+ Nc6 6. Bxc6+ bxc6 7. Nf3 Bf5 8. O-O e6 9. Bf4 c5
-                    10. a4 cxd4 11. Nxd4 Bd6 12. Bxd6 Qxd6 13. Re1 O-O 14. Nxf5 exf5 15. Qf3 Rfe8 16. Rxe8+ Rxe8 17. h3
-                    Rb8 18. b3 Qc5 19. Rd1 Ne4 20. Nxd5 Rd8 21. Nf4 Rxd1+ 22. Qxd1 Nf6 23. Qd8+ Qf8 24. Qxf8+ Kxf8 25.
-                    Kf1 Ke7 26. Ke2 Kd6 27. Nd3 Kd5 28. f3 Kd4 29. Nb4 g6 30. Nc6+ Kd5 31. Nxa7 Kc5 32. Nb5 Nd5 33. Kd3
-                    Kb4 34. c4 Nb6 35. Kc2 Nxc4 36. bxc4 Kxc4 37. Kb2 Kc5 38. Nc3 Kb6 39. Kb3 Ka5 40. Nd5 f6 41. Nxf6 g5
-                    42. Nxh7 f4 43. Nxg5 Kb6 44. Ne6 Ka7 45. Nxf4 Ka6 46. h4 Ka5 47. h5 Ka6 48. h6 Ka5 49. h7 Ka6 50.
-                    h8=Q Ka5 51. Qd4 Ka6 52. Qd6+ Ka5 53. Nd5 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nc3 Nf6 5. Bb5+ Nc6 6.
-                    Bxc6+ bxc6 7. Nf3 Bf5 8. O-O e6 9. Bf4 c5 10. a4 cxd4 11. Nxd4 Bd6 12. Bxd6 Qxd6 13. Re1 O-O 14.
-                    Nxf5 exf5 15. Qf3 Rfe8 16. Rxe8+ Rxe8 17. h3 Rb8 18. b3 Qc5 19. Rd1 Ne4 20. Nxd5 Rd8 21. Nf4 Rxd1+
-                    22. Qxd1 Nf6 23. Qd8+ Qf8 24. Qxf8+ Kxf8 25. Kf1 Ke7 26. Ke2 Kd6 27. Nd3 Kd5 28. f3 Kd4 29. Nb4 g6
-                    30. Nc6+ Kd5 31. Nxa7 Kc5 32. Nb5 Nd5 33. Kd3 Kb4 34. c4 Nb6 35. Kc2 Nxc4 36. bxc4 Kxc4 37. Kb2 Kc5
-                    38. Nc3 Kb6 39. Kb3 Ka5 40. Nd5 f6 41. Nxf6 g5 42. Nxh7 f4 43. Nxg5 Kb6 44. Ne6 Ka7 45. Nxf4 Ka6 46.
-                    h4 Ka5 47. h5 Ka6 48. h6 Ka5 49. h7 Ka6 50. h8=Q Ka5 51. Qd4 Ka6 52. Qd6+ Ka5 53. Nd5 1. e4 c6 2. d4
-                    d5 3. exd5 cxd5 4. Nc3 Nf6 5. Bb5+ Nc6 6. Bxc6+ bxc6 7. Nf3 Bf5 8. O-O e6 9. Bf4 c5 10. a4 cxd4 11.
-                    Nxd4 Bd6 12. Bxd6 Qxd6 13. Re1 O-O 14. Nxf5 exf5 15. Qf3 Rfe8 16. Rxe8+ Rxe8 17. h3 Rb8 18. b3 Qc5
-                    19. Rd1 Ne4 20. Nxd5 Rd8 21. Nf4 Rxd1+ 22. Qxd1 Nf6 23. Qd8+ Qf8 24. Qxf8+ Kxf8 25. Kf1 Ke7 26. Ke2
-                    Kd6 27. Nd3 Kd5 28. f3 Kd4 29. Nb4 g6 30. Nc6+ Kd5 31. Nxa7 Kc5 32. Nb5 Nd5 33. Kd3 Kb4 34. c4 Nb6
-                    35. Kc2 Nxc4 36. bxc4 Kxc4 37. Kb2 Kc5 38. Nc3 Kb6 39. Kb3 Ka5 40. Nd5 f6 41. Nxf6 g5 42. Nxh7 f4
-                    43. Nxg5 Kb6 44. Ne6 Ka7 45. Nxf4 Ka6 46. h4 Ka5 47. h5 Ka6 48. h6 Ka5 49. h7 Ka6 50. h8=Q Ka5 51.
-                    Qd4 Ka6 52. Qd6+ Ka5 53. Nd5 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nc3 Nf6 5. Bb5+ Nc6 6. Bxc6+ bxc6 7.
-                    Nf3 Bf5 8. O-O e6 9. Bf4 c5 10. a4 cxd4 11. Nxd4 Bd6 12. Bxd6 Qxd6 13. Re1 O-O 14. Nxf5 exf5 15. Qf3
-                    Rfe8 16. Rxe8+ Rxe8 17. h3 Rb8 18. b3 Qc5 19. Rd1 Ne4 20. Nxd5 Rd8 21. Nf4 Rxd1+ 22. Qxd1 Nf6 23.
-                    Qd8+ Qf8 24. Qxf8+ Kxf8 25. Kf1 Ke7 26. Ke2 Kd6 27. Nd3 Kd5 28. f3 Kd4 29. Nb4 g6 30. Nc6+ Kd5 31.
-                    Nxa7 Kc5 32. Nb5 Nd5 33. Kd3 Kb4 34. c4 Nb6 35. Kc2 Nxc4 36. bxc4 Kxc4 37. Kb2 Kc5 38. Nc3 Kb6 39.
-                    Kb3 Ka5 40. Nd5 f6 41. Nxf6 g5 42. Nxh7 f4 43. Nxg5 Kb6 44. Ne6 Ka7 45. Nxf4 Ka6 46. h4 Ka5 47. h5
-                    Ka6 48. h6 Ka5 49. h7 Ka6 50. h8=Q Ka5 51. Qd4 Ka6 52. Qd6+ Ka5 53. Nd5
-                </div>
-
+                <div id="moves" class="moves"></div>
                 <div class="actions">
                     <button id="undo" disabled>&lt;</button>
                     <button id="redo" disabled>&gt;</button>
@@ -61,4 +51,5 @@
             </div>
         </div>
     </body>
+    
 </html>
