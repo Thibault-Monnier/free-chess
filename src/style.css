@@ -22,13 +22,21 @@ body {
 
 .improvements {
     grid-area: improvements;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    flex-grow: 1;
     background-color: #222;
     border-radius: 1rem;
     padding: 2.5rem;
+}
+
+.improvements h1 {
+    margin-top: 3rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.improvements h1:first-child {
+    margin-top: 0;
+}
+.improvements p {
+    font-style: italic;
 }
 
 .next_player {
