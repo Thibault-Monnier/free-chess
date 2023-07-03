@@ -2,7 +2,7 @@ import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter, PieceName } from '../types'
-import { squareNbToCoordinates, squareNbTofilerank } from '../utils'
+import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
@@ -11,7 +11,7 @@ export abstract class Piece {
 
     addOffset(startSquareNb: number, offset: fileRank): number | null {
         const endSquareNb = startSquareNb + offset.file + offset.rank * 8
-        const { file } = squareNbTofilerank(startSquareNb)
+        const { file } = squareNbToFileRank(startSquareNb)
 
         if (endSquareNb < 0 || endSquareNb > 63) return null
         if (file + offset.file < 0) return null
@@ -47,7 +47,7 @@ export abstract class Piece {
         startSquareNb: number,
         endSquareNb: number | null,
         game: Game,
-        PieceLetter: PieceLetter
+        letter: PieceLetter
     ): Move | undefined {
         if (endSquareNb === null) return
 
@@ -65,18 +65,16 @@ export abstract class Piece {
                 startSquareNb,
                 endSquareNb,
                 endBoard,
-                this.encodeMove(PieceLetter, endSquarePiece ? true : false, endSquareNb)
+                this.encodeMove(letter, endSquarePiece ? true : false, endSquareNb)
             )
             moves.push(move)
             return move
         }
     }
 
-    encodeMove(PieceLetter: string, isCapture: boolean, endSquareNb: number): string {
+    private encodeMove(letter: PieceLetter, isCapture: boolean, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''
         const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
-
-        console.log(`${PieceLetter}${captureSymbol}${endSquareCoordinates}`)
-        return `${PieceLetter}${captureSymbol}${endSquareCoordinates}`
+        return [letter, captureSymbol, endSquareCoordinates].join('')
     }
 }

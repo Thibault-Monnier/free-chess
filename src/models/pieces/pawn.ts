@@ -2,7 +2,7 @@ import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter } from '../types'
-import { fileRankToSquareNb, squareNbTofilerank } from '../utils'
+import { fileRankToSquareNb, squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 
 export class Pawn extends Piece {
@@ -27,7 +27,7 @@ export class Pawn extends Piece {
             this.createMove(moves, startSquareNb, moveOneSquare, game, Pawn.LETTER)
 
             // Advance two squares
-            const { rank } = squareNbTofilerank(startSquareNb)
+            const { rank } = squareNbToFileRank(startSquareNb)
             if (
                 startBoard.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
@@ -56,9 +56,9 @@ export class Pawn extends Piece {
 
         // En passant captures
         if (game.lastMove?.piece.name === 'pawn') {
-            const { file, rank } = squareNbTofilerank(startSquareNb)
-            const { file: opponentfile, rank: opponentrank } = squareNbTofilerank(game.lastMove.endSquareNb)
-            const { rank: opponentStartrank } = squareNbTofilerank(game.lastMove.startSquareNb)
+            const { file, rank } = squareNbToFileRank(startSquareNb)
+            const { file: opponentfile, rank: opponentrank } = squareNbToFileRank(game.lastMove.endSquareNb)
+            const { rank: opponentStartrank } = squareNbToFileRank(game.lastMove.startSquareNb)
 
             if (
                 (this.color === 'white'

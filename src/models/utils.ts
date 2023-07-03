@@ -1,6 +1,6 @@
 import { fileRank, Coordinates } from './types'
 
-export function squareNbTofilerank(squareNb: number): fileRank {
+export function squareNbToFileRank(squareNb: number): fileRank {
     return {
         file: squareNb % 8,
         rank: Math.floor(squareNb / 8),
@@ -12,9 +12,7 @@ export function fileRankToSquareNb({ file, rank }: fileRank): number {
 }
 
 export function squareNbToCoordinates(squareNb: number): Coordinates {
-    const { file, rank } = squareNbTofilerank(squareNb)
+    const { file, rank } = squareNbToFileRank(squareNb)
     const fileInLetter = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'][file]
-    const coordinates: Coordinates = `${fileInLetter}${rank + 1}` as Coordinates
-    console.log(squareNb + '=' + coordinates)
-    return coordinates
+    return `${fileInLetter}${rank + 1}` as Coordinates
 }
