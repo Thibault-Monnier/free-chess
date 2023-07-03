@@ -39,42 +39,44 @@ export class King extends Piece {
         // Castling
         const canCastle = startBoard.canCastle[this.color]
         if (canCastle.queenSide) {
-            for (let i = 1; i <= 3; i++) {
-                if (game.currentBoard.squares[startSquareNb - i] !== null) {
-                    break
-                }
-                if (i === 3) {
-                    createCastling(true)
-                }
+            const isClearPath = this.areSquaresEmpty(startBoard, [
+                startSquareNb - 1,
+                startSquareNb - 2,
+                startSquareNb - 3,
+            ])
+            if (isClearPath) {
+                const move = this.createCastling(startBoard, startSquareNb, true)
+                moves.push(move)
             }
         }
         if (canCastle.kingSide) {
-            for (let i = 1; i <= 2; i++) {
-                if (game.currentBoard.squares[startSquareNb + i] !== null) {
-                    break
-                }
-                if (i === 2) {
-                    createCastling(false)
-                }
+            const isClearPath = this.areSquaresEmpty(startBoard, [startSquareNb + 1, startSquareNb + 2])
+            if (isClearPath) {
+                const move = this.createCastling(startBoard, startSquareNb, false)
+                moves.push(move)
             }
         }
 
-        function createCastling(isQueenSideCastling: boolean) {
-            const endBoard = new Board(startBoard)
-            const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
-            const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
-
-            endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
-            endBoard.squares[endSquareNb + (isQueenSideCastling ? 1 : -1)] = endBoard.squares[rookStartPosition]
-            endBoard.squares[startSquareNb] = null
-            endBoard.squares[rookStartPosition] = null
-
-            let moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
-            console.log(moveNotation)
-
-            moves.push(new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation))
-        }
-
         return moves
+    }
+
+    private areSquaresEmpty(board: Board, squareNbs: number[]): boolean {
+        return squareNbs.every((squareNb) => !board.squares[squareNb])
+    }
+
+    private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
+        const endBoard = new Board(startBoard)
+        const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
+        const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
+
+        endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
+        endBoard.squares[endSquareNb + (isQueenSideCastling ? 1 : -1)] = endBoard.squares[rookStartPosition]
+        endBoard.squares[startSquareNb] = null
+        endBoard.squares[rookStartPosition] = null
+
+        let moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
+        console.log(moveNotation)
+
+        return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
     }
 }

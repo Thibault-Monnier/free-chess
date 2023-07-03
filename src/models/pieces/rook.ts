@@ -1,3 +1,4 @@
+import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
 import { PieceColor, PieceLetter } from '../types'
@@ -17,7 +18,8 @@ export class Rook extends Piece {
                 { file: 0, rank: -1 },
                 { file: -1, rank: 0 },
             ],
-            game, 'R'
+            game,
+            'R'
         )
 
         const isQueenSquare = (this.color === 'white' ? 0 : 56) === startSquareNb
@@ -29,5 +31,15 @@ export class Rook extends Piece {
         }
 
         return moves
+    }
+
+    eaten(board: Board): void {
+        if (this.color === 'white') {
+            if (board.squares[0] === this) board.canCastle[this.color].queenSide = false
+            if (board.squares[7] === this) board.canCastle[this.color].kingSide = false
+        } else {
+            if (board.squares[56] === this) board.canCastle[this.color].queenSide = false
+            if (board.squares[63] === this) board.canCastle[this.color].kingSide = false
+        }
     }
 }

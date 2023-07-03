@@ -9,6 +9,8 @@ export abstract class Piece {
 
     abstract possibleMoves(startSquareNb: number, game: Game): Move[]
 
+    eaten(board: Board): void {}
+
     addOffset(startSquareNb: number, offset: fileRank): number | null {
         const endSquareNb = startSquareNb + offset.file + offset.rank * 8
         const { file } = squareNbToFileRank(startSquareNb)
@@ -56,6 +58,9 @@ export abstract class Piece {
 
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
             const endBoard = new Board(startBoard)
+
+            const piece = endBoard.squares[endSquareNb]
+            if (piece) piece.eaten(endBoard)
 
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
