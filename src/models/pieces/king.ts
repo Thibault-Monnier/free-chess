@@ -1,10 +1,12 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceName } from '../types'
+import { fileRank, PieceColor, pieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class King extends Piece {
+    private pieceLetter: pieceLetter = 'K'
+
     constructor(color: PieceColor) {
         super('king', color)
     }
@@ -26,7 +28,7 @@ export class King extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            const move = this.createMove(moves, startSquareNb, endSquareNb, game)
+            const move = this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
             if (move) {
                 const canCastle = move.endBoard.canCastle[this.color]
                 canCastle.queenSide = false
@@ -69,7 +71,7 @@ export class King extends Piece {
             endBoard.squares[startSquareNb] = null
             endBoard.squares[rookStartPosition] = null
 
-            moves.push(new Move(endBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard))
+            moves.push(new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard))
         }
 
         return moves
