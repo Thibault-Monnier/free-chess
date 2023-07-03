@@ -1,11 +1,13 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { fileRank, PieceColor } from '../types'
+import { fileRank, PieceColor, pieceLetter } from '../types'
 import { fileRankToSquareNb, squareNbTofilerank } from '../utils'
 import { Piece } from './piece'
 
 export class Pawn extends Piece {
+    private pieceLetter: pieceLetter = ''
+
     constructor(color: PieceColor) {
         super('pawn', color)
     }
@@ -22,7 +24,7 @@ export class Pawn extends Piece {
         const moveTwoSquares = startSquareNb + 16 * direction
         if (moveOneSquare >= 0 && moveOneSquare <= 63 && startBoard.squares[moveOneSquare] === null) {
             // Advance one square
-            this.createMove(moves, startSquareNb, moveOneSquare, game)
+            this.createMove(moves, startSquareNb, moveOneSquare, game, this.pieceLetter)
 
             // Advance two squares
             const { rank } = squareNbTofilerank(startSquareNb)
@@ -30,7 +32,7 @@ export class Pawn extends Piece {
                 startBoard.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                this.createMove(moves, startSquareNb, moveTwoSquares, game)
+                this.createMove(moves, startSquareNb, moveTwoSquares, game, this.pieceLetter)
             }
         }
 
@@ -48,7 +50,7 @@ export class Pawn extends Piece {
                 startBoard.squares[endSquareNb] &&
                 startBoard.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, game)
+                this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
             }
         }
 
@@ -66,7 +68,7 @@ export class Pawn extends Piece {
                 Math.abs(file - opponentfile) === 1
             ) {
                 const endSquareNb = fileRankToSquareNb({ file: opponentfile, rank: rank + direction })
-                this.createMove(moves, startSquareNb, endSquareNb, game)
+                this.createMove(moves, startSquareNb, endSquareNb, game, this.pieceLetter)
                 moves[moves.length - 1].endBoard.squares[game.lastMove.endSquareNb] = null
             }
         }

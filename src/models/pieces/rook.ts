@@ -1,9 +1,11 @@
 import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor } from '../types'
+import { PieceColor, pieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
+    private pieceLetter: pieceLetter = 'R'
+
     constructor(color: PieceColor) {
         super('rook', color)
     }
@@ -17,7 +19,7 @@ export class Rook extends Piece {
                 { file: 0, rank: -1 },
                 { file: -1, rank: 0 },
             ],
-            game
+            game, this.pieceLetter
         )
 
         const isQueenSquare = (this.color === 'white' ? 0 : 56) === startSquareNb

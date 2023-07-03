@@ -1,8 +1,8 @@
 import { Board } from '../board'
 import { Game } from '../game'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceName } from '../types'
-import { squareNbTofilerank } from '../utils'
+import { fileRank, PieceColor, pieceLetter, PieceName } from '../types'
+import { squareNbToCoordinates, squareNbTofilerank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
@@ -20,7 +20,12 @@ export abstract class Piece {
         return endSquareNb
     }
 
-    createMovesForRepeatedOffsets(startSquareNb: number, offsets: fileRank[], game: Game): Move[] {
+    createMovesForRepeatedOffsets(
+        startSquareNb: number,
+        offsets: fileRank[],
+        game: Game,
+        pieceLetter: pieceLetter
+    ): Move[] {
         const moves: Move[] = []
         const startBoard: Board = game.currentBoard
 
@@ -30,14 +35,20 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, game)
+                this.createMove(moves, startSquareNb, endSquareNb, game, pieceLetter)
                 if (startBoard.squares[endSquareNb]) break
             }
         }
         return moves
     }
 
-    createMove(moves: Move[], startSquareNb: number, endSquareNb: number | null, game: Game): Move | undefined {
+    createMove(
+        moves: Move[],
+        startSquareNb: number,
+        endSquareNb: number | null,
+        game: Game,
+        pieceLetter: pieceLetter
+    ): Move | undefined {
         if (endSquareNb === null) return
 
         const startBoard = game.currentBoard
@@ -49,9 +60,23 @@ export abstract class Piece {
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 
-            const move = new Move(this, startSquareNb, endSquareNb, endBoard)
+            const move = new Move(
+                this,
+                startSquareNb,
+                endSquareNb,
+                endBoard,
+                this.encodeMove(pieceLetter, endSquarePiece ? true : false, endSquareNb)
+            )
             moves.push(move)
             return move
         }
+    }
+
+    encodeMove(pieceLetter: string, isCapture: boolean, endSquareNb: number): string {
+        const captureSymbol = isCapture ? 'x' : ''
+        const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
+
+        console.log(`${pieceLetter}${captureSymbol}${endSquareCoordinates}`)
+        return `${pieceLetter}${captureSymbol}${endSquareCoordinates}`
     }
 }

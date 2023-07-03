@@ -44,7 +44,6 @@ export class King extends Piece {
                     break
                 }
                 if (i === 3) {
-                    console.log('queenSide')
                     createCastling(true)
                 }
             }
@@ -55,7 +54,6 @@ export class King extends Piece {
                     break
                 }
                 if (i === 2) {
-                    console.log('kingSide')
                     createCastling(false)
                 }
             }
@@ -71,7 +69,10 @@ export class King extends Piece {
             endBoard.squares[startSquareNb] = null
             endBoard.squares[rookStartPosition] = null
 
-            moves.push(new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard))
+            let moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
+            console.log(moveNotation)
+
+            moves.push(new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation))
         }
 
         return moves
