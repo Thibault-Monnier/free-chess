@@ -20,12 +20,14 @@ export class Board {
     constructor(board?: Board) {
         if (board) {
             this.squares = [...board.squares]
+            this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
         } else {
             this.squares = new Array(64).fill(null)
             this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
         }
     }
 
+    // TODO: import canCastle
     public importFEN(fen: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
         const placement = fen.split(' ')[0]
