@@ -15,6 +15,7 @@ export class Chess {
     private draw() {
         this.toggleActions()
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
+        this.updateMovesPanel()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -89,5 +90,22 @@ export class Chess {
 
         if (this.game.canRedo) document.getElementById('redo')!.removeAttribute('disabled')
         else document.getElementById('redo')!.setAttribute('disabled', '')
+    }
+
+    private updateMovesPanel(): void {
+        let html = ''
+        const moves = document.getElementById('moves')!
+
+        this.game.moves.forEach((move, index) => {
+            if (index % 2 === 0) {
+                html += `<div>${index / 2 + 1}.</div>`
+            }
+
+            html +=
+                this.game.moveNb - 1 === index
+                    ? `<div class="move currentMove">${move.notation}</div>`
+                    : `<div class="move">${move.notation}</div>`
+        })
+        moves.innerHTML = html
     }
 }

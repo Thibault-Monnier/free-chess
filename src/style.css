@@ -82,9 +82,40 @@ body {
     flex-grow: 1;
     background-color: #222;
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: 2.5rem 2rem;
+
     overflow-y: auto;
+    scrollbar-width: thin;
+
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr;
+    grid-auto-rows: 1.8rem;
+
+    align-items: center;
+    justify-items: center;
+    align-content: start;
+    gap: 0.25rem;
 }
+
+.move {
+    cursor: pointer;
+    border-radius: 0.5rem;
+    padding: 0.1rem 1.5rem;
+    border: thin solid transparent;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.move:hover {
+    background-color: #0e0e0e;
+    border-color: #888;
+}
+
+.currentMove {
+    font-weight: 700;
+    border-color: whitesmoke;
+}
+
 .actions {
     display: flex;
     justify-content: center;
