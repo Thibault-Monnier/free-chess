@@ -70,16 +70,19 @@ export abstract class Piece {
                 startSquareNb,
                 endSquareNb,
                 endBoard,
-                this.encodeMove(letter, endSquarePiece ? true : false, endSquareNb)
+                this.encodeMove(letter, endSquarePiece ? true : false, startSquareNb, endSquareNb)
             )
             moves.push(move)
             return move
         }
     }
 
-    private encodeMove(letter: PieceLetter, isCapture: boolean, endSquareNb: number): string {
+    private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''
         const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
-        return [letter, captureSymbol, endSquareCoordinates].join('')
+        let file = ''
+        if (isCapture && letter === '') file = squareNbToCoordinates(startSquareNb)[0]
+        
+        return [letter === '' ? file : letter, captureSymbol, endSquareCoordinates].join('')
     }
 }
