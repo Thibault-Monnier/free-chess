@@ -37,6 +37,10 @@ export class Game {
         this._moveNb++
     }
 
+    jumpToMove(moveNb: number) {
+        this._moveNb = moveNb
+    }
+
     get canUndo(): boolean {
         return this._moveNb > 0
     }

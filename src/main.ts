@@ -16,3 +16,6 @@ document.getElementById('redo')!.onclick = () => chess.redo()
 document.getElementById('reset')!.onclick = () => chess.reset()
 
 canvas.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
+
+//@ts-ignore
+window.chess = chess

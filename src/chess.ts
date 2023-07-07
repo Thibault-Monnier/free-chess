@@ -66,6 +66,12 @@ export class Chess {
         document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
     }
 
+    jumpToMove(moveNb: number): void {
+        this.selectedSquareNb = null
+        this.game.jumpToMove(moveNb)
+        this.draw()
+    }
+
     undo(): void {
         this.selectedSquareNb = null
         this.game.undo()
@@ -104,7 +110,7 @@ export class Chess {
             html +=
                 this.game.moveNb - 1 === index
                     ? `<div class="move currentMove">${move.notation}</div>`
-                    : `<div class="move">${move.notation}</div>`
+                    : `<div class="move" onClick="window.chess.jumpToMove(${index+1})">${move.notation}</div>`
         })
         moves.innerHTML = html
     }
