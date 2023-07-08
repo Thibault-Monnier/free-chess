@@ -15,8 +15,8 @@ export class Board {
         white: { queenSide: boolean; kingSide: boolean }
         black: { queenSide: boolean; kingSide: boolean }
     } = {
-        white: { queenSide: true, kingSide: true },
-        black: { queenSide: true, kingSide: true },
+        white: { queenSide: false, kingSide: false },
+        black: { queenSide: false, kingSide: false },
     }
 
     constructor(board?: Board, switchColor: boolean = false) {
@@ -30,14 +30,14 @@ export class Board {
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
         } else {
             this.squares = new Array(64).fill(null)
-            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
         }
     }
 
     // TODO: import canCastle
     public importFEN(fen: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
-        const placement = fen.split(' ')[0]
+        const [placement, colorToMove, canCastle, enPassantTargetSquare] = fen.split(' ')
 
         placement.split('/').forEach((rowPlacement, index) => {
             const rank = 7 - index
@@ -61,6 +61,13 @@ export class Board {
                 }
             }
         })
+
+        this.colorToMove = colorToMove === 'w' ? 'white' : 'black'
+
+        if (canCastle.includes('K')) this.canCastle.white.kingSide = true
+        if (canCastle.includes('Q')) this.canCastle.white.queenSide = true
+        if (canCastle.includes('k')) this.canCastle.black.kingSide = true
+        if (canCastle.includes('q')) this.canCastle.black.queenSide = true
     }
 
     debug() {
