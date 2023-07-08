@@ -110,8 +110,11 @@ export class Chess {
             html +=
                 this.game.moveNb - 1 === index
                     ? `<div class="move currentMove">${move.notation}</div>`
-                    : `<div class="move" onClick="window.chess.jumpToMove(${index+1})">${move.notation}</div>`
+                    : `<div class="move" onClick="window.chess.jumpToMove(${index + 1})">${move.notation}</div>`
         })
         moves.innerHTML = html
+
+        const currentMove = document.getElementsByClassName('currentMove')[0]
+        if (currentMove) currentMove.scrollIntoView({behavior: 'smooth', block:'center'})
     }
 }

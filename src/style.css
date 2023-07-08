@@ -134,6 +134,7 @@ body {
 
 .actions button {
     cursor: pointer;
+    user-select: none;
 
     /*Draw the button background*/
     background-color: #222;
