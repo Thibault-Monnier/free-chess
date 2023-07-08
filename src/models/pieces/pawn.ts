@@ -30,7 +30,8 @@ export class Pawn extends Piece {
                 board.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER)
+                const move = this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER)
+                if (move) move.endBoard.enPassantTargetSquareNb = moveOneSquare
             }
         }
 
@@ -53,23 +54,13 @@ export class Pawn extends Piece {
         }
 
         // En passant captures
-        /*if (game.lastMove?.piece.name === 'pawn') {
-            const { file, rank } = squareNbToFileRank(startSquareNb)
-            const { file: opponentfile, rank: opponentrank } = squareNbToFileRank(game.lastMove.endSquareNb)
-            const { rank: opponentStartrank } = squareNbToFileRank(game.lastMove.startSquareNb)
-
-            if (
-                (this.color === 'white'
-                    ? opponentStartrank === 6 && opponentrank === 4
-                    : opponentStartrank === 1 && opponentrank === 3) &&
-                rank === opponentrank &&
-                Math.abs(file - opponentfile) === 1
-            ) {
-                const endSquareNb = fileRankToSquareNb({ file: opponentfile, rank: rank + direction })
-                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER)
-                moves[moves.length - 1].endBoard.squares[game.lastMove.endSquareNb] = null
+        if (board.enPassantTargetSquareNb !== null) {
+            const offsetToTarget = board.enPassantTargetSquareNb - startSquareNb
+            if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
+                const move = this.createMove(moves, startSquareNb, board.enPassantTargetSquareNb, board, Pawn.LETTER)
+                if (move) move.endBoard.squares[board.enPassantTargetSquareNb - 8 * direction] = null
             }
-        }*/
+        }
 
         return moves
     }

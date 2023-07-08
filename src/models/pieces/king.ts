@@ -59,7 +59,7 @@ export class King extends Piece {
     }
 
     private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
-        const endBoard = new Board(startBoard, true)
+        const endBoard = new Board(startBoard, { switchColor: true, resetEnPassant: true })
         const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
         const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
 

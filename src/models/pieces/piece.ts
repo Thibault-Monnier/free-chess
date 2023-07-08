@@ -54,7 +54,7 @@ export abstract class Piece {
         const endSquarePiece = board.squares[endSquareNb]
 
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
-            const endBoard = new Board(board, true)
+            const endBoard = new Board(board, { switchColor: true, resetEnPassant: true })
 
             const piece = endBoard.squares[endSquareNb]
             if (piece) piece.eaten(endBoard)
@@ -87,7 +87,6 @@ export abstract class Piece {
             }
         }
     }*/
-    
 
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''

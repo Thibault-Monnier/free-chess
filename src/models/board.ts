@@ -5,8 +5,8 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { PieceColor } from './types'
-import { fileRankToSquareNb } from './utils'
+import { Coordinates, PieceColor } from './types'
+import { coordinatesToSquareNb, fileRankToSquareNb } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
@@ -18,16 +18,18 @@ export class Board {
         white: { queenSide: false, kingSide: false },
         black: { queenSide: false, kingSide: false },
     }
+    public enPassantTargetSquareNb: number | null = null
 
-    constructor(board?: Board, switchColor: boolean = false) {
+    constructor(board?: Board, options?: { switchColor: boolean; resetEnPassant: boolean }) {
         if (board) {
             this.squares = [...board.squares]
-            if (switchColor) {
+            if (options?.switchColor) {
                 this.colorToMove = board.colorToMove === 'white' ? 'black' : 'white'
             } else {
                 this.colorToMove = board.colorToMove
             }
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
+            this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
         } else {
             this.squares = new Array(64).fill(null)
             this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
@@ -68,6 +70,9 @@ export class Board {
         if (canCastle.includes('Q')) this.canCastle.white.queenSide = true
         if (canCastle.includes('k')) this.canCastle.black.kingSide = true
         if (canCastle.includes('q')) this.canCastle.black.queenSide = true
+
+        this.enPassantTargetSquareNb =
+            enPassantTargetSquare === '-' ? null : coordinatesToSquareNb(enPassantTargetSquare as Coordinates)
     }
 
     debug() {
