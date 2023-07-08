@@ -12,7 +12,7 @@ export class King extends Piece {
     }
 
     // TODO: checks
-    possibleMoves(startSquareNb: number, game: Game): Move[] {
+    possibleMoves(startSquareNb: number, board: Board): Move[] {
         const OFFSETS: fileRank[] = [
             { file: 1, rank: 1 },
             { file: 1, rank: 0 },
@@ -24,11 +24,10 @@ export class King extends Piece {
             { file: -1, rank: -1 },
         ]
         const moves: Move[] = []
-        const startBoard: Board = game.currentBoard
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            const move = this.createMove(moves, startSquareNb, endSquareNb, game, King.LETTER)
+            const move = this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER)
             if (move) {
                 const canCastle = move.endBoard.canCastle[this.color]
                 canCastle.queenSide = false
@@ -37,22 +36,22 @@ export class King extends Piece {
         }
 
         // Castling
-        const canCastle = startBoard.canCastle[this.color]
+        const canCastle = board.canCastle[this.color]
         if (canCastle.queenSide) {
-            const isClearPath = this.areSquaresEmpty(startBoard, [
+            const isClearPath = this.areSquaresEmpty(board, [
                 startSquareNb - 1,
                 startSquareNb - 2,
                 startSquareNb - 3,
             ])
             if (isClearPath) {
-                const move = this.createCastling(startBoard, startSquareNb, true)
+                const move = this.createCastling(board, startSquareNb, true)
                 moves.push(move)
             }
         }
         if (canCastle.kingSide) {
-            const isClearPath = this.areSquaresEmpty(startBoard, [startSquareNb + 1, startSquareNb + 2])
+            const isClearPath = this.areSquaresEmpty(board, [startSquareNb + 1, startSquareNb + 2])
             if (isClearPath) {
-                const move = this.createCastling(startBoard, startSquareNb, false)
+                const move = this.createCastling(board, startSquareNb, false)
                 moves.push(move)
             }
         }

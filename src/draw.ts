@@ -1,3 +1,4 @@
+import { Board } from './models/board'
 import { Game } from './models/game'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
@@ -95,7 +96,7 @@ export function drawBoard(game: Game, selectedSquareNb: number | null, highlight
 
 function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     const piece = game.currentBoard.squares[selectedSquareNb]!
-    const moves = piece.possibleMoves(selectedSquareNb, game)
+    const moves = piece.possibleMoves(selectedSquareNb, game.currentBoard)
 
     for (let move of moves) {
         const { x, y } = squareNbToXY(move.endSquareNb)

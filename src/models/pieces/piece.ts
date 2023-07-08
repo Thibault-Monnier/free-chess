@@ -1,5 +1,4 @@
 import { Board } from '../board'
-import { Game } from '../game'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter, PieceName } from '../types'
 import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
@@ -7,7 +6,7 @@ import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
-    abstract possibleMoves(startSquareNb: number, game: Game): Move[]
+    abstract possibleMoves(startSquareNb: number, board: Board): Move[]
 
     eaten(board: Board): void {}
 
@@ -25,11 +24,10 @@ export abstract class Piece {
     createMovesForRepeatedOffsets(
         startSquareNb: number,
         offsets: fileRank[],
-        game: Game,
+        board: Board,
         PieceLetter: PieceLetter
     ): Move[] {
         const moves: Move[] = []
-        const startBoard: Board = game.currentBoard
 
         for (let offset of offsets) {
             let endSquareNb: number | null = startSquareNb
@@ -37,8 +35,8 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, game, PieceLetter)
-                if (startBoard.squares[endSquareNb]) break
+                this.createMove(moves, startSquareNb, endSquareNb, board, PieceLetter)
+                if (board.squares[endSquareNb]) break
             }
         }
         return moves
@@ -48,22 +46,25 @@ export abstract class Piece {
         moves: Move[],
         startSquareNb: number,
         endSquareNb: number | null,
-        game: Game,
+        board: Board,
         letter: PieceLetter
     ): Move | undefined {
         if (endSquareNb === null) return
 
-        const startBoard = game.currentBoard
-        const endSquarePiece = startBoard.squares[endSquareNb]
+        const endSquarePiece = board.squares[endSquareNb]
 
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
-            const endBoard = new Board(startBoard)
+            const endBoard = new Board(board)
 
             const piece = endBoard.squares[endSquareNb]
             if (piece) piece.eaten(endBoard)
 
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
+
+            /*if (this.isInCheck(endBoard)) {
+                return
+            }*/
 
             const move = new Move(
                 this,
@@ -77,12 +78,23 @@ export abstract class Piece {
         }
     }
 
+    //Worst possible code in terms of optimization, change when optimizing
+    /*private isInCheck(endBoard: Board): boolean {
+        for (const square of endBoard.squares) {
+            if (square && square.color !== this.color) {
+                const moves = square!.possibleMoves()
+                console.log(moves)
+            }
+        }
+    }*/
+    
+
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''
         const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
         let file = ''
         if (isCapture && letter === '') file = squareNbToCoordinates(startSquareNb)[0]
-        
+
         return [letter === '' ? file : letter, captureSymbol, endSquareCoordinates].join('')
     }
 }

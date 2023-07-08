@@ -1,7 +1,6 @@
 import { Board } from '../board'
-import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, PieceLetter } from '../types'
+import { PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
@@ -9,7 +8,7 @@ export class Rook extends Piece {
         super('rook', color)
     }
 
-    possibleMoves(startSquareNb: number, game: Game): Move[] {
+    possibleMoves(startSquareNb: number, board: Board): Move[] {
         const moves = this.createMovesForRepeatedOffsets(
             startSquareNb,
             [
@@ -18,7 +17,7 @@ export class Rook extends Piece {
                 { file: 0, rank: -1 },
                 { file: -1, rank: 0 },
             ],
-            game,
+            board,
             'R'
         )
 

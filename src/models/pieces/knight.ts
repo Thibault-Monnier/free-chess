@@ -1,7 +1,6 @@
 import { Board } from '../board'
-import { Game } from '../game'
 import { Move } from '../move'
-import { PieceColor, PieceLetter } from '../types'
+import { PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Knight extends Piece {
@@ -9,7 +8,7 @@ export class Knight extends Piece {
         super('knight', color)
     }
 
-    possibleMoves(startSquareNb: number, game: Game): Move[] {
+    possibleMoves(startSquareNb: number, board: Board): Move[] {
         const OFFSETS: { file: number; rank: number }[] = [
             { file: 1, rank: 2 },
             { file: 2, rank: 1 },
@@ -21,11 +20,10 @@ export class Knight extends Piece {
             { file: -1, rank: 2 },
         ]
         const moves: Move[] = []
-        const startBoard: Board = game.currentBoard
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, game, 'N')
+            this.createMove(moves, startSquareNb, endSquareNb, board, 'N')
         }
         return moves
     }

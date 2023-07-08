@@ -1,5 +1,4 @@
 import { Board } from '../board'
-import { Game } from '../game'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter } from '../types'
 import { fileRankToSquareNb, squareNbToFileRank } from '../utils'
@@ -13,8 +12,7 @@ export class Pawn extends Piece {
     }
 
     // TODO:  promotion
-    possibleMoves(startSquareNb: number, game: Game): Move[] {
-        const startBoard: Board = game.currentBoard
+    possibleMoves(startSquareNb: number, board: Board): Move[] {
         const moves: Move[] = []
 
         const direction = this.color === 'white' ? 1 : -1
@@ -22,17 +20,17 @@ export class Pawn extends Piece {
         // Basic moves
         const moveOneSquare = startSquareNb + 8 * direction
         const moveTwoSquares = startSquareNb + 16 * direction
-        if (moveOneSquare >= 0 && moveOneSquare <= 63 && startBoard.squares[moveOneSquare] === null) {
+        if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
             // Advance one square
-            this.createMove(moves, startSquareNb, moveOneSquare, game, Pawn.LETTER)
+            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER)
 
             // Advance two squares
             const { rank } = squareNbToFileRank(startSquareNb)
             if (
-                startBoard.squares[moveTwoSquares] === null &&
+                board.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                this.createMove(moves, startSquareNb, moveTwoSquares, game, Pawn.LETTER)
+                this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER)
             }
         }
 
@@ -47,15 +45,15 @@ export class Pawn extends Piece {
 
             if (
                 endSquareNb !== null &&
-                startBoard.squares[endSquareNb] &&
-                startBoard.squares[endSquareNb]!.color !== this.color
+                board.squares[endSquareNb] &&
+                board.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, game, Pawn.LETTER)
+                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER)
             }
         }
 
         // En passant captures
-        if (game.lastMove?.piece.name === 'pawn') {
+        /*if (game.lastMove?.piece.name === 'pawn') {
             const { file, rank } = squareNbToFileRank(startSquareNb)
             const { file: opponentfile, rank: opponentrank } = squareNbToFileRank(game.lastMove.endSquareNb)
             const { rank: opponentStartrank } = squareNbToFileRank(game.lastMove.startSquareNb)
@@ -68,10 +66,10 @@ export class Pawn extends Piece {
                 Math.abs(file - opponentfile) === 1
             ) {
                 const endSquareNb = fileRankToSquareNb({ file: opponentfile, rank: rank + direction })
-                this.createMove(moves, startSquareNb, endSquareNb, game, Pawn.LETTER)
+                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER)
                 moves[moves.length - 1].endBoard.squares[game.lastMove.endSquareNb] = null
             }
-        }
+        }*/
 
         return moves
     }

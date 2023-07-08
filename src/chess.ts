@@ -56,7 +56,7 @@ export class Chess {
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
         const piece = this.game.currentBoard.squares[this.selectedSquareNb]
-        const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game)
+        const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game.currentBoard)
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 
@@ -115,6 +115,6 @@ export class Chess {
         moves.innerHTML = html
 
         const currentMove = document.getElementsByClassName('currentMove')[0]
-        if (currentMove) currentMove.scrollIntoView({behavior: 'smooth', block:'center'})
+        if (currentMove) currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 }
