@@ -96,7 +96,7 @@ export function drawBoard(game: Game, selectedSquareNb: number | null, highlight
 
 function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     const piece = game.currentBoard.squares[selectedSquareNb]!
-    const moves = piece.possibleMoves(selectedSquareNb, game.currentBoard)
+    const moves = piece.possibleMoves(selectedSquareNb, game.currentBoard, {})
 
     for (let move of moves) {
         const { x, y } = squareNbToXY(move.endSquareNb)
@@ -119,11 +119,7 @@ function drawCoordinates() {
 
     for (let file = 0; file < 8; file++) {
         ctx.fillStyle = getSquareColor(file) === 'dark' ? lightSquares : darkSquares
-        ctx.fillText(
-            String.fromCharCode(97 + file),
-            squareSize * (file + 1) - fontSize,
-            canvas.height - fontSize * 0.4
-        )
+        ctx.fillText(String.fromCharCode(97 + file), squareSize * (file + 1) - fontSize, canvas.height - fontSize * 0.4)
     }
 
     for (let rank = 0; rank < 8; rank++) {

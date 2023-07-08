@@ -56,7 +56,7 @@ export class Chess {
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
         const piece = this.game.currentBoard.squares[this.selectedSquareNb]
-        const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game.currentBoard)
+        const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game.currentBoard, {})
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 

@@ -11,3 +11,4 @@ export type Coordinates = `${'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'}${
     | '6'
     | '7'
     | '8'}`
+export type PossibleMoveOptions = { skipCheckVerification?: boolean }

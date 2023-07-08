@@ -1,12 +1,12 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter, PieceName } from '../types'
+import { fileRank, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
 import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
-    abstract possibleMoves(startSquareNb: number, board: Board): Move[]
+    abstract possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[]
 
     eaten(board: Board): void {}
 
@@ -25,7 +25,8 @@ export abstract class Piece {
         startSquareNb: number,
         offsets: fileRank[],
         board: Board,
-        PieceLetter: PieceLetter
+        PieceLetter: PieceLetter,
+        options: PossibleMoveOptions
     ): Move[] {
         const moves: Move[] = []
 
@@ -35,7 +36,7 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, board, PieceLetter)
+                this.createMove(moves, startSquareNb, endSquareNb, board, PieceLetter, options)
                 if (board.squares[endSquareNb]) break
             }
         }
@@ -47,7 +48,8 @@ export abstract class Piece {
         startSquareNb: number,
         endSquareNb: number | null,
         board: Board,
-        letter: PieceLetter
+        letter: PieceLetter,
+        options: PossibleMoveOptions
     ): Move | undefined {
         if (endSquareNb === null) return
 
@@ -62,9 +64,7 @@ export abstract class Piece {
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 
-            /*if (this.isInCheck(endBoard)) {
-                return
-            }*/
+            if (!options?.skipCheckVerification && this.isInCheck(endBoard)) return
 
             const move = new Move(
                 this,
@@ -78,15 +78,22 @@ export abstract class Piece {
         }
     }
 
+    private isInCheck(board: Board): boolean {
+        const kingSquareNb = board.squares.findIndex((piece) => piece?.name === 'king' && piece.color === this.color)
+        return this.areSquaresAttacked(board, kingSquareNb)
+    }
+
     //Worst possible code in terms of optimization, change when optimizing
-    /*private isInCheck(endBoard: Board): boolean {
-        for (const square of endBoard.squares) {
-            if (square && square.color !== this.color) {
-                const moves = square!.possibleMoves()
-                console.log(moves)
-            }
+    public areSquaresAttacked(board: Board, ...targetSquareNbs: number[]): boolean {
+        for (let squareNb = 0; squareNb < 64; squareNb++) {
+            const piece = board.squares[squareNb]
+            if (!piece || piece.color === this.color) continue
+
+            const moves = piece.possibleMoves(squareNb, board, { skipCheckVerification: true })
+            if (moves.some((move) => targetSquareNbs.includes(move.endSquareNb))) return true
         }
-    }*/
+        return false
+    }
 
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
         const captureSymbol = isCapture ? 'x' : ''

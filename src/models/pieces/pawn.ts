@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter } from '../types'
+import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { fileRankToSquareNb, squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 
@@ -12,7 +12,7 @@ export class Pawn extends Piece {
     }
 
     // TODO:  promotion
-    possibleMoves(startSquareNb: number, board: Board): Move[] {
+    possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         const moves: Move[] = []
 
         const direction = this.color === 'white' ? 1 : -1
@@ -22,7 +22,7 @@ export class Pawn extends Piece {
         const moveTwoSquares = startSquareNb + 16 * direction
         if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
             // Advance one square
-            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER)
+            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
 
             // Advance two squares
             const { rank } = squareNbToFileRank(startSquareNb)
@@ -30,7 +30,7 @@ export class Pawn extends Piece {
                 board.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                const move = this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER)
+                const move = this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options)
                 if (move) move.endBoard.enPassantTargetSquareNb = moveOneSquare
             }
         }
@@ -49,7 +49,7 @@ export class Pawn extends Piece {
                 board.squares[endSquareNb] &&
                 board.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER)
+                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER, options)
             }
         }
 
@@ -57,7 +57,14 @@ export class Pawn extends Piece {
         if (board.enPassantTargetSquareNb !== null) {
             const offsetToTarget = board.enPassantTargetSquareNb - startSquareNb
             if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
-                const move = this.createMove(moves, startSquareNb, board.enPassantTargetSquareNb, board, Pawn.LETTER)
+                const move = this.createMove(
+                    moves,
+                    startSquareNb,
+                    board.enPassantTargetSquareNb,
+                    board,
+                    Pawn.LETTER,
+                    options
+                )
                 if (move) move.endBoard.squares[board.enPassantTargetSquareNb - 8 * direction] = null
             }
         }

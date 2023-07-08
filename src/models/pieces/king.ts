@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter } from '../types'
+import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { Piece } from './piece'
 
 export class King extends Piece {
@@ -11,7 +11,7 @@ export class King extends Piece {
     }
 
     // TODO: checks
-    possibleMoves(startSquareNb: number, board: Board): Move[] {
+    possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         const OFFSETS: fileRank[] = [
             { file: 1, rank: 1 },
             { file: 1, rank: 0 },
@@ -26,7 +26,7 @@ export class King extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            const move = this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER)
+            const move = this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER, options)
             if (move) {
                 const canCastle = move.endBoard.canCastle[this.color]
                 canCastle.queenSide = false
@@ -37,14 +37,14 @@ export class King extends Piece {
         // Castling
         const canCastle = board.canCastle[this.color]
         if (canCastle.queenSide) {
-            const isClearPath = this.areSquaresEmpty(board, [startSquareNb - 1, startSquareNb - 2, startSquareNb - 3])
+            const isClearPath = this.areSquaresClear(board, [startSquareNb - 1, startSquareNb - 2, startSquareNb - 3])
             if (isClearPath) {
                 const move = this.createCastling(board, startSquareNb, true)
                 moves.push(move)
             }
         }
         if (canCastle.kingSide) {
-            const isClearPath = this.areSquaresEmpty(board, [startSquareNb + 1, startSquareNb + 2])
+            const isClearPath = this.areSquaresClear(board, [startSquareNb + 1, startSquareNb + 2])
             if (isClearPath) {
                 const move = this.createCastling(board, startSquareNb, false)
                 moves.push(move)
@@ -54,8 +54,8 @@ export class King extends Piece {
         return moves
     }
 
-    private areSquaresEmpty(board: Board, squareNbs: number[]): boolean {
-        return squareNbs.every((squareNb) => !board.squares[squareNb])
+    private areSquaresClear(board: Board, squareNbs: number[]): boolean {
+        return squareNbs.every((squareNb) => !board.squares[squareNb]) && !this.areSquaresAttacked(board, ...squareNbs)
     }
 
     private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {

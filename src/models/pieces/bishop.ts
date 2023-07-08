@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { PieceColor } from '../types'
+import { PieceColor, PossibleMoveOptions } from '../types'
 import { Piece } from './piece'
 
 export class Bishop extends Piece {
@@ -8,7 +8,7 @@ export class Bishop extends Piece {
         super('bishop', color)
     }
 
-    possibleMoves(startSquareNb: number, board: Board): Move[] {
+    possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         return this.createMovesForRepeatedOffsets(
             startSquareNb,
             [
@@ -18,7 +18,8 @@ export class Bishop extends Piece {
                 { file: -1, rank: -1 },
             ],
             board,
-            'B'
+            'B',
+            options
         )
     }
 }
