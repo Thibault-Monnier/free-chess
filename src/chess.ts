@@ -41,7 +41,7 @@ export class Chess {
                 this.selectedSquareNb = null
             }
             //Selects the square if it contains a piece of the current player
-            else if (piece.color === this.game.currentPlayerColor) {
+            else if (piece.color === this.game.currentBoard.colorToMove) {
                 this.selectedSquareNb = squareNb
             }
         } else {
@@ -61,7 +61,7 @@ export class Chess {
     }
 
     private toggleNextPlayer() {
-        const isWhite = this.game.currentPlayerColor === 'white'
+        const isWhite = this.game.currentBoard.colorToMove === 'white'
         document.getElementById('white_to_move')!.setAttribute('style', isWhite ? '' : 'display: none;')
         document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
     }

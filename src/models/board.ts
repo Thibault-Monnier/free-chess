@@ -5,10 +5,12 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
+import { PieceColor } from './types'
 import { fileRankToSquareNb } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
+    public colorToMove: PieceColor = 'white'
     public canCastle: {
         white: { queenSide: boolean; kingSide: boolean }
         black: { queenSide: boolean; kingSide: boolean }
@@ -17,9 +19,14 @@ export class Board {
         black: { queenSide: true, kingSide: true },
     }
 
-    constructor(board?: Board) {
+    constructor(board?: Board, switchColor: boolean = false) {
         if (board) {
             this.squares = [...board.squares]
+            if (switchColor) {
+                this.colorToMove = board.colorToMove === 'white' ? 'black' : 'white'
+            } else {
+                this.colorToMove = board.colorToMove
+            }
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
         } else {
             this.squares = new Array(64).fill(null)

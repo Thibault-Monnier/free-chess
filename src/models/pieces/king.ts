@@ -1,5 +1,4 @@
 import { Board } from '../board'
-import { Game } from '../game'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
@@ -38,11 +37,7 @@ export class King extends Piece {
         // Castling
         const canCastle = board.canCastle[this.color]
         if (canCastle.queenSide) {
-            const isClearPath = this.areSquaresEmpty(board, [
-                startSquareNb - 1,
-                startSquareNb - 2,
-                startSquareNb - 3,
-            ])
+            const isClearPath = this.areSquaresEmpty(board, [startSquareNb - 1, startSquareNb - 2, startSquareNb - 3])
             if (isClearPath) {
                 const move = this.createCastling(board, startSquareNb, true)
                 moves.push(move)
@@ -64,7 +59,7 @@ export class King extends Piece {
     }
 
     private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
-        const endBoard = new Board(startBoard)
+        const endBoard = new Board(startBoard, true)
         const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
         const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
 

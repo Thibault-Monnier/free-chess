@@ -54,7 +54,7 @@ export abstract class Piece {
         const endSquarePiece = board.squares[endSquareNb]
 
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
-            const endBoard = new Board(board)
+            const endBoard = new Board(board, true)
 
             const piece = endBoard.squares[endSquareNb]
             if (piece) piece.eaten(endBoard)

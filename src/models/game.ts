@@ -1,6 +1,5 @@
 import { Board } from './board'
 import { Move } from './move'
-import { PieceColor } from './types'
 
 export class Game {
     private startingBoard: Board = new Board()
@@ -21,10 +20,6 @@ export class Game {
         } else {
             return this.startingBoard
         }
-    }
-
-    get currentPlayerColor(): PieceColor {
-        return this._moveNb % 2 === 0 ? 'white' : 'black'
     }
 
     get lastMove(): Move | undefined {
