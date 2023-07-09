@@ -1,3 +1,5 @@
+import { Chess } from '../chess'
+import { Move } from './move'
 import { Bishop } from './pieces/bishop'
 import { King } from './pieces/king'
 import { Knight } from './pieces/knight'
@@ -5,16 +7,13 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { Coordinates, PieceColor } from './types'
+import { CanCastle, Coordinates, PieceColor } from './types'
 import { coordinatesToSquareNb, fileRankToSquareNb } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
     public colorToMove: PieceColor = 'white'
-    public canCastle: {
-        white: { queenSide: boolean; kingSide: boolean }
-        black: { queenSide: boolean; kingSide: boolean }
-    } = {
+    public canCastle: CanCastle = {
         white: { queenSide: false, kingSide: false },
         black: { queenSide: false, kingSide: false },
     }
@@ -32,11 +31,10 @@ export class Board {
             this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
         } else {
             this.squares = new Array(64).fill(null)
-            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0')
         }
     }
 
-    // TODO: import canCastle
     public importFEN(fen: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
         const [placement, colorToMove, canCastle, enPassantTargetSquare] = fen.split(' ')
@@ -66,13 +64,23 @@ export class Board {
 
         this.colorToMove = colorToMove === 'w' ? 'white' : 'black'
 
-        if (canCastle.includes('K')) this.canCastle.white.kingSide = true
-        if (canCastle.includes('Q')) this.canCastle.white.queenSide = true
-        if (canCastle.includes('k')) this.canCastle.black.kingSide = true
-        if (canCastle.includes('q')) this.canCastle.black.queenSide = true
+        this.canCastle.white.kingSide = canCastle.includes('K')
+        this.canCastle.white.queenSide = canCastle.includes('Q')
+        this.canCastle.black.kingSide = canCastle.includes('k')
+        this.canCastle.black.queenSide = canCastle.includes('q')
 
         this.enPassantTargetSquareNb =
             enPassantTargetSquare === '-' ? null : coordinatesToSquareNb(enPassantTargetSquare as Coordinates)
+    }
+
+    public possibleMoves(): Move[] {
+        let moves: Move[] = []
+        this.squares.forEach((piece, squareNb) => {
+            if (piece && piece.color === this.colorToMove) {
+                moves = [...moves, ...piece.possibleMoves(squareNb, this, {})]
+            }
+        })
+        return moves
     }
 
     debug() {

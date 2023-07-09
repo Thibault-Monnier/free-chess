@@ -49,8 +49,9 @@ export abstract class Piece {
         endSquareNb: number | null,
         board: Board,
         letter: PieceLetter,
-        options: PossibleMoveOptions
-    ): Move | undefined {
+        options: PossibleMoveOptions,
+        postMove?: (endBoard: Board) => void
+    ): void {
         if (endSquareNb === null) return
 
         const endSquarePiece = board.squares[endSquareNb]
@@ -64,6 +65,8 @@ export abstract class Piece {
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 
+            if (postMove) postMove(endBoard)
+
             if (!options?.skipCheckVerification && this.isInCheck(endBoard)) return
 
             const move = new Move(
@@ -74,7 +77,6 @@ export abstract class Piece {
                 this.encodeMove(letter, endSquarePiece ? true : false, startSquareNb, endSquareNb)
             )
             moves.push(move)
-            return move
         }
     }
 

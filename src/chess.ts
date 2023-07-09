@@ -16,6 +16,7 @@ export class Chess {
         this.toggleActions()
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
         this.updateMovesPanel()
+        this.toggleNextPlayer()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -33,7 +34,6 @@ export class Chess {
             else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
                 const move = this.getMove(squareNb)!
                 this.game.addMove(move)
-                this.toggleNextPlayer()
                 this.selectedSquareNb = null
             }
             //Deselects the square if it is empty

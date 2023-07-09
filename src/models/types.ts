@@ -12,3 +12,7 @@ export type Coordinates = `${'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'}${
     | '7'
     | '8'}`
 export type PossibleMoveOptions = { skipCheckVerification?: boolean }
+export type CanCastle = {
+    white: { queenSide: boolean; kingSide: boolean }
+    black: { queenSide: boolean; kingSide: boolean }
+}

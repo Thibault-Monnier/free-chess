@@ -26,36 +26,45 @@ export class King extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            const move = this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER, options)
-            if (move) {
-                const canCastle = move.endBoard.canCastle[this.color]
+            this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER, options, (endBoard) => {
+                const canCastle = endBoard.canCastle[this.color]
                 canCastle.queenSide = false
                 canCastle.kingSide = false
-            }
+            })
         }
 
         // Castling
-        const canCastle = board.canCastle[this.color]
-        if (canCastle.queenSide) {
-            const isClearPath = this.areSquaresClear(board, [startSquareNb - 1, startSquareNb - 2, startSquareNb - 3])
-            if (isClearPath) {
-                const move = this.createCastling(board, startSquareNb, true)
-                moves.push(move)
+        if (!options.skipCheckVerification) {
+            // Castlings cannot "eat" opponent kings
+            const canCastle = board.canCastle[this.color]
+            if (canCastle.queenSide) {
+                const isClearPath = this.areSquaresClear(board, startSquareNb, [
+                    startSquareNb - 1,
+                    startSquareNb - 2,
+                    startSquareNb - 3,
+                ])
+                if (isClearPath) {
+                    const move = this.createCastling(board, startSquareNb, true)
+                    moves.push(move)
+                }
             }
-        }
-        if (canCastle.kingSide) {
-            const isClearPath = this.areSquaresClear(board, [startSquareNb + 1, startSquareNb + 2])
-            if (isClearPath) {
-                const move = this.createCastling(board, startSquareNb, false)
-                moves.push(move)
+            if (canCastle.kingSide) {
+                const isClearPath = this.areSquaresClear(board, startSquareNb, [startSquareNb + 1, startSquareNb + 2])
+                if (isClearPath) {
+                    const move = this.createCastling(board, startSquareNb, false)
+                    moves.push(move)
+                }
             }
         }
 
         return moves
     }
 
-    private areSquaresClear(board: Board, squareNbs: number[]): boolean {
-        return squareNbs.every((squareNb) => !board.squares[squareNb]) && !this.areSquaresAttacked(board, ...squareNbs)
+    private areSquaresClear(board: Board, startSquareNb: number, squareNbs: number[]): boolean {
+        return (
+            squareNbs.every((squareNb) => !board.squares[squareNb]) &&
+            !this.areSquaresAttacked(board, ...[startSquareNb, ...squareNbs])
+        )
     }
 
     private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
@@ -68,9 +77,7 @@ export class King extends Piece {
         endBoard.squares[startSquareNb] = null
         endBoard.squares[rookStartPosition] = null
 
-        let moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
-        console.log(moveNotation)
-
+        const moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
         return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
     }
 }

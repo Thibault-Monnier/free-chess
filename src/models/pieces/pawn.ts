@@ -30,8 +30,9 @@ export class Pawn extends Piece {
                 board.squares[moveTwoSquares] === null &&
                 ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
             ) {
-                const move = this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options)
-                if (move) move.endBoard.enPassantTargetSquareNb = moveOneSquare
+                this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options, (endBoard) => {
+                    endBoard.enPassantTargetSquareNb = moveOneSquare
+                })
             }
         }
 
@@ -55,17 +56,20 @@ export class Pawn extends Piece {
 
         // En passant captures
         if (board.enPassantTargetSquareNb !== null) {
-            const offsetToTarget = board.enPassantTargetSquareNb - startSquareNb
+            const enPassantTargetSquareNb = board.enPassantTargetSquareNb
+            const offsetToTarget = enPassantTargetSquareNb - startSquareNb
             if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
-                const move = this.createMove(
+                this.createMove(
                     moves,
                     startSquareNb,
-                    board.enPassantTargetSquareNb,
+                    enPassantTargetSquareNb,
                     board,
                     Pawn.LETTER,
-                    options
+                    options,
+                    (endBoard) => {
+                        endBoard.squares[enPassantTargetSquareNb - 8 * direction] = null
+                    }
                 )
-                if (move) move.endBoard.squares[board.enPassantTargetSquareNb - 8 * direction] = null
             }
         }
 
