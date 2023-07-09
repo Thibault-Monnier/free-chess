@@ -1,4 +1,3 @@
-import { Chess } from '../chess'
 import { Move } from './move'
 import { Bishop } from './pieces/bishop'
 import { King } from './pieces/king'
