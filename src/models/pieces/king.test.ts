@@ -1,5 +1,4 @@
 import { Board } from '../board'
-import { Piece } from './piece'
 
 describe('possibleMoves', () => {
     it('skips castlings in skipVerification mode', () => {
