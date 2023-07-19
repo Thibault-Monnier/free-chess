@@ -7,7 +7,7 @@ import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
 import { CanCastle, Coordinates, PieceColor } from './types'
-import { coordinatesToSquareNb, fileRankToSquareNb } from './utils'
+import { coordinatesToSquareNb, fileRankToSquareNb, invertColor } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
@@ -21,11 +21,7 @@ export class Board {
     constructor(board?: Board, options?: { switchColor: boolean; resetEnPassant: boolean }) {
         if (board) {
             this.squares = [...board.squares]
-            if (options?.switchColor) {
-                this.colorToMove = board.colorToMove === 'white' ? 'black' : 'white'
-            } else {
-                this.colorToMove = board.colorToMove
-            }
+            this.colorToMove = options?.switchColor ? invertColor(board.colorToMove) : board.colorToMove
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
             this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
         } else {
@@ -80,6 +76,23 @@ export class Board {
             }
         })
         return moves
+    }
+
+    public isInCheck(kingColor = this.colorToMove): boolean {
+        const kingSquareNb = this.squares.findIndex((piece) => piece?.name === 'king' && piece.color === kingColor)
+        return this.areSquaresAttacked(invertColor(kingColor), kingSquareNb)
+    }
+
+    // Worst possible code in terms of optimization, change when optimizing
+    public areSquaresAttacked(attackingColor: PieceColor, ...targetSquareNbs: number[]): boolean {
+        for (let squareNb = 0; squareNb < 64; squareNb++) {
+            const piece = this.squares[squareNb]
+            if (piece?.color === attackingColor) {
+                const moves = piece.possibleMoves(squareNb, this, { skipCheckVerification: true })
+                if (moves.some((move) => targetSquareNbs.includes(move.endSquareNb))) return true
+            }
+        }
+        return false
     }
 
     debug() {

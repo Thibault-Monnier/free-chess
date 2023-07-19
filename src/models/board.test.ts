@@ -31,6 +31,18 @@ describe('importFEN', () => {
     })
 })
 
+describe('isInCheck', () => {
+    const isInCheck = (fen: string): boolean => {
+        const board = new Board()
+        board.importFEN(fen)
+        return board.isInCheck()
+    }
+
+    it('detects check', () => expect(isInCheck('r6r/1b2k1bq/8/8/7B/8/8/R3K2R b - - 0 0')).toBe(true))
+
+    it('detects when not in check', () => expect(isInCheck('k7/8/8/8/8/8/8/b5K1 w - - 0 0')).toBe(false))
+})
+
 describe('possibleMoves', () => {
     const nbMoves = (fen: string): number => {
         const board = new Board()

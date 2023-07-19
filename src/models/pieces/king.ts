@@ -1,6 +1,7 @@
 import { Board } from '../board'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { invertColor } from '../utils'
 import { Piece } from './piece'
 
 export class King extends Piece {
@@ -63,7 +64,7 @@ export class King extends Piece {
     private areSquaresClear(board: Board, startSquareNb: number, squareNbs: number[]): boolean {
         return (
             squareNbs.every((squareNb) => !board.squares[squareNb]) &&
-            !this.areSquaresAttacked(board, ...[startSquareNb, ...squareNbs])
+            !board.areSquaresAttacked(invertColor(this.color), ...[startSquareNb, ...squareNbs])
         )
     }
 

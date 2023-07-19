@@ -67,7 +67,7 @@ export abstract class Piece {
 
             if (postMove) postMove(endBoard)
 
-            if (!options?.skipCheckVerification && this.isInCheck(endBoard)) return
+            if (!options?.skipCheckVerification && endBoard.isInCheck(board.colorToMove)) return
 
             const move = new Move(
                 this,
@@ -78,23 +78,6 @@ export abstract class Piece {
             )
             moves.push(move)
         }
-    }
-
-    private isInCheck(board: Board): boolean {
-        const kingSquareNb = board.squares.findIndex((piece) => piece?.name === 'king' && piece.color === this.color)
-        return this.areSquaresAttacked(board, kingSquareNb)
-    }
-
-    //Worst possible code in terms of optimization, change when optimizing
-    public areSquaresAttacked(board: Board, ...targetSquareNbs: number[]): boolean {
-        for (let squareNb = 0; squareNb < 64; squareNb++) {
-            const piece = board.squares[squareNb]
-            if (!piece || piece.color === this.color) continue
-
-            const moves = piece.possibleMoves(squareNb, board, { skipCheckVerification: true })
-            if (moves.some((move) => targetSquareNbs.includes(move.endSquareNb))) return true
-        }
-        return false
     }
 
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {

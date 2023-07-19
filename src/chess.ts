@@ -17,6 +17,7 @@ export class Chess {
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
         this.updateMovesPanel()
         this.toggleNextPlayer()
+        this.alertEndOfGame()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -58,6 +59,14 @@ export class Chess {
         const piece = this.game.currentBoard.squares[this.selectedSquareNb]
         const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game.currentBoard, {})
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
+    }
+
+    private alertEndOfGame() {
+        const currentBoard = this.game.currentBoard
+        if (currentBoard.possibleMoves().length === 0) {
+            if (currentBoard.isInCheck()) alert('Checkmate!')
+            else alert('Stalemate!')
+        }
     }
 
     private toggleNextPlayer() {

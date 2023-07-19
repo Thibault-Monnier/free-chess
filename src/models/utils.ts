@@ -1,4 +1,8 @@
-import { fileRank, Coordinates } from './types'
+import { fileRank, Coordinates, PieceColor } from './types'
+
+export function invertColor(color: PieceColor): PieceColor {
+    return color === 'white' ? 'black' : 'white'
+}
 
 export function squareNbToFileRank(squareNb: number): fileRank {
     return {
