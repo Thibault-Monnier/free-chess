@@ -6,7 +6,7 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { CanCastle, Coordinates, PieceColor } from './types'
+import { CanCastle, Coordinates, EndOfGame, PieceColor } from './types'
 import { coordinatesToSquareNb, fileRankToSquareNb, invertColor } from './utils'
 
 export class Board {
@@ -76,6 +76,12 @@ export class Board {
             }
         })
         return moves
+    }
+
+    get endOfGame(): EndOfGame | null {
+        if (this.possibleMoves().length === 0) {
+            return this.isInCheck() ? 'checkmate' : 'stalemate'
+        } else return null
     }
 
     public isInCheck(kingColor = this.colorToMove): boolean {

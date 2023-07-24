@@ -45,7 +45,8 @@ body {
 }
 
 .white_to_move,
-.black_to_move {
+.black_to_move,
+.end_of_game {
     display: flex;
     gap: 0.5rem;
     background-color: #222;

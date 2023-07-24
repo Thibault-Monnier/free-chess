@@ -16,3 +16,4 @@ export type CanCastle = {
     white: { queenSide: boolean; kingSide: boolean }
     black: { queenSide: boolean; kingSide: boolean }
 }
+export type EndOfGame = 'checkmate' | 'stalemate'

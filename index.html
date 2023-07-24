@@ -13,10 +13,7 @@
         <div class="chess">
             <div class="improvements">
                 <h1>Work in progress:</h1>
-                <p>
-                    - Game End: Checkmates <br />
-                    - Game End: Stalemate
-                </p>
+                <p></p>
 
                 <h1>TODO:</h1>
                 <p>Bot</p>
@@ -29,7 +26,7 @@
                 <p>Arrows?</p>
             </div>
 
-            <div class="next_player">
+            <div id="next_player" class="next_player">
                 <div id="white_to_move" class="white_to_move">
                     <div class="square"></div>
                     White to move
@@ -38,6 +35,7 @@
                     <div class="square"></div>
                     Black to move
                 </div>
+                <div id="end_of_game" class="end_of_game" style="display: none"></div>
             </div>
 
             <canvas id="board" class="board"> </canvas>

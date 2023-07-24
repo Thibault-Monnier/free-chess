@@ -1,5 +1,5 @@
 import { Board } from './board'
-import { CanCastle } from './types'
+import { CanCastle, EndOfGame } from './types'
 
 describe('importFEN', () => {
     const boardFromFen = (fen: string): Board => {
@@ -63,4 +63,16 @@ describe('possibleMoves', () => {
     //it('includes all types of promotions', () => expect(nbMoves('rnb2k1r/pp1Pbppp/2p5/q7/2B5/8/PPPQNnPP/RNB1K2R w KQ - 3 9')).toEqual(39))
 
     it('', () => expect(nbMoves('2r5/3pk3/8/2P5/8/2K5/8/8 w - - 5 4')).toEqual(9))
+})
+
+describe('endOfGame', () => {
+    const endOfGame = (fen: string): EndOfGame | null => {
+        const board = new Board()
+        board.importFEN(fen)
+        return board.endOfGame
+    }
+
+    it('tests checkmate', () => expect(endOfGame('r1K5/r7/8/8/8/8/8/7k w - - 0 0')).toBe('checkmate'))
+    it('tests stalemate', () => expect(endOfGame('k7/7R/8/8/8/8/8/1R4K1 b - - 0 0')).toBe('stalemate'))
+    it('returns null if not end of game', () => expect(endOfGame('kr6/8/8/8/8/8/8/6RK b - - 0 0')).toBe(null))
 })

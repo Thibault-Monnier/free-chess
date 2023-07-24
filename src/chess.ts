@@ -1,6 +1,7 @@
 import { drawBoard, squareSize } from './draw'
 import { Game } from './models/game'
 import { Move } from './models/move'
+import { invertColor } from './models/utils'
 
 export class Chess {
     private game: Game = new Game()
@@ -17,7 +18,6 @@ export class Chess {
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
         this.updateMovesPanel()
         this.toggleNextPlayer()
-        this.alertEndOfGame()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -61,18 +61,33 @@ export class Chess {
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 
-    private alertEndOfGame() {
-        const currentBoard = this.game.currentBoard
-        if (currentBoard.possibleMoves().length === 0) {
-            if (currentBoard.isInCheck()) alert('Checkmate!')
-            else alert('Stalemate!')
-        }
-    }
-
     private toggleNextPlayer() {
-        const isWhite = this.game.currentBoard.colorToMove === 'white'
-        document.getElementById('white_to_move')!.setAttribute('style', isWhite ? '' : 'display: none;')
-        document.getElementById('black_to_move')!.setAttribute('style', isWhite ? 'display: none;' : '')
+        const whiteToMoveElement = document.getElementById('white_to_move')!
+        const blackToMoveElement = document.getElementById('black_to_move')!
+        const endOfGameElement = document.getElementById('end_of_game')!
+
+        whiteToMoveElement.setAttribute('style', 'display: none;')
+        blackToMoveElement.setAttribute('style', 'display: none;')
+        endOfGameElement.setAttribute('style', 'display: none;')
+
+        const endOfGame = this.game.currentBoard.endOfGame
+        switch (endOfGame) {
+            case 'checkmate':
+                const colorToMove = this.game.currentBoard.colorToMove
+                endOfGameElement.innerHTML = `${
+                    colorToMove.charAt(0).toUpperCase() + colorToMove.slice(1)
+                } wins by checkmate!`
+                endOfGameElement.setAttribute('style', '')
+                break
+            case 'stalemate':
+                endOfGameElement.innerHTML = 'Stalemate!'
+                endOfGameElement.setAttribute('style', '')
+                break
+            case null:
+                const isWhite = this.game.currentBoard.colorToMove === 'white'
+                if (isWhite) whiteToMoveElement.setAttribute('style', '')
+                else blackToMoveElement.setAttribute('style', '')
+        }
     }
 
     jumpToMove(moveNb: number): void {
