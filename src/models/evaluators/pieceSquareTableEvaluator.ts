@@ -41,7 +41,7 @@ export class PieceSquareTableEvaluator extends Evaluator {
     private pieceEvaluation(squareNb: number, value: number, coefficients: number[][], color: PieceColor): number {
         const colorMultiplier = color === 'white' ? 1 : -1
         const { file, rank } = squareNbToFileRank(squareNb)
-        const coefficient = coefficients[color === 'white' ? 7 - rank : rank][file]
+        const coefficient = coefficients[color === 'white' ? 7 - rank : rank][color === 'white' ? file : 7 - file]
         return (value + coefficient) * colorMultiplier
     }
 
