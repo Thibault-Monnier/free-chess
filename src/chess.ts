@@ -1,7 +1,7 @@
 import { drawBoard, squareSize } from './draw'
+import { PieceSquareTableEvaluator } from './models/evaluators/pieceSquareTableEvaluator'
 import { Game } from './models/game'
 import { Move } from './models/move'
-import { invertColor } from './models/utils'
 
 export class Chess {
     private game: Game = new Game()
@@ -18,6 +18,7 @@ export class Chess {
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
         this.updateMovesPanel()
         this.toggleNextPlayer()
+        this.updateEvaluation()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -88,6 +89,12 @@ export class Chess {
                 if (isWhite) whiteToMoveElement.setAttribute('style', '')
                 else blackToMoveElement.setAttribute('style', '')
         }
+    }
+
+    private updateEvaluation() {
+        const element = document.getElementById('evaluation')!
+        const evaluator = new PieceSquareTableEvaluator(this.game.currentBoard)
+        element.innerHTML = evaluator.run().toString()
     }
 
     jumpToMove(moveNb: number): void {
