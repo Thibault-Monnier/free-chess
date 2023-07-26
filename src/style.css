@@ -14,7 +14,7 @@ body {
 
 .chess {
     display: grid;
-    grid-template-areas: '. next_player panel' 'improvements board panel';
+    grid-template-areas: '. header panel' 'improvements board panel';
     gap: 1.5rem;
     grid-template-columns: 20rem calc(var(--square-size) * 8) 25rem;
     grid-template-rows: 2.5rem calc(var(--square-size) * 8);
@@ -39,9 +39,10 @@ body {
     font-style: italic;
 }
 
-.next_player {
-    grid-area: next_player;
+.header {
+    grid-area: header;
     display: flex;
+    justify-content: space-between;
 }
 
 .white_to_move,

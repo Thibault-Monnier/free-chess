@@ -94,7 +94,7 @@ export class Chess {
     private updateEvaluation() {
         const element = document.getElementById('evaluation')!
         const evaluator = new PieceSquareTableEvaluator(this.game.currentBoard)
-        element.innerHTML = evaluator.run().toString()
+        element.innerHTML = `Evaluation: ${evaluator.run().toString()}`
     }
 
     jumpToMove(moveNb: number): void {
