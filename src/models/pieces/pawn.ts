@@ -3,6 +3,7 @@ import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { fileRankToSquareNb, squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
+import { Queen } from './queen'
 
 export class Pawn extends Piece {
     private static LETTER: PieceLetter = ''
@@ -11,7 +12,6 @@ export class Pawn extends Piece {
         super('pawn', color)
     }
 
-    // TODO:  promotion
     possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         const moves: Move[] = []
 
@@ -20,15 +20,19 @@ export class Pawn extends Piece {
         // Basic moves
         const moveOneSquare = startSquareNb + 8 * direction
         const moveTwoSquares = startSquareNb + 16 * direction
+        const { rank: startRank } = squareNbToFileRank(startSquareNb)
+        const promotionStartRank = this.color === 'white' ? 6 : 1
+
         if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
-            // Advance one square
-            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
+            // Advance one square if not eligible for promotion
+            if (startRank !== promotionStartRank) {
+                this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
+            }
 
             // Advance two squares
-            const { rank } = squareNbToFileRank(startSquareNb)
             if (
                 board.squares[moveTwoSquares] === null &&
-                ((this.color === 'white' && rank === 1) || (this.color === 'black' && rank === 6))
+                ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
             ) {
                 this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options, (endBoard) => {
                     endBoard.enPassantTargetSquareNb = moveOneSquare
@@ -36,12 +40,19 @@ export class Pawn extends Piece {
             }
         }
 
+        // Promotion
+        if (board.squares[moveOneSquare] === null && startRank === promotionStartRank) {
+            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options, (endBoard) => {
+                endBoard.squares[moveOneSquare] = new Queen(this.color)
+            })
+        }
+
+        // Basic captures
         const captures: fileRank[] = [
             { file: -1, rank: direction },
             { file: 1, rank: direction },
         ]
 
-        // Basic captures
         for (let capture of captures) {
             const endSquareNb = this.addOffset(startSquareNb, capture)
 
