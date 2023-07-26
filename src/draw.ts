@@ -1,4 +1,5 @@
 import { Game } from './models/game'
+import { Move } from './models/move'
 import { PieceColor, PieceName } from './models/types'
 import { waitOneMillisecondAsync } from './utils'
 
@@ -73,7 +74,12 @@ function squareNbToXY(squareNb: number): { x: number; y: number } {
     }
 }
 
-export function drawBoard(game: Game, selectedSquareNb: number | null, highlightedSquareNbs: boolean[]): void {
+export function drawBoard(
+    game: Game,
+    selectedSquareNb: number | null,
+    highlightedSquareNbs: boolean[],
+    bestMove: Move | null
+): void {
     for (let squareNb = 0; squareNb < 64; squareNb++) {
         const { x, y } = squareNbToXY(squareNb)
         ctx.fillStyle = getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
@@ -85,6 +91,10 @@ export function drawBoard(game: Game, selectedSquareNb: number | null, highlight
         }
         if (highlightedSquareNbs[squareNb]) {
             ctx.fillStyle = 'rgba(255, 80, 70, 0.75)'
+            ctx.fillRect(x, y, squareSize, squareSize)
+        }
+        if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
+            ctx.fillStyle = 'rgba(100, 255, 100, 0.75)'
             ctx.fillRect(x, y, squareSize, squareSize)
         }
     }

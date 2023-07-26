@@ -1,4 +1,5 @@
 import { drawBoard, squareSize } from './draw'
+import { DepthOneBot } from './models/bots/depthOneBot'
 import { PieceSquareTableEvaluator } from './models/evaluators/pieceSquareTableEvaluator'
 import { Game } from './models/game'
 import { Move } from './models/move'
@@ -15,7 +16,11 @@ export class Chess {
 
     private draw() {
         this.toggleActions()
-        drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs)
+
+        const bot = new DepthOneBot(this.game.currentBoard)
+        const bestMove = bot.run()
+        drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs, bestMove)
+
         this.updateMovesPanel()
         this.toggleNextPlayer()
         this.updateEvaluation()
