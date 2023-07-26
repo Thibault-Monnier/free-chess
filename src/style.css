@@ -45,14 +45,16 @@ body {
     justify-content: space-between;
 }
 
-.white_to_move,
-.black_to_move,
-.end_of_game {
-    display: flex;
-    gap: 0.5rem;
+.next_player,
+.evaluation {
     background-color: #222;
     border-radius: 1rem;
     padding: 0.5rem 1rem;
+}
+
+.white_to_move, .black_to_move {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .square {

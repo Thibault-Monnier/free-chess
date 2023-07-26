@@ -716,7 +716,7 @@ define("models/evaluators/pieceSquareTableEvaluator", ["require", "exports", "mo
             return this.pieceEvaluation(squareNb, value, coefficients, color);
         }
         bishopEvaluation(squareNb, color) {
-            const value = 330;
+            const value = 320;
             const coefficients = [
                 [-20, -10, -10, -10, -10, -10, -10, -20],
                 [-10, 0, 0, 0, 0, 0, 0, -10],
