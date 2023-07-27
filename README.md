@@ -1,2 +1,2 @@
 # WEBSITE LINK
-free-chess.netlify.app
+[chess](free-chess.netlify.app)
