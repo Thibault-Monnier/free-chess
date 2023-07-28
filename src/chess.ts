@@ -1,9 +1,8 @@
-import { drawArrow, drawBoard, squareSize } from './draw'
-import { DepthOneBot } from './models/bots/depthOneBot'
+import { drawBoard, squareSize } from './draw'
+import { DepthNBot } from './models/bots/depthNBot'
 import { PieceSquareTableEvaluator } from './models/evaluators/pieceSquareTableEvaluator'
 import { Game } from './models/game'
 import { Move } from './models/move'
-import { squareNbToFileRank } from './models/utils'
 
 export class Chess {
     private game: Game = new Game()
@@ -18,10 +17,9 @@ export class Chess {
     private draw() {
         this.toggleActions()
 
-        const bot = new DepthOneBot(this.game.currentBoard)
+        const bot = new DepthNBot(this.game.currentBoard, 2)
         const bestMove = bot.run()
         drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs, bestMove)
-        if (bestMove) this.createBestMoveArrow(bestMove)
 
         this.updateMovesPanel()
         this.toggleNextPlayer()
@@ -98,25 +96,7 @@ export class Chess {
         }
     }
 
-    private createBestMoveArrow(move: Move): void {
-        const startPosition = squareNbToFileRank(move.startSquareNb)
-        const endPosition = squareNbToFileRank(move.endSquareNb)
-        const width = 8
-        const color = 'rgba(50, 150, 50, 1)'
-
-        const startCoordinates = {
-            fromX: startPosition.file * squareSize + squareSize / 2,
-            fromY: (7 - startPosition.rank) * squareSize + squareSize / 2,
-        }
-        const endCoordinates = {
-            toX: endPosition.file * squareSize + squareSize / 2,
-            toY: (7 - endPosition.rank) * squareSize + squareSize / 2,
-        }
-
-        drawArrow(startCoordinates, endCoordinates, width, color)
-    }
-
-    private updateEvaluation() {
+    public updateEvaluation() {
         const element = document.getElementById('evaluation')!
         const evaluator = new PieceSquareTableEvaluator(this.game.currentBoard)
         element.innerHTML = `Evaluation: ${evaluator.run().toString()}`

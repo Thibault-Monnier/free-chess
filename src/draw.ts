@@ -1,6 +1,7 @@
 import { Game } from './models/game'
 import { Move } from './models/move'
 import { PieceColor, PieceName } from './models/types'
+import { squareNbToFileRank } from './models/utils'
 import { waitOneMillisecondAsync } from './utils'
 
 export const squareSize = 85
@@ -99,6 +100,7 @@ export function drawBoard(
         }
     }
     drawCoordinates()
+    if (bestMove) createBestMoveArrow(bestMove)
     drawPieces(game)
     if (selectedSquareNb !== null) drawPossibleMoves(game, selectedSquareNb)
 }
@@ -118,7 +120,25 @@ function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     }
 }
 
-export function drawArrow(
+function createBestMoveArrow(move: Move): void {
+    const startPosition = squareNbToFileRank(move.startSquareNb)
+    const endPosition = squareNbToFileRank(move.endSquareNb)
+    const width = 8
+    const color = 'rgba(50, 150, 50, 1)'
+
+    const startCoordinates = {
+        fromX: startPosition.file * squareSize + squareSize / 2,
+        fromY: (7 - startPosition.rank) * squareSize + squareSize / 2,
+    }
+    const endCoordinates = {
+        toX: endPosition.file * squareSize + squareSize / 2,
+        toY: (7 - endPosition.rank) * squareSize + squareSize / 2,
+    }
+
+    drawArrow(startCoordinates, endCoordinates, width, color)
+}
+
+function drawArrow(
     { fromX, fromY }: { fromX: number; fromY: number },
     { toX, toY }: { toX: number; toY: number },
     width: number,
