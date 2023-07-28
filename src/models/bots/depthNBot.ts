@@ -6,7 +6,7 @@ import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
     run(): Move | null {
-        logWithTimestamp('DepthNBot start')
+        logWithTimestamp(`Depth${this.depth}Bot start`)
         const moves = this.board.possibleMoves()
 
         let bestMove: Move | null = null
@@ -20,7 +20,7 @@ export class DepthNBot extends Bot {
             }
         }
 
-        logWithTimestamp('DepthNBot end')
+        logWithTimestamp(`Depth${this.depth}Bot end`)
 
         return bestMove
     }
