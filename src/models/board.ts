@@ -34,6 +34,7 @@ export class Board {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
         const [placement, colorToMove, canCastle, enPassantTargetSquare] = fen.split(' ')
 
+        this.squares = new Array(64).fill(null)
         placement.split('/').forEach((rowPlacement, index) => {
             const rank = 7 - index
             let file = 0

@@ -5,7 +5,12 @@ import { BestMove } from '../types'
 import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
+    private nbEvaluations = 0
+
     run(): BestMove | null {
+        this.nbEvaluations = 0
+        const startTimestamp = performance.now()
+
         const moves = this.board.possibleMoves()
         const colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
 
@@ -20,11 +25,22 @@ export class DepthNBot extends Bot {
             }
         }
 
+        const endTimestamp = performance.now()
+        console.log(
+            'Time:',
+            Math.round(endTimestamp - startTimestamp),
+            'ms' + ' - Evaluations:',
+            this.nbEvaluations,
+            ' - Evaluations/s:',
+            Math.round((this.nbEvaluations / (endTimestamp - startTimestamp)) * 1000)
+        )
+
         return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
     }
 
     private minimax(board: Board, depth: number): number {
         if (depth === 0 || board.endOfGame) {
+            this.nbEvaluations++
             const evaluation = new PieceSquareTableEvaluator(board).run()
             return evaluation
         }
