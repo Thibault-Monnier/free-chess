@@ -3,7 +3,7 @@ import { Move } from '../move'
 import { Bot } from './bot'
 
 export class DepthOneBot extends Bot {
-    run(): Move | null {
+    run(): { move: Move; evaluation: number } | null {
         const moves = this.board.possibleMoves()
         const colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
 
@@ -19,6 +19,6 @@ export class DepthOneBot extends Bot {
             }
         }
 
-        return bestMove
+        return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
     }
 }

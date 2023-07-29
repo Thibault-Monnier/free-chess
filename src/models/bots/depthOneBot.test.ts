@@ -7,7 +7,8 @@ describe('depthOneBot', () => {
         const board = new Board()
         board.importFEN(fen)
         const bot = new DepthOneBot(board, null)
-        return bot.run()
+        const run = bot.run()
+        return run ? run.move : null
     }
 
     it('', () => {

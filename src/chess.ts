@@ -1,6 +1,5 @@
 import { drawBoard, squareSize } from './draw'
 import { DepthNBot } from './models/bots/depthNBot'
-import { PieceSquareTableEvaluator } from './models/evaluators/pieceSquareTableEvaluator'
 import { Game } from './models/game'
 import { Move } from './models/move'
 
@@ -19,11 +18,11 @@ export class Chess {
 
         const bot = new DepthNBot(this.game.currentBoard, 2)
         const bestMove = bot.run()
-        drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs, bestMove)
+        drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs, bestMove ? bestMove.move : null)
 
         this.updateMovesPanel()
         this.toggleNextPlayer()
-        this.updateEvaluation()
+        if (bestMove) this.updateEvaluation(bestMove.evaluation)
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -96,10 +95,9 @@ export class Chess {
         }
     }
 
-    public updateEvaluation() {
+    private updateEvaluation(evaluation: number) {
         const element = document.getElementById('evaluation')!
-        const evaluator = new PieceSquareTableEvaluator(this.game.currentBoard)
-        element.innerHTML = `Evaluation: ${evaluator.run().toString()}`
+        element.innerHTML = `Evaluation: ${evaluation.toString()}`
     }
 
     jumpToMove(moveNb: number): void {

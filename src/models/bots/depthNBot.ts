@@ -1,18 +1,17 @@
-import { logWithTimestamp } from '../../utils'
 import { Board } from '../board'
 import { PieceSquareTableEvaluator } from '../evaluators/pieceSquareTableEvaluator'
 import { Move } from '../move'
 import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
-    run(): Move | null {
-        logWithTimestamp(`Depth${this.depth}Bot start`)
+    run(): { move: Move; evaluation: number } | null {
         const moves = this.board.possibleMoves()
+        const colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
 
         let bestMove: Move | null = null
         let bestEvaluation = -Infinity
         for (let move of moves) {
-            const evaluation = this.minimax(move.endBoard, this.depth! - 1) * this.colorMultiplier
+            const evaluation = this.minimax(move.endBoard, this.depth! - 1) * colorMultiplier
 
             if (evaluation > bestEvaluation) {
                 bestMove = move
@@ -20,9 +19,7 @@ export class DepthNBot extends Bot {
             }
         }
 
-        logWithTimestamp(`Depth${this.depth}Bot end`)
-
-        return bestMove
+        return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
     }
 
     private minimax(board: Board, depth: number): number {
@@ -31,14 +28,21 @@ export class DepthNBot extends Bot {
             return evaluation
         }
 
-        let bestEvaluation = -Infinity
         const moves = board.possibleMoves()
-        for (let move of moves) {
-            const evaluation = this.minimax(move.endBoard, depth - 1) * this.colorMultiplier
-            bestEvaluation = Math.max(bestEvaluation, evaluation)
+        if (board.colorToMove === 'white') {
+            let bestEvaluation = -Infinity
+            for (let move of moves) {
+                const evaluation = this.minimax(move.endBoard, depth - 1)
+                bestEvaluation = Math.max(bestEvaluation, evaluation)
+            }
+            return bestEvaluation
+        } else {
+            let bestEvaluation = Infinity
+            for (let move of moves) {
+                const evaluation = this.minimax(move.endBoard, depth - 1)
+                bestEvaluation = Math.min(bestEvaluation, evaluation)
+            }
+            return bestEvaluation
         }
-        return bestEvaluation * this.colorMultiplier
     }
-
-    private colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
 }
