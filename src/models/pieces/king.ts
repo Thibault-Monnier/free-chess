@@ -11,7 +11,6 @@ export class King extends Piece {
         super('king', color)
     }
 
-    // TODO: checks
     possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         const OFFSETS: fileRank[] = [
             { file: 1, rank: 1 },
@@ -70,8 +69,10 @@ export class King extends Piece {
 
     private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
         const endBoard = new Board(startBoard, { switchColor: true, resetEnPassant: true })
-        const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
+        endBoard.canCastle[this.color][isQueenSideCastling ? 'queenSide' : 'kingSide'] = false
+
         const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
+        const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
 
         endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
         endBoard.squares[endSquareNb + (isQueenSideCastling ? 1 : -1)] = endBoard.squares[rookStartPosition]
