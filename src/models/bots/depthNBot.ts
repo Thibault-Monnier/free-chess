@@ -1,10 +1,11 @@
 import { Board } from '../board'
 import { PieceSquareTableEvaluator } from '../evaluators/pieceSquareTableEvaluator'
 import { Move } from '../move'
+import { BestMove } from '../types'
 import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
-    run(): { move: Move; evaluation: number } | null {
+    run(): BestMove | null {
         const moves = this.board.possibleMoves()
         const colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
 

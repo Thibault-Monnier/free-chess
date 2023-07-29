@@ -1,3 +1,5 @@
+import { Move } from './move'
+
 export type PieceColor = 'white' | 'black'
 export type PieceName = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 export type PieceLetter = 'K' | 'Q' | 'R' | 'B' | 'N' | ''
@@ -17,3 +19,4 @@ export type CanCastle = {
     black: { queenSide: boolean; kingSide: boolean }
 }
 export type EndOfGame = 'checkmate' | 'stalemate'
+export type BestMove = { move: Move; evaluation: number }

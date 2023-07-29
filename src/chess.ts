@@ -2,27 +2,30 @@ import { drawBoard, squareSize } from './draw'
 import { DepthNBot } from './models/bots/depthNBot'
 import { Game } from './models/game'
 import { Move } from './models/move'
+import { BestMove } from './models/types'
 
 export class Chess {
     private game: Game = new Game()
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
+    private bestMove: BestMove | null = null
     //public mode: "1v1" | "1vC" | "CvC"
 
     constructor() {
+        this.calculateBestMove()
         this.draw()
     }
 
     private draw() {
         this.toggleActions()
-
-        const bot = new DepthNBot(this.game.currentBoard, 2)
-        const bestMove = bot.run()
-        drawBoard(this.game, this.selectedSquareNb, this.highlightedSquareNbs, bestMove ? bestMove.move : null)
-
+        drawBoard(
+            this.game,
+            this.selectedSquareNb,
+            this.highlightedSquareNbs,
+            this.bestMove ? this.bestMove.move : null
+        )
         this.updateMovesPanel()
         this.toggleNextPlayer()
-        if (bestMove) this.updateEvaluation(bestMove.evaluation)
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -41,6 +44,7 @@ export class Chess {
                 const move = this.getMove(squareNb)!
                 this.game.addMove(move)
                 this.selectedSquareNb = null
+                this.calculateBestMove()
             }
             //Deselects the square if it is empty
             else if (piece === null) {
@@ -95,32 +99,42 @@ export class Chess {
         }
     }
 
-    private updateEvaluation(evaluation: number) {
+    private updateEvaluation() {
         const element = document.getElementById('evaluation')!
-        element.innerHTML = `Evaluation: ${evaluation.toString()}`
+        element.innerHTML = `Evaluation: ${this.bestMove ? this.bestMove.evaluation : '/'}`
+    }
+
+    private calculateBestMove(): void {
+        const bot = new DepthNBot(this.game.currentBoard, 3)
+        this.bestMove = bot.run()
+        if (this.bestMove) this.updateEvaluation()
     }
 
     jumpToMove(moveNb: number): void {
         this.selectedSquareNb = null
         this.game.jumpToMove(moveNb)
+        this.calculateBestMove()
         this.draw()
     }
 
     undo(): void {
         this.selectedSquareNb = null
         this.game.undo()
+        this.calculateBestMove()
         this.draw()
     }
 
     redo(): void {
         this.selectedSquareNb = null
         this.game.redo()
+        this.calculateBestMove()
         this.draw()
     }
 
     reset(): void {
         this.selectedSquareNb = null
         this.game = new Game()
+        this.calculateBestMove()
         this.draw()
     }
 
