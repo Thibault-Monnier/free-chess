@@ -3,6 +3,7 @@ import { DepthNBot } from './models/bots/depthNBot'
 import { Game } from './models/game'
 import { Move } from './models/move'
 import { BestMove } from './models/types'
+import { invertColor } from './models/utils'
 
 export class Chess {
     private game: Game = new Game()
@@ -84,9 +85,9 @@ export class Chess {
         const endOfGame = this.game.currentBoard.endOfGame
         switch (endOfGame) {
             case 'checkmate':
-                const colorToMove = this.game.currentBoard.colorToMove
+                const colorWinner = invertColor(this.game.currentBoard.colorToMove)
                 endOfGameElement.innerHTML = `${
-                    colorToMove.charAt(0).toUpperCase() + colorToMove.slice(1)
+                    colorWinner.charAt(0).toUpperCase() + colorWinner.slice(1)
                 } wins by checkmate!`
                 endOfGameElement.setAttribute('style', '')
                 break
