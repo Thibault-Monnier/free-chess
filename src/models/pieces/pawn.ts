@@ -23,20 +23,23 @@ export class Pawn extends Piece {
         const { rank: startRank } = squareNbToFileRank(startSquareNb)
         const promotionStartRank = this.color === 'white' ? 6 : 1
 
-        if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
-            // Advance one square if not eligible for promotion
-            if (startRank !== promotionStartRank) {
-                this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
-            }
+        if (!options.skipCheckVerification) {
+            // Pawn advance cannot "eat" opponent kings
+            if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
+                // Advance one square if not eligible for promotion
+                if (startRank !== promotionStartRank) {
+                    this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
+                }
 
-            // Advance two squares
-            if (
-                board.squares[moveTwoSquares] === null &&
-                ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
-            ) {
-                this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options, (endBoard) => {
-                    endBoard.enPassantTargetSquareNb = moveOneSquare
-                })
+                // Advance two squares
+                if (
+                    board.squares[moveTwoSquares] === null &&
+                    ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
+                ) {
+                    this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options, (endBoard) => {
+                        endBoard.enPassantTargetSquareNb = moveOneSquare
+                    })
+                }
             }
         }
 
@@ -66,21 +69,24 @@ export class Pawn extends Piece {
         }
 
         // En passant captures
-        if (board.enPassantTargetSquareNb !== null) {
-            const enPassantTargetSquareNb = board.enPassantTargetSquareNb
-            const offsetToTarget = enPassantTargetSquareNb - startSquareNb
-            if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
-                this.createMove(
-                    moves,
-                    startSquareNb,
-                    enPassantTargetSquareNb,
-                    board,
-                    Pawn.LETTER,
-                    options,
-                    (endBoard) => {
-                        endBoard.squares[enPassantTargetSquareNb - 8 * direction] = null
-                    }
-                )
+        if (!options.skipCheckVerification) {
+            // En passant captures cannot "eat" opponent kings
+            if (board.enPassantTargetSquareNb !== null) {
+                const enPassantTargetSquareNb = board.enPassantTargetSquareNb
+                const offsetToTarget = enPassantTargetSquareNb - startSquareNb
+                if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
+                    this.createMove(
+                        moves,
+                        startSquareNb,
+                        enPassantTargetSquareNb,
+                        board,
+                        Pawn.LETTER,
+                        options,
+                        (endBoard) => {
+                            endBoard.squares[enPassantTargetSquareNb - 8 * direction] = null
+                        }
+                    )
+                }
             }
         }
 
