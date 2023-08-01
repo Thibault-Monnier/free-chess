@@ -63,6 +63,22 @@ describe('possibleMoves', () => {
     //it('includes all types of promotions', () => expect(nbMoves('rnb2k1r/pp1Pbppp/2p5/q7/2B5/8/PPPQNnPP/RNB1K2R w KQ - 3 9')).toEqual(39))
 
     it('', () => expect(nbMoves('2r5/3pk3/8/2P5/8/2K5/8/8 w - - 5 4')).toEqual(9))
+
+    describe('pins', () => {
+        it('detects a pin', () => expect(nbMoves('k7/8/8/n7/8/8/R7/K7 b - - 0 0')).toEqual(3))
+
+        it('detects unpin when the pinned piece has the same movement offset as the pinning piece', () => {
+            expect(nbMoves('k7/8/r7/8/Q7/8/8/K7 b - - 0 0')).toEqual(6)
+        })
+
+        it('detects unpin when two pieces block the pin', () => {
+            expect(nbMoves('k7/p7/r7/8/Q7/8/8/K7 b - - 0 0')).toEqual(11)
+        })
+
+        it("detects clearance of a pin's path when en passant", () => {
+            expect(nbMoves('8/8/8/8/k1PpQ3/8/8/K7 b - c3 0 0')).toEqual(5)
+        })
+    })
 })
 
 describe('endOfGame', () => {

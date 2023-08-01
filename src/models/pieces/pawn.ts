@@ -1,7 +1,7 @@
 import { Board } from '../board'
 import { Move } from '../move'
 import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
-import { fileRankToSquareNb, squareNbToFileRank } from '../utils'
+import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 import { Queen } from './queen'
 
