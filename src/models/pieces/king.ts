@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { invertColor } from '../utils'
 import { Piece } from './piece'
 
@@ -82,4 +82,6 @@ export class King extends Piece {
         const moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
         return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
     }
+
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
 }

@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { PieceColor, PossibleMoveOptions } from '../types'
+import { OpponentAttackTable, PieceColor, PossibleMoveOptions } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
@@ -42,4 +42,6 @@ export class Rook extends Piece {
             if (board.squares[63] === this) board.canCastle[this.color].kingSide = false
         }
     }
+
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
 }

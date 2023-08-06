@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { PieceColor, PossibleMoveOptions } from '../types'
+import { OpponentAttackTable, PieceColor, PossibleMoveOptions } from '../types'
 import { Piece } from './piece'
 
 export class Knight extends Piece {
@@ -27,4 +27,6 @@ export class Knight extends Piece {
         }
         return moves
     }
+
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
 }

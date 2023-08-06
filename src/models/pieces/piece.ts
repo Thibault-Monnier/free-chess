@@ -1,20 +1,21 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
+import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
 import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
     abstract possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[]
+    abstract updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void
 
     eaten(board: Board): void {}
 
     addOffset(startSquareNb: number, offset: fileRank): number | null {
         const endSquareNb = startSquareNb + offset.file + offset.rank * 8
-        const { file } = squareNbToFileRank(startSquareNb)
-
         if (endSquareNb < 0 || endSquareNb > 63) return null
+
+        const { file } = squareNbToFileRank(startSquareNb)
         if (file + offset.file < 0) return null
         if (file + offset.file > 7) return null
 
@@ -78,6 +79,44 @@ export abstract class Piece {
             )
             moves.push(move)
         }
+    }
+
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable, OFFSETS: fileRank[]): void {
+        for (let offset of OFFSETS) {
+            let endSquareNb: number | null = startSquareNb
+
+            while (true) {
+                endSquareNb = this.addOffset(endSquareNb, offset)
+                if (endSquareNb === null) break
+                table.attackedSquares[endSquareNb] = true
+
+                const piece = board.squares[endSquareNb]
+                if (piece) {
+                    if (piece.color !== this.color && this.isPiecePinned(endSquareNb, board, offset)) {
+                        table.pinnedPieces.push({
+                            squareNb: endSquareNb,
+                            offset,
+                        })
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    isPiecePinned(startSquareNb: number, board: Board, offset: fileRank): boolean {
+        let endSquareNb: number | null = startSquareNb
+        while (true) {
+            endSquareNb = this.addOffset(endSquareNb, offset)
+            if (endSquareNb === null) break
+
+            const piece = board.squares[endSquareNb]
+            if (piece) {
+                return piece.color !== this.color && piece.name === 'king'
+            }
+        }
+
+        return false
     }
 
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {

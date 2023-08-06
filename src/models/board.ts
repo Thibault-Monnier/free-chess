@@ -6,7 +6,7 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { CanCastle, Coordinates, EndOfGame, PieceColor } from './types'
+import { CanCastle, Coordinates, EndOfGame, OpponentAttackTable, PieceColor } from './types'
 import { coordinatesToSquareNb, fileRankToSquareNb, invertColor } from './utils'
 
 export class Board {
@@ -70,6 +70,7 @@ export class Board {
     }
 
     public possibleMoves(): Move[] {
+        const opponentAttackTable = this.createOpponentAttackTable()
         let moves: Move[] = []
         this.squares.forEach((piece, squareNb) => {
             if (piece && piece.color === this.colorToMove) {
@@ -88,6 +89,19 @@ export class Board {
     public isInCheck(kingColor = this.colorToMove): boolean {
         const kingSquareNb = this.squares.findIndex((piece) => piece?.name === 'king' && piece.color === kingColor)
         return this.areSquaresAttacked(invertColor(kingColor), kingSquareNb)
+    }
+
+    public createOpponentAttackTable(): OpponentAttackTable {
+        const table: OpponentAttackTable = { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
+
+        for (let squareNb = 0; squareNb < 64; squareNb++) {
+            const piece = this.squares[squareNb]
+            if (piece && piece.color !== this.colorToMove) {
+                piece.updateAttackTable(squareNb, this, table)
+            }
+        }
+
+        return table
     }
 
     // Worst possible code in terms of optimization, change when optimizing

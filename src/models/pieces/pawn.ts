@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 import { Queen } from './queen'
@@ -92,4 +92,6 @@ export class Pawn extends Piece {
 
         return moves
     }
+
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
 }
