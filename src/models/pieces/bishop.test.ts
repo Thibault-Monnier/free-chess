@@ -2,14 +2,8 @@ import { Board } from '../board'
 import { OpponentAttackTable } from '../types'
 
 describe('updateAttackTable', () => {
-    const boardFromFen = (fen: string): Board => {
-        const board = new Board()
-        board.importFEN(fen)
-        return board
-    }
-
     describe('test with specific fen', () => {
-        const board = boardFromFen('7k/n7/5q2/8/3B4/8/5P2/8 w - - 0 0')
+        const board = new Board('7k/n7/5q2/8/3B4/8/5P2/8 w - - 0 0')
         const bishopSquareNb = 27
         const bishop = board.squares[bishopSquareNb]
 

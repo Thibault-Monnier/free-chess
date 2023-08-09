@@ -2,19 +2,13 @@ import { Board } from './board'
 import { CanCastle, EndOfGame } from './types'
 
 describe('importFEN', () => {
-    const boardFromFen = (fen: string): Board => {
-        const board = new Board()
-        board.importFEN(fen)
-        return board
-    }
-
     it('imports a FEN', () => {
-        const board = boardFromFen('rbk3n1/p7/8/8/8/8/7P/RBK3N1 b KQ - 0 0')
+        const board = new Board('rbk3n1/p7/8/8/8/8/7P/RBK3N1 b KQ - 0 0')
         expect(board.squares[56]?.name).toBe('rook')
     })
 
     it('imports another FEN', () => {
-        const board = boardFromFen('8/8/8/2k5/2pP4/8/B7/4K3 b - d3 0 3')
+        const board = new Board('8/8/8/2k5/2pP4/8/B7/4K3 b - d3 0 3')
         expect(board.squares.filter((piece) => piece !== null).length).toBe(5)
         expect(board.colorToMove).toEqual('black')
         expect(board.canCastle).toStrictEqual<CanCastle>({
@@ -33,8 +27,7 @@ describe('importFEN', () => {
 
 describe('isInCheck', () => {
     const isInCheck = (fen: string): boolean => {
-        const board = new Board()
-        board.importFEN(fen)
+        const board = new Board(fen)
         return board.isInCheck()
     }
 
@@ -45,8 +38,7 @@ describe('isInCheck', () => {
 
 describe('possibleMoves', () => {
     const nbMoves = (fen: string): number => {
-        const board = new Board()
-        board.importFEN(fen)
+        const board = new Board(fen)
         return board.possibleMoves().length
     }
 
@@ -83,8 +75,7 @@ describe('possibleMoves', () => {
 
 describe('endOfGame', () => {
     const endOfGame = (fen: string): EndOfGame | null => {
-        const board = new Board()
-        board.importFEN(fen)
+        const board = new Board(fen)
         return board.endOfGame
     }
 

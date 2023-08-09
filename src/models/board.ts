@@ -18,8 +18,17 @@ export class Board {
     }
     public enPassantTargetSquareNb: number | null = null
 
-    constructor(board?: Board, options?: { switchColor: boolean; resetEnPassant: boolean }) {
-        if (board) {
+    //Test if constructor can be called in each of the following ways
+    constructor()
+    constructor(board: Board, options?: { switchColor: boolean; resetEnPassant: boolean })
+    constructor(fen: string)
+
+    constructor(boardOrFen?: Board | string, options?: { switchColor: boolean; resetEnPassant: boolean }) {
+        if (typeof boardOrFen === 'string') {
+            this.squares = new Array(64).fill(null)
+            this.importFEN(boardOrFen)
+        } else if (boardOrFen) {
+            const board = boardOrFen
             this.squares = [...board.squares]
             this.colorToMove = options?.switchColor ? invertColor(board.colorToMove) : board.colorToMove
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }

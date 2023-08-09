@@ -4,8 +4,7 @@ import { DepthOneBot } from './depthOneBot'
 
 describe('depthOneBot', () => {
     const bestMove = (fen: string): Move | null => {
-        const board = new Board()
-        board.importFEN(fen)
+        const board = new Board(fen)
         const bot = new DepthOneBot(board, null)
         const run = bot.run()
         return run ? run.move : null
