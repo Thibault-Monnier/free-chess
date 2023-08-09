@@ -1,4 +1,5 @@
 import { Board } from '../board'
+import { OpponentAttackTable } from '../types'
 
 describe('possibleMoves', () => {
     it('skips castlings in skipVerification mode', () => {
@@ -27,5 +28,28 @@ describe('possibleMoves', () => {
         const boardAfterCastling = castlingMove.endBoard
 
         expect(boardAfterCastling.squares.length).toEqual(64)
+    })
+})
+
+describe('updateAttackTable', () => {
+    const boardFromFen = (fen: string): Board => {
+        const board = new Board()
+        board.importFEN(fen)
+        return board
+    }
+
+    describe('test with specific fen', () => {
+        const board = boardFromFen('k7/8/8/8/8/8/8/K7 w - - 0 0')
+        const kingSquareNb = 0
+        const king = board.squares[kingSquareNb]
+
+        expect(king?.name).toBe('king')
+
+        const table: OpponentAttackTable = { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
+        king?.updateAttackTable(kingSquareNb, board, table)
+
+        it('calculates attacked squares', () => {
+            expect(table.attackedSquares.filter((square) => square === true).length).toBe(3)
+        })
     })
 })

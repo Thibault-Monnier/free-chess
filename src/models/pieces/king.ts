@@ -12,16 +12,6 @@ export class King extends Piece {
     }
 
     possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
-        const OFFSETS: fileRank[] = [
-            { file: 1, rank: 1 },
-            { file: 1, rank: 0 },
-            { file: 1, rank: -1 },
-            { file: 0, rank: 1 },
-            { file: 0, rank: -1 },
-            { file: -1, rank: 1 },
-            { file: -1, rank: 0 },
-            { file: -1, rank: -1 },
-        ]
         const moves: Move[] = []
 
         for (let offset of OFFSETS) {
@@ -83,5 +73,18 @@ export class King extends Piece {
         return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {
+        this.calculateAttackTable(startSquareNb, board, table, OFFSETS, false)
+    }
 }
+
+const OFFSETS: fileRank[] = [
+    { file: 1, rank: 1 },
+    { file: 1, rank: 0 },
+    { file: 1, rank: -1 },
+    { file: 0, rank: 1 },
+    { file: 0, rank: -1 },
+    { file: -1, rank: 1 },
+    { file: -1, rank: 0 },
+    { file: -1, rank: -1 },
+]

@@ -81,11 +81,17 @@ export abstract class Piece {
         }
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable, OFFSETS: fileRank[]): void {
-        for (let offset of OFFSETS) {
+    calculateAttackTable(
+        startSquareNb: number,
+        board: Board,
+        table: OpponentAttackTable,
+        offsets: fileRank[],
+        isSlidingPiece: boolean
+    ): void {
+        for (let offset of offsets) {
             let endSquareNb: number | null = startSquareNb
 
-            while (true) {
+            do {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
                 table.attackedSquares[endSquareNb] = true
@@ -100,11 +106,11 @@ export abstract class Piece {
                     }
                     break
                 }
-            }
+            } while (isSlidingPiece)
         }
     }
 
-    isPiecePinned(startSquareNb: number, board: Board, offset: fileRank): boolean {
+    protected isPiecePinned(startSquareNb: number, board: Board, offset: fileRank): boolean {
         let endSquareNb: number | null = startSquareNb
         while (true) {
             endSquareNb = this.addOffset(endSquareNb, offset)
