@@ -32,14 +32,8 @@ describe('possibleMoves', () => {
 })
 
 describe('updateAttackTable', () => {
-    const boardFromFen = (fen: string): Board => {
-        const board = new Board()
-        board.importFEN(fen)
-        return board
-    }
-
     describe('test with specific fen', () => {
-        const board = boardFromFen('k7/8/8/8/8/8/8/K7 w - - 0 0')
+        const board = new Board('k7/8/8/8/8/8/8/K7 w - - 0 0')
         const kingSquareNb = 0
         const king = board.squares[kingSquareNb]
 
