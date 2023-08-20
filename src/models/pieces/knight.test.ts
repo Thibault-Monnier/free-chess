@@ -1,5 +1,6 @@
-import { Board } from "../board"
-import { OpponentAttackTable } from "../types"
+import { Board } from '../board'
+import { AttackTable } from '../types'
+import { createEmptyAttackTable } from '../utils'
 
 describe('updateAttackTable', () => {
     describe('test with specific fen', () => {
@@ -9,7 +10,7 @@ describe('updateAttackTable', () => {
 
         expect(knight?.name).toBe('knight')
 
-        const table: OpponentAttackTable = { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
+        const table: AttackTable = createEmptyAttackTable()
         knight?.updateAttackTable(knightSquareNb, board, table)
 
         it('calculates attacked squares', () => {

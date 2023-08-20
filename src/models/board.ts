@@ -6,8 +6,8 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { CanCastle, Coordinates, EndOfGame, OpponentAttackTable, PieceColor } from './types'
-import { coordinatesToSquareNb, fileRankToSquareNb, invertColor } from './utils'
+import { CanCastle, Coordinates, EndOfGame, AttackTable, PieceColor } from './types'
+import { coordinatesToSquareNb, createEmptyAttackTable, fileRankToSquareNb, invertColor } from './utils'
 
 export class Board {
     public squares: (Piece | null)[]
@@ -83,7 +83,7 @@ export class Board {
         let moves: Move[] = []
         this.squares.forEach((piece, squareNb) => {
             if (piece && piece.color === this.colorToMove) {
-                moves = [...moves, ...piece.possibleMoves(squareNb, this, {})]
+                moves = [...moves, ...piece.possibleMoves(squareNb, this, opponentAttackTable, {})]
             }
         })
         return moves
@@ -100,8 +100,8 @@ export class Board {
         return this.areSquaresAttacked(invertColor(kingColor), kingSquareNb)
     }
 
-    public createOpponentAttackTable(): OpponentAttackTable {
-        const table: OpponentAttackTable = { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
+    public createOpponentAttackTable(): AttackTable {
+        const table: AttackTable = createEmptyAttackTable()
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const piece = this.squares[squareNb]
@@ -118,7 +118,9 @@ export class Board {
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const piece = this.squares[squareNb]
             if (piece?.color === attackingColor) {
-                const moves = piece.possibleMoves(squareNb, this, { skipCheckVerification: true })
+                const moves = piece.possibleMoves(squareNb, this, createEmptyAttackTable(), {
+                    skipCheckVerification: true,
+                })
                 if (moves.some((move) => targetSquareNbs.includes(move.endSquareNb))) return true
             }
         }

@@ -1,4 +1,5 @@
 import { drawBoard, squareSize } from './draw'
+import { Board } from './models/board'
 import { DepthNBot } from './models/bots/depthNBot'
 import { Game } from './models/game'
 import { Move } from './models/move'
@@ -16,6 +17,10 @@ export class Chess {
     constructor() {
         this.calculateBestMove()
         this.draw()
+    }
+
+    private get currentBoard(): Board {
+        return this.game.currentBoard
     }
 
     private draw() {
@@ -37,7 +42,7 @@ export class Chess {
         if (clickType === 'left') {
             this.highlightedSquareNbs.fill(false)
 
-            const piece = this.game.currentBoard.squares[squareNb]
+            const piece = this.currentBoard.squares[squareNb]
             //Deselects the square if it was already selected
             if (squareNb === this.selectedSquareNb) {
                 this.selectedSquareNb = null
@@ -54,7 +59,7 @@ export class Chess {
                 this.selectedSquareNb = null
             }
             //Selects the square if it contains a piece of the current player
-            else if (piece.color === this.game.currentBoard.colorToMove) {
+            else if (piece.color === this.currentBoard.colorToMove) {
                 this.selectedSquareNb = squareNb
             }
         } else {
@@ -68,8 +73,13 @@ export class Chess {
     //Calls the possibleMoves() method of the piece on the selected square
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
-        const piece = this.game.currentBoard.squares[this.selectedSquareNb]
-        const possibleMoves = piece!.possibleMoves(this.selectedSquareNb, this.game.currentBoard, {})
+        const piece = this.currentBoard.squares[this.selectedSquareNb]
+        const possibleMoves = piece!.possibleMoves(
+            this.selectedSquareNb,
+            this.currentBoard,
+            this.currentBoard.createOpponentAttackTable(),
+            {}
+        )
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 
@@ -82,10 +92,10 @@ export class Chess {
         blackToMoveElement.setAttribute('style', 'display: none;')
         endOfGameElement.setAttribute('style', 'display: none;')
 
-        const endOfGame = this.game.currentBoard.endOfGame
+        const endOfGame = this.currentBoard.endOfGame
         switch (endOfGame) {
             case 'checkmate':
-                const colorWinner = invertColor(this.game.currentBoard.colorToMove)
+                const colorWinner = invertColor(this.currentBoard.colorToMove)
                 endOfGameElement.innerHTML = `${
                     colorWinner.charAt(0).toUpperCase() + colorWinner.slice(1)
                 } wins by checkmate!`
@@ -96,7 +106,7 @@ export class Chess {
                 endOfGameElement.setAttribute('style', '')
                 break
             case null:
-                const isWhite = this.game.currentBoard.colorToMove === 'white'
+                const isWhite = this.currentBoard.colorToMove === 'white'
                 if (isWhite) whiteToMoveElement.setAttribute('style', '')
                 else blackToMoveElement.setAttribute('style', '')
         }
@@ -121,7 +131,7 @@ export class Chess {
 
         this.bestMove = undefined
         this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
-            const bot = new DepthNBot(this.game.currentBoard, 3)
+            const bot = new DepthNBot(this.currentBoard, 3)
             this.bestMove = bot.run()
             this.draw()
         })

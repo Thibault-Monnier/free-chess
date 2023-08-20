@@ -107,7 +107,12 @@ export function drawBoard(
 
 function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     const piece = game.currentBoard.squares[selectedSquareNb]!
-    const moves = piece.possibleMoves(selectedSquareNb, game.currentBoard, {})
+    const moves = piece.possibleMoves(
+        selectedSquareNb,
+        game.currentBoard,
+        game.currentBoard.createOpponentAttackTable(),
+        {}
+    )
 
     for (let move of moves) {
         const { x, y } = squareNbToXY(move.endSquareNb)

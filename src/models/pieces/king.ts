@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { fileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { invertColor } from '../utils'
 import { Piece } from './piece'
 
@@ -11,7 +11,12 @@ export class King extends Piece {
         super('king', color)
     }
 
-    possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
+    possibleMoves(
+        startSquareNb: number,
+        board: Board,
+        opponentAttackTable: AttackTable,
+        options: PossibleMoveOptions
+    ): Move[] {
         const moves: Move[] = []
 
         for (let offset of OFFSETS) {
@@ -73,7 +78,7 @@ export class King extends Piece {
         return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {
+    updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
         this.calculateAttackTable(startSquareNb, board, table, OFFSETS, false)
     }
 }

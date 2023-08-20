@@ -1,13 +1,18 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
+import { fileRank, AttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
 import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
-    abstract possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[]
-    abstract updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void
+    abstract possibleMoves(
+        startSquareNb: number,
+        board: Board,
+        opponentAttackTable: AttackTable,
+        options: PossibleMoveOptions
+    ): Move[]
+    abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
 
     eaten(board: Board): void {}
 
@@ -84,7 +89,7 @@ export abstract class Piece {
     calculateAttackTable(
         startSquareNb: number,
         board: Board,
-        table: OpponentAttackTable,
+        table: AttackTable,
         offsets: fileRank[],
         isSlidingPiece: boolean
     ): void {

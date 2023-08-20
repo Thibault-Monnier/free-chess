@@ -20,7 +20,7 @@ export type CanCastle = {
 }
 export type EndOfGame = 'checkmate' | 'stalemate'
 export type BestMove = { move: Move; evaluation: number }
-export type OpponentAttackTable = {
+export type AttackTable = {
     attackedSquares: Bitboard
     pinnedPieces: Array<PinnedPiece>
 }

@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, OpponentAttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { fileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 import { Queen } from './queen'
@@ -12,7 +12,12 @@ export class Pawn extends Piece {
         super('pawn', color)
     }
 
-    possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
+    possibleMoves(
+        startSquareNb: number,
+        board: Board,
+        opponentAttackTable: AttackTable,
+        options: PossibleMoveOptions
+    ): Move[] {
         const moves: Move[] = []
 
         // Basic moves
@@ -86,7 +91,7 @@ export class Pawn extends Piece {
         return moves
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {
+    updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
         this.calculateAttackTable(startSquareNb, board, table, this.captureOffsets, false)
     }
 

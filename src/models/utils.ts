@@ -1,4 +1,4 @@
-import { fileRank, Coordinates, PieceColor } from './types'
+import { fileRank, Coordinates, PieceColor, AttackTable } from './types'
 
 export function invertColor(color: PieceColor): PieceColor {
     return color === 'white' ? 'black' : 'white'
@@ -25,4 +25,8 @@ export function coordinatesToSquareNb(coordinates: Coordinates): number {
     const file = coordinates[0].charCodeAt(0) - 'a'.charCodeAt(0)
     const rank = Number(coordinates[1]) - 1
     return fileRankToSquareNb({ file, rank })
+}
+
+export function createEmptyAttackTable(): AttackTable {
+    return { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
 }
