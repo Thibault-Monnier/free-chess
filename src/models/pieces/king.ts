@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { invertColor } from '../utils'
 import { Piece } from './piece'
 
@@ -83,7 +83,7 @@ export class King extends Piece {
     }
 }
 
-const OFFSETS: fileRank[] = [
+const OFFSETS: FileRank[] = [
     { file: 1, rank: 1 },
     { file: 1, rank: 0 },
     { file: 1, rank: -1 },

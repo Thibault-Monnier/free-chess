@@ -1,17 +1,17 @@
-import { fileRank, Coordinates, PieceColor, AttackTable } from './types'
+import { FileRank, Coordinates, PieceColor, AttackTable } from './types'
 
 export function invertColor(color: PieceColor): PieceColor {
     return color === 'white' ? 'black' : 'white'
 }
 
-export function squareNbToFileRank(squareNb: number): fileRank {
+export function squareNbToFileRank(squareNb: number): FileRank {
     return {
         file: squareNb % 8,
         rank: Math.floor(squareNb / 8),
     }
 }
 
-export function fileRankToSquareNb({ file, rank }: fileRank): number {
+export function fileRankToSquareNb({ file, rank }: FileRank): number {
     return rank * 8 + file
 }
 

@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
 import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 import { Queen } from './queen'
@@ -99,7 +99,7 @@ export class Pawn extends Piece {
         return this.color === 'white' ? 1 : -1
     }
 
-    private get captureOffsets(): fileRank[] {
+    private get captureOffsets(): FileRank[] {
         return [
             { file: -1, rank: this.direction },
             { file: 1, rank: this.direction },

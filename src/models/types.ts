@@ -3,7 +3,7 @@ import { Move } from './move'
 export type PieceColor = 'white' | 'black'
 export type PieceName = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 export type PieceLetter = 'K' | 'Q' | 'R' | 'B' | 'N' | ''
-export type fileRank = { file: number; rank: number }
+export type FileRank = { file: number; rank: number }
 export type Coordinates = `${'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'}${
     | '1'
     | '2'
@@ -24,5 +24,5 @@ export type AttackTable = {
     attackedSquares: Bitboard
     pinnedPieces: Array<PinnedPiece>
 }
-export type PinnedPiece = { squareNb: number; offset: fileRank }
+export type PinnedPiece = { squareNb: number; offset: FileRank }
 export type Bitboard = boolean[]

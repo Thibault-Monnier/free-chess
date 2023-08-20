@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { fileRank, AttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
 import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
@@ -16,7 +16,7 @@ export abstract class Piece {
 
     eaten(board: Board): void {}
 
-    addOffset(startSquareNb: number, offset: fileRank): number | null {
+    addOffset(startSquareNb: number, offset: FileRank): number | null {
         const endSquareNb = startSquareNb + offset.file + offset.rank * 8
         if (endSquareNb < 0 || endSquareNb > 63) return null
 
@@ -29,7 +29,7 @@ export abstract class Piece {
 
     createMovesForRepeatedOffsets(
         startSquareNb: number,
-        offsets: fileRank[],
+        offsets: FileRank[],
         board: Board,
         PieceLetter: PieceLetter,
         options: PossibleMoveOptions
@@ -90,7 +90,7 @@ export abstract class Piece {
         startSquareNb: number,
         board: Board,
         table: AttackTable,
-        offsets: fileRank[],
+        offsets: FileRank[],
         isSlidingPiece: boolean
     ): void {
         for (let offset of offsets) {
@@ -115,7 +115,7 @@ export abstract class Piece {
         }
     }
 
-    protected isPiecePinned(startSquareNb: number, board: Board, offset: fileRank): boolean {
+    protected isPiecePinned(startSquareNb: number, board: Board, offset: FileRank): boolean {
         let endSquareNb: number | null = startSquareNb
         while (true) {
             endSquareNb = this.addOffset(endSquareNb, offset)
