@@ -9,18 +9,7 @@ export class Rook extends Piece {
     }
 
     possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
-        const moves = this.createMovesForRepeatedOffsets(
-            startSquareNb,
-            [
-                { file: 1, rank: 0 },
-                { file: 0, rank: 1 },
-                { file: 0, rank: -1 },
-                { file: -1, rank: 0 },
-            ],
-            board,
-            'R',
-            options
-        )
+        const moves = this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, 'R', options)
 
         const isQueenSquare = (this.color === 'white' ? 0 : 56) === startSquareNb
         const isKingSquare = (this.color === 'white' ? 7 : 63) === startSquareNb
@@ -43,5 +32,14 @@ export class Rook extends Piece {
         }
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {
+        this.calculateAttackTable(startSquareNb, board, table, OFFSETS, true)
+    }
 }
+
+const OFFSETS = [
+    { file: 1, rank: 0 },
+    { file: 0, rank: 1 },
+    { file: 0, rank: -1 },
+    { file: -1, rank: 0 },
+]

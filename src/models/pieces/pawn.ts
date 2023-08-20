@@ -15,11 +15,9 @@ export class Pawn extends Piece {
     possibleMoves(startSquareNb: number, board: Board, options: PossibleMoveOptions): Move[] {
         const moves: Move[] = []
 
-        const direction = this.color === 'white' ? 1 : -1
-
         // Basic moves
-        const moveOneSquare = startSquareNb + 8 * direction
-        const moveTwoSquares = startSquareNb + 16 * direction
+        const moveOneSquare = startSquareNb + 8 * this.direction
+        const moveTwoSquares = startSquareNb + 16 * this.direction
         const { rank: startRank } = squareNbToFileRank(startSquareNb)
         const promotionStartRank = this.color === 'white' ? 6 : 1
 
@@ -51,13 +49,8 @@ export class Pawn extends Piece {
         }
 
         // Basic captures
-        const captures: fileRank[] = [
-            { file: -1, rank: direction },
-            { file: 1, rank: direction },
-        ]
-
-        for (let capture of captures) {
-            const endSquareNb = this.addOffset(startSquareNb, capture)
+        for (let offset of this.captureOffsets) {
+            const endSquareNb = this.addOffset(startSquareNb, offset)
 
             if (
                 endSquareNb !== null &&
@@ -74,7 +67,7 @@ export class Pawn extends Piece {
             if (board.enPassantTargetSquareNb !== null) {
                 const enPassantTargetSquareNb = board.enPassantTargetSquareNb
                 const offsetToTarget = enPassantTargetSquareNb - startSquareNb
-                if (offsetToTarget === 7 * direction || offsetToTarget === 9 * direction) {
+                if (offsetToTarget === 7 * this.direction || offsetToTarget === 9 * this.direction) {
                     this.createMove(
                         moves,
                         startSquareNb,
@@ -83,7 +76,7 @@ export class Pawn extends Piece {
                         Pawn.LETTER,
                         options,
                         (endBoard) => {
-                            endBoard.squares[enPassantTargetSquareNb - 8 * direction] = null
+                            endBoard.squares[enPassantTargetSquareNb - 8 * this.direction] = null
                         }
                     )
                 }
@@ -93,5 +86,18 @@ export class Pawn extends Piece {
         return moves
     }
 
-    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {}
+    updateAttackTable(startSquareNb: number, board: Board, table: OpponentAttackTable): void {
+        this.calculateAttackTable(startSquareNb, board, table, this.captureOffsets, false)
+    }
+
+    private get direction(): number {
+        return this.color === 'white' ? 1 : -1
+    }
+
+    private get captureOffsets(): fileRank[] {
+        return [
+            { file: -1, rank: this.direction },
+            { file: 1, rank: this.direction },
+        ]
+    }
 }
