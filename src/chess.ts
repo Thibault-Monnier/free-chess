@@ -77,8 +77,7 @@ export class Chess {
         const possibleMoves = piece!.possibleMoves(
             this.selectedSquareNb,
             this.currentBoard,
-            this.currentBoard.createOpponentAttackTable(),
-            {}
+            this.currentBoard.createOpponentAttackTable()
         )
         return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }

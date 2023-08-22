@@ -13,7 +13,7 @@ describe('possibleMoves', () => {
 
         // If castlings were not skipped from opponent (= white) moves computation, our implementation of
         // castlings would result in a "Maximum call stack size exceeded" error.
-        expect(() => king.possibleMoves(kingSquareNb, board, createEmptyAttackTable(), {})).not.toThrowError()
+        expect(() => king.possibleMoves(kingSquareNb, board, createEmptyAttackTable())).not.toThrowError()
     })
 
     it('does not change the squares array size after castling', () => {
@@ -23,7 +23,7 @@ describe('possibleMoves', () => {
         const blackKingSquareNb = 60
         const blackKing = board.squares[blackKingSquareNb]!
 
-        const blackKingMoves = blackKing.possibleMoves(blackKingSquareNb, board, createEmptyAttackTable(), {})
+        const blackKingMoves = blackKing.possibleMoves(blackKingSquareNb, board, createEmptyAttackTable())
         const castlingMove = blackKingMoves.find((move) => move.notation === 'O-O')!
         expect(castlingMove).toBeDefined()
         const boardAfterCastling = castlingMove.endBoard

@@ -1,17 +1,12 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, PossibleMoveOptions } from '../types'
-import { squareNbToCoordinates, squareNbToFileRank } from '../utils'
+import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName } from '../types'
+import { fileRankToSquareNb, invertColor, squareNbToCoordinates, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
-    abstract possibleMoves(
-        startSquareNb: number,
-        board: Board,
-        opponentAttackTable: AttackTable,
-        options: PossibleMoveOptions
-    ): Move[]
+    abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
 
     eaten(board: Board): void {}
@@ -31,8 +26,8 @@ export abstract class Piece {
         startSquareNb: number,
         offsets: FileRank[],
         board: Board,
-        PieceLetter: PieceLetter,
-        options: PossibleMoveOptions
+        opponentAttackTable: AttackTable,
+        PieceLetter: PieceLetter
     ): Move[] {
         const moves: Move[] = []
 
@@ -42,7 +37,7 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, board, PieceLetter, options)
+                this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, PieceLetter)
                 if (board.squares[endSquareNb]) break
             }
         }
@@ -54,8 +49,8 @@ export abstract class Piece {
         startSquareNb: number,
         endSquareNb: number | null,
         board: Board,
+        opponentAttackTable: AttackTable,
         letter: PieceLetter,
-        options: PossibleMoveOptions,
         postMove?: (endBoard: Board) => void
     ): void {
         if (endSquareNb === null) return
@@ -73,7 +68,14 @@ export abstract class Piece {
 
             if (postMove) postMove(endBoard)
 
-            if (!options?.skipCheckVerification && endBoard.isInCheck(board.colorToMove)) return
+            endBoard.colorToMove = invertColor(endBoard.colorToMove)
+            if (endBoard.isInCheck()) return
+            endBoard.colorToMove = invertColor(endBoard.colorToMove)
+
+            const pinnedPiece = opponentAttackTable.pinnedPieces.find(
+                (pinnedPiece) => pinnedPiece.squareNb === startSquareNb
+            )
+            if (pinnedPiece && (startSquareNb - endSquareNb) % fileRankToSquareNb(pinnedPiece.offset) !== 0) return
 
             const move = new Move(
                 this,

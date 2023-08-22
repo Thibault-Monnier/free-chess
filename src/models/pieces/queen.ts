@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { AttackTable, PieceColor, PossibleMoveOptions } from '../types'
+import { AttackTable, PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Queen extends Piece {
@@ -8,13 +8,8 @@ export class Queen extends Piece {
         super('queen', color)
     }
 
-    possibleMoves(
-        startSquareNb: number,
-        board: Board,
-        opponentAttackTable: AttackTable,
-        options: PossibleMoveOptions
-    ): Move[] {
-        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, 'Q', options)
+    possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
+        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'Q')
     }
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {

@@ -83,7 +83,7 @@ export class Board {
         let moves: Move[] = []
         this.squares.forEach((piece, squareNb) => {
             if (piece && piece.color === this.colorToMove) {
-                moves = [...moves, ...piece.possibleMoves(squareNb, this, opponentAttackTable, {})]
+                moves = [...moves, ...piece.possibleMoves(squareNb, this, opponentAttackTable)]
             }
         })
         return moves
@@ -95,9 +95,11 @@ export class Board {
         } else return null
     }
 
-    public isInCheck(kingColor = this.colorToMove): boolean {
-        const kingSquareNb = this.squares.findIndex((piece) => piece?.name === 'king' && piece.color === kingColor)
-        return this.areSquaresAttacked(invertColor(kingColor), kingSquareNb)
+    public isInCheck(opponentAttackTable = this.createOpponentAttackTable()): boolean {
+        const kingSquareNb = this.squares.findIndex(
+            (piece) => piece?.name === 'king' && piece.color === this.colorToMove
+        )
+        return opponentAttackTable.attackedSquares[kingSquareNb]
     }
 
     public createOpponentAttackTable(): AttackTable {
@@ -111,20 +113,6 @@ export class Board {
         }
 
         return table
-    }
-
-    // Worst possible code in terms of optimization, change when optimizing
-    public areSquaresAttacked(attackingColor: PieceColor, ...targetSquareNbs: number[]): boolean {
-        for (let squareNb = 0; squareNb < 64; squareNb++) {
-            const piece = this.squares[squareNb]
-            if (piece?.color === attackingColor) {
-                const moves = piece.possibleMoves(squareNb, this, createEmptyAttackTable(), {
-                    skipCheckVerification: true,
-                })
-                if (moves.some((move) => targetSquareNbs.includes(move.endSquareNb))) return true
-            }
-        }
-        return false
     }
 
     debug() {

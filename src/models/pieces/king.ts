@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { FileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { invertColor } from '../utils'
 import { Piece } from './piece'
 
@@ -11,17 +11,12 @@ export class King extends Piece {
         super('king', color)
     }
 
-    possibleMoves(
-        startSquareNb: number,
-        board: Board,
-        opponentAttackTable: AttackTable,
-        options: PossibleMoveOptions
-    ): Move[] {
+    possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
         const moves: Move[] = []
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, board, King.LETTER, options, (endBoard) => {
+            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, King.LETTER, (endBoard) => {
                 const canCastle = endBoard.canCastle[this.color]
                 canCastle.queenSide = false
                 canCastle.kingSide = false
@@ -29,36 +24,41 @@ export class King extends Piece {
         }
 
         // Castling
-        if (!options.skipCheckVerification) {
-            // Castlings cannot "eat" opponent kings
-            const canCastle = board.canCastle[this.color]
-            if (canCastle.queenSide) {
-                const isClearPath = this.areSquaresClear(board, startSquareNb, [
-                    startSquareNb - 1,
-                    startSquareNb - 2,
-                    startSquareNb - 3,
-                ])
-                if (isClearPath) {
-                    const move = this.createCastling(board, startSquareNb, true)
-                    moves.push(move)
-                }
+        const canCastle = board.canCastle[this.color]
+        if (canCastle.queenSide) {
+            const isClearPath = this.areSquaresClear(board, opponentAttackTable, startSquareNb, [
+                startSquareNb - 1,
+                startSquareNb - 2,
+                startSquareNb - 3,
+            ])
+            if (isClearPath) {
+                const move = this.createCastling(board, startSquareNb, true)
+                moves.push(move)
             }
-            if (canCastle.kingSide) {
-                const isClearPath = this.areSquaresClear(board, startSquareNb, [startSquareNb + 1, startSquareNb + 2])
-                if (isClearPath) {
-                    const move = this.createCastling(board, startSquareNb, false)
-                    moves.push(move)
-                }
+        }
+        if (canCastle.kingSide) {
+            const isClearPath = this.areSquaresClear(board, opponentAttackTable, startSquareNb, [
+                startSquareNb + 1,
+                startSquareNb + 2,
+            ])
+            if (isClearPath) {
+                const move = this.createCastling(board, startSquareNb, false)
+                moves.push(move)
             }
         }
 
         return moves
     }
 
-    private areSquaresClear(board: Board, startSquareNb: number, squareNbs: number[]): boolean {
+    private areSquaresClear(
+        board: Board,
+        opponentAttackTable: AttackTable,
+        startSquareNb: number,
+        squareNbs: number[]
+    ): boolean {
         return (
             squareNbs.every((squareNb) => !board.squares[squareNb]) &&
-            !board.areSquaresAttacked(invertColor(this.color), ...[startSquareNb, ...squareNbs])
+            [startSquareNb, ...squareNbs].every((squareNb) => !opponentAttackTable.attackedSquares[squareNb])
         )
     }
 

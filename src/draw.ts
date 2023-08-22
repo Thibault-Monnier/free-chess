@@ -110,8 +110,7 @@ function drawPossibleMoves(game: Game, selectedSquareNb: number) {
     const moves = piece.possibleMoves(
         selectedSquareNb,
         game.currentBoard,
-        game.currentBoard.createOpponentAttackTable(),
-        {}
+        game.currentBoard.createOpponentAttackTable()
     )
 
     for (let move of moves) {

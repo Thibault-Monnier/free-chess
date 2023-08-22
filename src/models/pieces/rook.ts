@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { AttackTable, PieceColor, PossibleMoveOptions } from '../types'
+import { AttackTable, PieceColor } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
@@ -8,13 +8,8 @@ export class Rook extends Piece {
         super('rook', color)
     }
 
-    possibleMoves(
-        startSquareNb: number,
-        board: Board,
-        opponentAttackTable: AttackTable,
-        options: PossibleMoveOptions
-    ): Move[] {
-        const moves = this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, 'R', options)
+    possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
+        const moves = this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'R')
 
         const isQueenSquare = (this.color === 'white' ? 0 : 56) === startSquareNb
         const isKingSquare = (this.color === 'white' ? 7 : 63) === startSquareNb

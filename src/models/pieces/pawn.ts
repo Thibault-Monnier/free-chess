@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { FileRank, AttackTable, PieceColor, PieceLetter, PossibleMoveOptions } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'
 import { Queen } from './queen'
@@ -12,12 +12,7 @@ export class Pawn extends Piece {
         super('pawn', color)
     }
 
-    possibleMoves(
-        startSquareNb: number,
-        board: Board,
-        opponentAttackTable: AttackTable,
-        options: PossibleMoveOptions
-    ): Move[] {
+    possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
         const moves: Move[] = []
 
         // Basic moves
@@ -26,31 +21,44 @@ export class Pawn extends Piece {
         const { rank: startRank } = squareNbToFileRank(startSquareNb)
         const promotionStartRank = this.color === 'white' ? 6 : 1
 
-        if (!options.skipCheckVerification) {
-            // Pawn advance cannot "eat" opponent kings
-            if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
-                // Advance one square if not eligible for promotion
-                if (startRank !== promotionStartRank) {
-                    this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options)
-                }
+        if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
+            // Advance one square if not eligible for promotion
+            if (startRank !== promotionStartRank) {
+                this.createMove(moves, startSquareNb, moveOneSquare, board, opponentAttackTable, Pawn.LETTER)
+            }
 
-                // Advance two squares
-                if (
-                    board.squares[moveTwoSquares] === null &&
-                    ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
-                ) {
-                    this.createMove(moves, startSquareNb, moveTwoSquares, board, Pawn.LETTER, options, (endBoard) => {
+            // Advance two squares
+            if (
+                board.squares[moveTwoSquares] === null &&
+                ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
+            ) {
+                this.createMove(
+                    moves,
+                    startSquareNb,
+                    moveTwoSquares,
+                    board,
+                    opponentAttackTable,
+                    Pawn.LETTER,
+                    (endBoard) => {
                         endBoard.enPassantTargetSquareNb = moveOneSquare
-                    })
-                }
+                    }
+                )
             }
         }
 
         // Promotion
         if (board.squares[moveOneSquare] === null && startRank === promotionStartRank) {
-            this.createMove(moves, startSquareNb, moveOneSquare, board, Pawn.LETTER, options, (endBoard) => {
-                endBoard.squares[moveOneSquare] = new Queen(this.color)
-            })
+            this.createMove(
+                moves,
+                startSquareNb,
+                moveOneSquare,
+                board,
+                opponentAttackTable,
+                Pawn.LETTER,
+                (endBoard) => {
+                    endBoard.squares[moveOneSquare] = new Queen(this.color)
+                }
+            )
         }
 
         // Basic captures
@@ -62,29 +70,26 @@ export class Pawn extends Piece {
                 board.squares[endSquareNb] &&
                 board.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, board, Pawn.LETTER, options)
+                this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER)
             }
         }
 
         // En passant captures
-        if (!options.skipCheckVerification) {
-            // En passant captures cannot "eat" opponent kings
-            if (board.enPassantTargetSquareNb !== null) {
-                const enPassantTargetSquareNb = board.enPassantTargetSquareNb
-                const offsetToTarget = enPassantTargetSquareNb - startSquareNb
-                if (offsetToTarget === 7 * this.direction || offsetToTarget === 9 * this.direction) {
-                    this.createMove(
-                        moves,
-                        startSquareNb,
-                        enPassantTargetSquareNb,
-                        board,
-                        Pawn.LETTER,
-                        options,
-                        (endBoard) => {
-                            endBoard.squares[enPassantTargetSquareNb - 8 * this.direction] = null
-                        }
-                    )
-                }
+        if (board.enPassantTargetSquareNb !== null) {
+            const enPassantTargetSquareNb = board.enPassantTargetSquareNb
+            const offsetToTarget = enPassantTargetSquareNb - startSquareNb
+            if (offsetToTarget === 7 * this.direction || offsetToTarget === 9 * this.direction) {
+                this.createMove(
+                    moves,
+                    startSquareNb,
+                    enPassantTargetSquareNb,
+                    board,
+                    opponentAttackTable,
+                    Pawn.LETTER,
+                    (endBoard) => {
+                        endBoard.squares[enPassantTargetSquareNb - 8 * this.direction] = null
+                    }
+                )
             }
         }
 
