@@ -68,6 +68,7 @@ export abstract class Piece {
 
             if (postMove) postMove(endBoard)
 
+            // TODO: rewrite this code
             endBoard.colorToMove = invertColor(endBoard.colorToMove)
             if (endBoard.isInCheck()) return
             endBoard.colorToMove = invertColor(endBoard.colorToMove)
@@ -103,15 +104,17 @@ export abstract class Piece {
                 if (endSquareNb === null) break
                 table.attackedSquares[endSquareNb] = true
 
-                const piece = board.squares[endSquareNb]
-                if (piece) {
-                    if (piece.color !== this.color && this.isPiecePinned(endSquareNb, board, offset)) {
-                        table.pinnedPieces.push({
-                            squareNb: endSquareNb,
-                            offset,
-                        })
+                if (isSlidingPiece) {
+                    const piece = board.squares[endSquareNb]
+                    if (piece) {
+                        if (piece.color !== this.color && this.isPiecePinned(endSquareNb, board, offset)) {
+                            table.pinnedPieces.push({
+                                squareNb: endSquareNb,
+                                offset,
+                            })
+                        }
+                        break
                     }
-                    break
                 }
             } while (isSlidingPiece)
         }

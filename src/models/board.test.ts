@@ -70,6 +70,20 @@ describe('possibleMoves', () => {
         it("detects clearance of a pin's path when en passant", () => {
             expect(nbMoves('8/8/8/8/k1PpQ3/8/8/K7 b - c3 0 0')).toEqual(5)
         })
+
+        describe("non-sliding pieces don't pin", () => {
+            it('verifies that the king cannot pin a piece', () => {
+                expect(nbMoves('k7/N7/K7/8/8/8/8/8 w - - 0 0')).toEqual(6)
+            })
+
+            it('verifies that the knight cannot pin a piece', () => {
+                expect(nbMoves('k7/8/8/2n5/8/1R6/8/K7 w - - 0 0')).toEqual(17)
+            })
+
+            it('verifies that the pawn cannot pin a piece', () => {
+                expect(nbMoves('k7/8/8/8/p7/1R6/8/3K4 w - - 0 0')).toEqual(19)
+            })
+        })
     })
 })
 
