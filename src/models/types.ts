@@ -22,6 +22,7 @@ export type BestMove = { move: Move; evaluation: number }
 export type AttackTable = {
     attackedSquares: Bitboard
     pinnedPieces: Array<PinnedPiece>
+    kingAttackers: Array<number>
 }
 export type PinnedPiece = { squareNb: number; offset: FileRank }
 export type Bitboard = boolean[]

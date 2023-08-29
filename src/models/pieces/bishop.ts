@@ -15,6 +15,10 @@ export class Bishop extends Piece {
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
         this.calculateAttackTable(startSquareNb, board, table, OFFSETS, true)
     }
+
+    get isSliding(): boolean {
+        return true
+    }
 }
 
 const OFFSETS: FileRank[] = [

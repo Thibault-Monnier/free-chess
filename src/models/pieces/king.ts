@@ -1,7 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
 import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
-import { invertColor } from '../utils'
 import { Piece } from './piece'
 
 export class King extends Piece {
@@ -80,6 +79,10 @@ export class King extends Piece {
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
         this.calculateAttackTable(startSquareNb, board, table, OFFSETS, false)
+    }
+
+    get isSliding(): boolean {
+        return false
     }
 }
 

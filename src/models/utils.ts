@@ -28,5 +28,39 @@ export function coordinatesToSquareNb(coordinates: Coordinates): number {
 }
 
 export function createEmptyAttackTable(): AttackTable {
-    return { attackedSquares: new Array(64).fill(false), pinnedPieces: [] }
+    return { attackedSquares: new Array(64).fill(false), pinnedPieces: [], kingAttackers: [] }
+}
+
+// Tests if a square is on the segment between two points
+export function isBetweenSquares(squareNbFrom: number, testedSquareNb: number, squareNbTo: number): boolean {
+    const fromSquare = squareNbToFileRank(squareNbFrom)
+    const toSquare = squareNbToFileRank(squareNbTo)
+    const squareTested = squareNbToFileRank(testedSquareNb)
+    const direction = {
+        file: Math.sign(toSquare.file - fromSquare.file),
+        rank: Math.sign(toSquare.rank - fromSquare.rank),
+    }
+
+    let currentSquare = fromSquare
+    currentSquare.file += direction.file
+    currentSquare.rank += direction.rank
+    while (currentSquare.file !== toSquare.file || currentSquare.rank !== toSquare.rank) {
+        if (currentSquare.file < 0 || currentSquare.file > 7 || currentSquare.rank < 0 || currentSquare.rank > 7) {
+            return false
+        }
+        if (currentSquare.file === squareTested.file && currentSquare.rank === squareTested.rank) return true
+
+        currentSquare.file += direction.file
+        currentSquare.rank += direction.rank
+    }
+    return false
+}
+
+export function calculateOffset(squareNbFrom: number, squareNbTo: number): number {
+    const fromSquare = squareNbToFileRank(squareNbFrom)
+    const toSquare = squareNbToFileRank(squareNbTo)
+    return fileRankToSquareNb({
+        file: Math.sign(toSquare.file - fromSquare.file),
+        rank: Math.sign(toSquare.rank - fromSquare.rank),
+    })
 }

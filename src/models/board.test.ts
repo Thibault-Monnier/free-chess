@@ -97,3 +97,14 @@ describe('endOfGame', () => {
     it('tests stalemate', () => expect(endOfGame('k7/7R/8/8/8/8/8/1R4K1 b - - 0 0')).toBe('stalemate'))
     it('returns null if not end of game', () => expect(endOfGame('kr6/8/8/8/8/8/8/6RK b - - 0 0')).toBe(null))
 })
+
+describe('kingAttackers in opponentAttackTable', () => {
+    const kingAttackers = (fen: string): number[] => {
+        const board = new Board(fen)
+        return board.createOpponentAttackTable().kingAttackers
+    }
+
+    it('verifies that kingAttackers is updated', () => {
+        expect(kingAttackers('kr1K4/8/8/8/8/8/8/8 w - - 0 0')).toEqual([57])
+    })
+})

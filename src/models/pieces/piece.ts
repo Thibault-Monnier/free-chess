@@ -1,13 +1,21 @@
 import { Board } from '../board'
 import { Move } from '../move'
 import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName } from '../types'
-import { fileRankToSquareNb, invertColor, squareNbToCoordinates, squareNbToFileRank } from '../utils'
+import {
+    calculateOffset,
+    fileRankToSquareNb,
+    invertColor,
+    isBetweenSquares,
+    squareNbToCoordinates,
+    squareNbToFileRank,
+} from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
     abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
+    abstract get isSliding(): boolean
 
     eaten(board: Board): void {}
 
@@ -60,23 +68,14 @@ export abstract class Piece {
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
             const endBoard = new Board(board, { switchColor: true, resetEnPassant: true })
 
-            const piece = endBoard.squares[endSquareNb]
-            if (piece) piece.eaten(endBoard)
+            if (endSquarePiece) endSquarePiece.eaten(endBoard)
 
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
 
             if (postMove) postMove(endBoard)
 
-            // TODO: rewrite this code
-            endBoard.colorToMove = invertColor(endBoard.colorToMove)
-            if (endBoard.isInCheck()) return
-            endBoard.colorToMove = invertColor(endBoard.colorToMove)
-
-            const pinnedPiece = opponentAttackTable.pinnedPieces.find(
-                (pinnedPiece) => pinnedPiece.squareNb === startSquareNb
-            )
-            if (pinnedPiece && (startSquareNb - endSquareNb) % fileRankToSquareNb(pinnedPiece.offset) !== 0) return
+            if (this.inCheckAfterMove(startSquareNb, endSquareNb, board, endBoard, opponentAttackTable)) return
 
             const move = new Move(
                 this,
@@ -104,9 +103,13 @@ export abstract class Piece {
                 if (endSquareNb === null) break
                 table.attackedSquares[endSquareNb] = true
 
-                if (isSlidingPiece) {
-                    const piece = board.squares[endSquareNb]
-                    if (piece) {
+                const piece = board.squares[endSquareNb]
+                if (piece) {
+                    if (piece.color !== this.color && piece.name === 'king') {
+                        table.kingAttackers.push(startSquareNb)
+                    }
+
+                    if (isSlidingPiece) {
                         if (piece.color !== this.color && this.isPiecePinned(endSquareNb, board, offset)) {
                             table.pinnedPieces.push({
                                 squareNb: endSquareNb,
@@ -129,6 +132,62 @@ export abstract class Piece {
             const piece = board.squares[endSquareNb]
             if (piece) {
                 return piece.color !== this.color && piece.name === 'king'
+            }
+        }
+
+        return false
+    }
+
+    private inCheckAfterMove(
+        startSquareNb: number,
+        endSquareNb: number,
+        board: Board,
+        endBoard: Board,
+        opponentAttackTable: AttackTable
+    ): boolean {
+        const kingAttackers = opponentAttackTable.kingAttackers
+        const piece = board.squares[startSquareNb]!
+
+        if (piece.name === 'king') {
+            if (opponentAttackTable.attackedSquares[endSquareNb]) return true
+
+            // If the king is attacked by a sliding piece, check that it does not move alongside the attack axis
+            for (let kingAttacker of kingAttackers) {
+                if (!board.squares[kingAttacker]?.isSliding) continue
+                const offset = calculateOffset(kingAttacker, startSquareNb)
+                if (endSquareNb === startSquareNb + offset) return true
+            }
+        } else {
+            const pinnedPiece = opponentAttackTable.pinnedPieces.find(
+                (pinnedPiece) => pinnedPiece.squareNb === startSquareNb
+            )
+            if (pinnedPiece && (startSquareNb - endSquareNb) % fileRankToSquareNb(pinnedPiece.offset) !== 0) return true
+
+            if (kingAttackers.length > 1) return true
+
+            if (kingAttackers.length === 1) {
+                const kingAttackerSquareNb = kingAttackers[0]
+                const kingSquareNb = endBoard.squares.findIndex(
+                    (piece) => piece?.name === 'king' && piece.color === this.color
+                )
+                const kingAttacker = board.squares[kingAttackerSquareNb]!
+                let isAttackStopped = false
+
+                // The move captures the attacking piece (normal capture + en passant)
+                if (endBoard.squares[kingAttackerSquareNb] !== board.squares[kingAttackerSquareNb]) {
+                    isAttackStopped = true
+                }
+
+                // The move intersects the attack axis
+                if (
+                    !isAttackStopped &&
+                    kingAttacker.isSliding &&
+                    isBetweenSquares(kingAttackerSquareNb, endSquareNb, kingSquareNb)
+                ) {
+                    isAttackStopped = true
+                }
+
+                if (!isAttackStopped) return true
             }
         }
 

@@ -100,6 +100,10 @@ export class Pawn extends Piece {
         this.calculateAttackTable(startSquareNb, board, table, this.captureOffsets, false)
     }
 
+    get isSliding(): boolean {
+        return false
+    }
+
     private get direction(): number {
         return this.color === 'white' ? 1 : -1
     }

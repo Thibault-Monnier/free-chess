@@ -130,7 +130,7 @@ export class Chess {
 
         this.bestMove = undefined
         this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
-            const bot = new DepthNBot(this.currentBoard, 3)
+            const bot = new DepthNBot(this.currentBoard, 4)
             this.bestMove = bot.run()
             this.draw()
         })

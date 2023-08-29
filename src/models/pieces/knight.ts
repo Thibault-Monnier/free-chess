@@ -21,6 +21,10 @@ export class Knight extends Piece {
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
         this.calculateAttackTable(startSquareNb, board, table, OFFSETS, false)
     }
+
+    get isSliding(): boolean {
+        return false
+    }
 }
 
 const OFFSETS: { file: number; rank: number }[] = [
