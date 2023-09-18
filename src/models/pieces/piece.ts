@@ -2,9 +2,8 @@ import { Board } from '../board'
 import { Move } from '../move'
 import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName } from '../types'
 import {
-    calculateOffset,
+    calculateAxisOffset,
     fileRankToSquareNb,
-    invertColor,
     isBetweenSquares,
     squareNbToCoordinates,
     squareNbToFileRank,
@@ -154,10 +153,11 @@ export abstract class Piece {
             // If the king is attacked by a sliding piece, check that it does not move alongside the attack axis
             for (let kingAttacker of kingAttackers) {
                 if (!board.squares[kingAttacker]?.isSliding) continue
-                const offset = calculateOffset(kingAttacker, startSquareNb)
+                const offset = calculateAxisOffset(kingAttacker, startSquareNb)
                 if (endSquareNb === startSquareNb + offset) return true
             }
         } else {
+            if (!kingAttackers.length && !opponentAttackTable.pinnedPieces.length) return false
             const pinnedPiece = opponentAttackTable.pinnedPieces.find(
                 (pinnedPiece) => pinnedPiece.squareNb === startSquareNb
             )

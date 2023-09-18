@@ -56,7 +56,7 @@ export function isBetweenSquares(squareNbFrom: number, testedSquareNb: number, s
     return false
 }
 
-export function calculateOffset(squareNbFrom: number, squareNbTo: number): number {
+export function calculateAxisOffset(squareNbFrom: number, squareNbTo: number): number {
     const fromSquare = squareNbToFileRank(squareNbFrom)
     const toSquare = squareNbToFileRank(squareNbTo)
     return fileRankToSquareNb({
