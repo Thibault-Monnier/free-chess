@@ -8,7 +8,6 @@ export function squareNbToFileRank(squareNb: number, debug = false): FileRank {
     const file = squareNb % 8
     const rank = squareNb >= 0 ? Math.floor(squareNb / 8) : Math.ceil(squareNb / 8)
 
-    if (debug) console.log('squareNbToFileRank', squareNb, file, rank)
     return {
         file,
         rank,
