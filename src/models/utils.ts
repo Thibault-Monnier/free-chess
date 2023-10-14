@@ -4,10 +4,14 @@ export function invertColor(color: PieceColor): PieceColor {
     return color === 'white' ? 'black' : 'white'
 }
 
-export function squareNbToFileRank(squareNb: number): FileRank {
+export function squareNbToFileRank(squareNb: number, debug = false): FileRank {
+    const file = squareNb % 8
+    const rank = squareNb >= 0 ? Math.floor(squareNb / 8) : Math.ceil(squareNb / 8)
+
+    if (debug) console.log('squareNbToFileRank', squareNb, file, rank)
     return {
-        file: squareNb % 8,
-        rank: Math.floor(squareNb / 8),
+        file,
+        rank,
     }
 }
 
@@ -59,6 +63,7 @@ export function isBetweenSquares(squareNbFrom: number, testedSquareNb: number, s
 export function calculateAxisOffset(squareNbFrom: number, squareNbTo: number): number {
     const fromSquare = squareNbToFileRank(squareNbFrom)
     const toSquare = squareNbToFileRank(squareNbTo)
+
     return fileRankToSquareNb({
         file: Math.sign(toSquare.file - fromSquare.file),
         rank: Math.sign(toSquare.rank - fromSquare.rank),
