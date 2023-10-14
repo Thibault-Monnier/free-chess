@@ -69,8 +69,18 @@ describe('possibleMoves', () => {
             expect(nbMoves('k7/p7/r7/8/Q7/8/8/K7 b - - 0 0')).toEqual(11)
         })
 
-        it("detects clearance of a pin's path when en passant", () => {
-            expect(nbMoves('8/8/8/8/k1PpQ3/8/8/K7 b - c3 0 0')).toEqual(5)
+        describe('en passant', () => {
+            it("detects clearance of a pin's path when en passant - row offset", () => {
+                expect(nbMoves('8/8/8/8/k1PpQ3/8/8/K7 b - c3 0 0')).toEqual(5)
+            })
+
+            it("detects clearance of a pin's path when en passant - random offset", () => {
+                expect(nbMoves('8/8/8/k7/2Pp4/6Q1/8/K7 b - c3 0 0')).toEqual(6)
+            })
+
+            it("detects clearance of a pin's path when en passant - random offset", () => {
+                expect(nbMoves('8/8/8/8/k1PpB3/8/8/K7 b - c3 0 0')).toEqual(6)
+            })
         })
 
         describe("non-sliding pieces don't pin", () => {
