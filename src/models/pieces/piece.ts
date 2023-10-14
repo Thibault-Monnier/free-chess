@@ -62,6 +62,11 @@ export abstract class Piece {
     ): void {
         if (endSquareNb === null) return
 
+        if (board.squares[startSquareNb]?.name === 'pawn' && board.enPassantTargetSquareNb === endSquareNb) {
+            // En passant capture
+            if (!this.isEnPassantLegal(startSquareNb, board)) return
+        }
+
         const endSquarePiece = board.squares[endSquareNb]
 
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
@@ -123,18 +128,21 @@ export abstract class Piece {
     }
 
     protected isPiecePinned(startSquareNb: number, board: Board, offset: FileRank): boolean {
+        const kingSquareNb = board.squares.findIndex((piece) => piece?.name === 'king' && piece.color !== this.color)
+        return this.firstPieceOnAxis(startSquareNb, board, offset) === board.squares[kingSquareNb]
+    }
+
+    private firstPieceOnAxis(startSquareNb: number, board: Board, offset: FileRank): Piece | null {
         let endSquareNb: number | null = startSquareNb
         while (true) {
             endSquareNb = this.addOffset(endSquareNb, offset)
             if (endSquareNb === null) break
 
             const piece = board.squares[endSquareNb]
-            if (piece) {
-                return piece.color !== this.color && piece.name === 'king'
-            }
+            if (piece) return piece
         }
 
-        return false
+        return null
     }
 
     private inCheckAfterMove(
@@ -153,6 +161,7 @@ export abstract class Piece {
             // If the king is attacked by a sliding piece, check that it does not move alongside the attack axis
             for (let kingAttacker of kingAttackers) {
                 if (!board.squares[kingAttacker]?.isSliding) continue
+
                 const offset = calculateAxisOffset(kingAttacker, startSquareNb)
                 if (endSquareNb === startSquareNb + offset) return true
             }
@@ -192,6 +201,63 @@ export abstract class Piece {
         }
 
         return false
+    }
+
+    private isEnPassantLegal(startSquareNb: number, board: Board): boolean {
+        const kingSquareNb = board.squares.findIndex((piece) => piece?.name === 'king' && piece.color === this.color)
+
+        const fromSquare = squareNbToFileRank(startSquareNb)
+        const toSquare = squareNbToFileRank(kingSquareNb)
+        const direction = {
+            file: toSquare.file - fromSquare.file,
+            rank: toSquare.rank - fromSquare.rank,
+        }
+        const offset = {
+            file: Math.sign(direction.file),
+            rank: Math.sign(direction.rank),
+        }
+
+        if (
+            offset.file !== 0 &&
+            offset.rank !== 0 &&
+            Math.abs(direction.file) !== Math.abs(direction.rank / offset.rank)
+        ) {
+            // The pawn-to-king offset isn't a possible movement offset
+            return true
+        } else {
+            const offset = calculateAxisOffset(startSquareNb, kingSquareNb)
+
+            let squareNb = startSquareNb
+
+            // Check that there is a enemy sliding piece attacking the pawn through the pawn-to-king offset
+            // "offset" is the pawn-to-king offset so it needs to be reversed
+            const firstPieceOnAxis = this.firstPieceOnAxis(squareNb, board, squareNbToFileRank(-offset))
+            if (firstPieceOnAxis && firstPieceOnAxis.color !== this.color && firstPieceOnAxis.isSliding) {
+                if (Math.abs(offset) === 1 || Math.abs(offset) === 8) {
+                    // The offset is a file or rank offset
+                    if (firstPieceOnAxis.name !== 'rook' && firstPieceOnAxis.name !== 'queen') return true
+                } else {
+                    // The offset is a diagonal offset
+                    if (firstPieceOnAxis.name !== 'bishop' && firstPieceOnAxis.name !== 'queen') return true
+                }
+
+                const kingSquareNb = board.squares.findIndex(
+                    (piece) => piece?.name === 'king' && piece.color === this.color
+                )
+
+                if (
+                    this.firstPieceOnAxis(squareNb + offset, board, squareNbToFileRank(offset)) ===
+                    board.squares[kingSquareNb]
+                ) {
+                    // Check there is nothing between the pawn and the king
+                    // Skip the first square (the pawn's square) so that the captured pawn's square isn't checked
+                    return false
+                }
+            }
+
+            // The first piece on the offset can't be pinning the pawn
+            return true
+        }
     }
 
     private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
