@@ -15,8 +15,7 @@ export class Chess {
     //public mode: "1v1" | "1vC" | "CvC"
 
     constructor() {
-        this.calculateBestMove()
-        this.draw()
+        this.newMove()
     }
 
     private get currentBoard(): Board {
@@ -36,6 +35,12 @@ export class Chess {
         this.updateEvaluation()
     }
 
+    private newMove() {
+        this.selectedSquareNb = null
+        this.calculateBestMove()
+        this.draw()
+    }
+
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
         const squareNb = Math.floor(x / squareSize) + Math.floor((squareSize * 8 - (y + 1)) / squareSize) * 8
 
@@ -51,8 +56,8 @@ export class Chess {
             else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
                 const move = this.getMove(squareNb)!
                 this.game.addMove(move)
-                this.selectedSquareNb = null
-                this.calculateBestMove()
+
+                this.newMove()
             }
             //Deselects the square if it is empty
             else if (piece === null) {
@@ -137,31 +142,23 @@ export class Chess {
     }
 
     jumpToMove(moveNb: number): void {
-        this.selectedSquareNb = null
         this.game.jumpToMove(moveNb)
-        this.calculateBestMove()
-        this.draw()
+        this.newMove()
     }
 
     undo(): void {
-        this.selectedSquareNb = null
         this.game.undo()
-        this.calculateBestMove()
-        this.draw()
+        this.newMove()
     }
 
     redo(): void {
-        this.selectedSquareNb = null
         this.game.redo()
-        this.calculateBestMove()
-        this.draw()
+        this.newMove()
     }
 
     reset(): void {
-        this.selectedSquareNb = null
         this.game = new Game()
-        this.calculateBestMove()
-        this.draw()
+        this.newMove()
     }
 
     private toggleActions(): void {
