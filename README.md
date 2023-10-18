@@ -4,7 +4,7 @@ Free Chess is an open source chess game and engine developed in Typescript by Th
 
 ## How to run the program?
 
-You can play [Free chess](https://free-chess.netlify.app)="_blank" from your browser.
+You can play [Free chess](https://free-chess.netlify.app) from your browser.
 
 To run it locally, clone this repository, and open `index.html` in your browser.
 
