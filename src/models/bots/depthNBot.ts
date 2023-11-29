@@ -25,7 +25,7 @@ export class DepthNBot extends Bot {
         for (let move of moves) {
             const evaluation = this.minimax(move.endBoard, this.depth! - 1, -Infinity, Infinity) * colorMultiplier
 
-            if (evaluation > bestEvaluation) {
+            if (evaluation >= bestEvaluation) {
                 bestMove = move
                 bestEvaluation = evaluation
             }
@@ -47,7 +47,8 @@ export class DepthNBot extends Bot {
             'Avg time possible moves (microsecs):',
             (this.perfTimePossibleMoves / this.perfNbPossibleMoves) * 1000
         )
-
+        
+        console.log('Best move:', bestMove, 'Evaluation:', bestEvaluation)
         return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
     }
 
