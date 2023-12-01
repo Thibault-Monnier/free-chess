@@ -4,7 +4,9 @@ import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class King extends Piece {
-    private static LETTER: PieceLetter = 'K'
+    static get notationChar(): PieceLetter {
+        return 'K'
+    }
 
     constructor(color: PieceColor) {
         super('king', color)
@@ -15,7 +17,7 @@ export class King extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, King.LETTER, (endBoard) => {
+            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, King.notationChar, (endBoard) => {
                 const canCastle = endBoard.canCastle[this.color]
                 canCastle.queenSide = false
                 canCastle.kingSide = false

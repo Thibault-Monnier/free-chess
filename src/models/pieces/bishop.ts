@@ -1,9 +1,13 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { AttackTable, PieceColor, FileRank } from '../types'
+import { AttackTable, PieceColor, FileRank, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Bishop extends Piece {
+    static get notationChar(): PieceLetter {
+        return 'B'
+    }
+
     constructor(color: PieceColor) {
         super('bishop', color)
     }

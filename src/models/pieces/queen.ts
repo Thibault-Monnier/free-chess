@@ -1,9 +1,13 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { AttackTable, PieceColor } from '../types'
+import { AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Queen extends Piece {
+    static get notationChar(): PieceLetter {
+        return 'Q'
+    }
+
     constructor(color: PieceColor) {
         super('queen', color)
     }
