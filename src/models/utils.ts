@@ -4,7 +4,7 @@ export function invertColor(color: PieceColor): PieceColor {
     return color === 'white' ? 'black' : 'white'
 }
 
-export function squareNbToFileRank(squareNb: number, debug = false): FileRank {
+export function squareNbToFileRank(squareNb: number): FileRank {
     const file = squareNb % 8
     const rank = squareNb >= 0 ? Math.floor(squareNb / 8) : Math.ceil(squareNb / 8)
 
