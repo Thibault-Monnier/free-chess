@@ -1,4 +1,5 @@
 import { Board } from './board'
+import { Move } from './move'
 import { CanCastle, EndOfGame } from './types'
 
 describe('importFEN', () => {
@@ -26,8 +27,8 @@ describe('importFEN', () => {
 })
 
 describe('isInCheck', () => {
-    const isInCheck = (fen: string): boolean => {
-        const board = new Board(fen)
+    const isInCheck = (FEN: string): boolean => {
+        const board = new Board(FEN)
         return board.isInCheck()
     }
 
@@ -37,9 +38,13 @@ describe('isInCheck', () => {
 })
 
 describe('possibleMoves', () => {
-    const nbMoves = (fen: string): number => {
-        const board = new Board(fen)
-        return board.possibleMoves().length
+    const possibleMoves = (FEN: string): Move[] => {
+        const board = new Board(FEN)
+        return board.possibleMoves()
+    }
+
+    const nbMoves = (FEN: string): number => {
+        return possibleMoves(FEN).length
     }
 
     it('', () => expect(nbMoves('r6r/1b2k1bq/8/8/7B/8/8/R3K2R b KQ - 3 2')).toEqual(8))
@@ -53,6 +58,18 @@ describe('possibleMoves', () => {
     it('', () => expect(nbMoves('2kr3r/p1ppqpb1/bn2Qnp1/3PN3/1p2P3/2N5/PPPBBPPP/R3K2R b KQ - 3 2')).toEqual(44))
 
     //it('includes all types of promotions', () => expect(nbMoves('rnb2k1r/pp1Pbppp/2p5/q7/2B5/8/PPPQNnPP/RNB1K2R w KQ - 3 9')).toEqual(39))
+
+    it('verifies that that the pawn promotes when it moves straight', () => {
+        expect(
+            possibleMoves('8/P7/8/8/8/8/8/k6K w - - 0 0').some((move) => move.endBoard.squares[56]?.name === 'queen')
+        ).toBe(true)
+    })
+
+    it('verifies that that the pawn promotes when it makes a capture-promotion', () => {
+        expect(
+            possibleMoves('k6K/8/8/8/8/8/7p/6R1 b - - 0 0').some((move) => move.endBoard.squares[6]?.name === 'queen')
+        ).toBe(true)
+    })
 
     it('', () => expect(nbMoves('2r5/3pk3/8/2P5/8/2K5/8/8 w - - 5 4')).toEqual(9))
 
@@ -100,8 +117,8 @@ describe('possibleMoves', () => {
 })
 
 describe('endOfGame', () => {
-    const endOfGame = (fen: string): EndOfGame | null => {
-        const board = new Board(fen)
+    const endOfGame = (FEN: string): EndOfGame | null => {
+        const board = new Board(FEN)
         return board.endOfGame
     }
 
@@ -111,8 +128,8 @@ describe('endOfGame', () => {
 })
 
 describe('kingAttackers in opponentAttackTable', () => {
-    const kingAttackers = (fen: string): number[] => {
-        const board = new Board(fen)
+    const kingAttackers = (FEN: string): number[] => {
+        const board = new Board(FEN)
         return board.createOpponentAttackTable().kingAttackers
     }
 

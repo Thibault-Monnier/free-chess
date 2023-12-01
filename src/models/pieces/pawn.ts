@@ -16,49 +16,50 @@ export class Pawn extends Piece {
         const moves: Move[] = []
 
         // Basic moves
-        const moveOneSquare = startSquareNb + 8 * this.direction
-        const moveTwoSquares = startSquareNb + 16 * this.direction
+        const moveOneSquareForward = this.addOffset(startSquareNb, squareNbToFileRank(8 * this.direction))
+        const moveTwoSquaresForward = this.addOffset(startSquareNb, squareNbToFileRank(16 * this.direction))
         const { rank: startRank } = squareNbToFileRank(startSquareNb)
         const promotionStartRank = this.color === 'white' ? 6 : 1
 
-        if (moveOneSquare >= 0 && moveOneSquare <= 63 && board.squares[moveOneSquare] === null) {
+        if (moveOneSquareForward !== null && board.squares[moveOneSquareForward] === null) {
             // Advance one square if not eligible for promotion
             if (startRank !== promotionStartRank) {
-                this.createMove(moves, startSquareNb, moveOneSquare, board, opponentAttackTable, Pawn.LETTER)
+                this.createMove(moves, startSquareNb, moveOneSquareForward, board, opponentAttackTable, Pawn.LETTER)
             }
 
             // Advance two squares
             if (
-                board.squares[moveTwoSquares] === null &&
+                moveTwoSquaresForward !== null &&
+                board.squares[moveTwoSquaresForward] === null &&
                 ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
             ) {
                 this.createMove(
                     moves,
                     startSquareNb,
-                    moveTwoSquares,
+                    moveTwoSquaresForward,
                     board,
                     opponentAttackTable,
                     Pawn.LETTER,
                     (endBoard) => {
-                        endBoard.enPassantTargetSquareNb = moveOneSquare
+                        endBoard.enPassantTargetSquareNb = moveOneSquareForward
                     }
                 )
             }
         }
 
+        const createPromotionMove = (endSquareNb: number) => {
+            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER, (endBoard) => {
+                endBoard.squares[endSquareNb!] = new Queen(this.color)
+            })
+        }
+
         // Promotion
-        if (board.squares[moveOneSquare] === null && startRank === promotionStartRank) {
-            this.createMove(
-                moves,
-                startSquareNb,
-                moveOneSquare,
-                board,
-                opponentAttackTable,
-                Pawn.LETTER,
-                (endBoard) => {
-                    endBoard.squares[moveOneSquare] = new Queen(this.color)
-                }
-            )
+        if (
+            moveOneSquareForward !== null &&
+            board.squares[moveOneSquareForward] === null &&
+            startRank === promotionStartRank
+        ) {
+            createPromotionMove(moveOneSquareForward)
         }
 
         // Basic captures
@@ -70,7 +71,11 @@ export class Pawn extends Piece {
                 board.squares[endSquareNb] &&
                 board.squares[endSquareNb]!.color !== this.color
             ) {
-                this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER)
+                if (startRank === promotionStartRank) {
+                    createPromotionMove(endSquareNb)
+                } else {
+                    this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER)
+                }
             }
         }
 
