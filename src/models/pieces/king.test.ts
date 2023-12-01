@@ -33,7 +33,7 @@ describe('possibleMoves', () => {
 })
 
 describe('updateAttackTable', () => {
-    describe('test with specific fen', () => {
+    describe('test with specific FEN', () => {
         const board = new Board('k7/8/8/8/8/8/8/K7 w - - 0 0')
         const kingSquareNb = 0
         const king = board.squares[kingSquareNb]

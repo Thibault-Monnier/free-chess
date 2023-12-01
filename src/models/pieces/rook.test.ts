@@ -3,7 +3,7 @@ import { AttackTable } from '../types'
 import { createEmptyAttackTable } from '../utils'
 
 describe('updateAttackTable', () => {
-    describe('test with specific fen', () => {
+    describe('test with specific FEN', () => {
         const board = new Board('kb5R/8/8/8/8/8/8/K7 w - - 0 0')
         const rookSquareNb = 63
         const rook = board.squares[rookSquareNb]

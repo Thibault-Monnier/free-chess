@@ -10,6 +10,8 @@ import { CanCastle, Coordinates, EndOfGame, AttackTable, PieceColor } from './ty
 import { coordinatesToSquareNb, createEmptyAttackTable, fileRankToSquareNb, invertColor } from './utils'
 
 export class Board {
+    public static startBoardFEN = 'k6K/8/8/8/8/8/7p/6R1 b - - 0 0'
+
     public squares: (Piece | null)[]
     public colorToMove: PieceColor = 'white'
     public canCastle: CanCastle = {
@@ -21,27 +23,27 @@ export class Board {
     //Test if constructor can be called in each of the following ways
     constructor()
     constructor(board: Board, options?: { switchColor: boolean; resetEnPassant: boolean })
-    constructor(fen: string)
+    constructor(FEN: string)
 
-    constructor(boardOrFen?: Board | string, options?: { switchColor: boolean; resetEnPassant: boolean }) {
-        if (typeof boardOrFen === 'string') {
+    constructor(boardOrFEN?: Board | string, options?: { switchColor: boolean; resetEnPassant: boolean }) {
+        if (typeof boardOrFEN === 'string') {
             this.squares = new Array(64).fill(null)
-            this.importFEN(boardOrFen)
-        } else if (boardOrFen) {
-            const board = boardOrFen
+            this.importFEN(boardOrFEN)
+        } else if (boardOrFEN) {
+            const board = boardOrFEN
             this.squares = [...board.squares]
             this.colorToMove = options?.switchColor ? invertColor(board.colorToMove) : board.colorToMove
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
             this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
         } else {
             this.squares = new Array(64).fill(null)
-            this.importFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0')
+            this.importFEN(Board.startBoardFEN)
         }
     }
 
-    public importFEN(fen: string) {
+    public importFEN(FEN: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
-        const [placement, colorToMove, canCastle, enPassantTargetSquare] = fen.split(' ')
+        const [placement, colorToMove, canCastle, enPassantTargetSquare] = FEN.split(' ')
 
         this.squares = new Array(64).fill(null)
         placement.split('/').forEach((rowPlacement, index) => {

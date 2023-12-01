@@ -3,7 +3,7 @@ import { AttackTable } from '../types'
 import { createEmptyAttackTable } from '../utils'
 
 describe('updateAttackTable', () => {
-    describe('test with specific fen', () => {
+    describe('test with specific FEN', () => {
         const board = new Board('7k/n7/5q2/8/3B4/8/5P2/8 w - - 0 0')
         const bishopSquareNb = 27
         const bishop = board.squares[bishopSquareNb]

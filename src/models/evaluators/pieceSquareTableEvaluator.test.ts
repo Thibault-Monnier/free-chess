@@ -2,8 +2,8 @@ import { Board } from '../board'
 import { PieceSquareTableEvaluator } from './pieceSquareTableEvaluator'
 
 describe('PieceSquareTableEvaluator', () => {
-    const evaluate = (fen: string): number => {
-        const board = new Board(fen)
+    const evaluate = (FEN: string): number => {
+        const board = new Board(FEN)
         const evaluator = new PieceSquareTableEvaluator(board)
         return evaluator.run()
     }
