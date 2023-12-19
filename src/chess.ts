@@ -173,15 +173,19 @@ export class Chess {
         let html = ''
         const moves = document.getElementById('moves')!
 
-        this.game.moves.forEach((move, index) => {
+        this.game.moves.forEach((_, index) => {
+            // Add the move number every two moves
             if (index % 2 === 0) {
                 html += `<div>${index / 2 + 1}.</div>`
+                // The move number starts at one but the index starts at zero, so + 1 is required to adjust.
             }
 
             html +=
                 this.game.moveNb - 1 === index
-                    ? `<div class="move currentMove">${move.notation}</div>`
-                    : `<div class="move" onClick="window.chess.jumpToMove(${index + 1})">${move.notation}</div>`
+                    ? `<div class="move currentMove">${this.game.calculateMoveNotation(index)}</div>`
+                    : `<div class="move" onClick="window.chess.jumpToMove(${
+                          index + 1
+                      })">${this.game.calculateMoveNotation(index)}</div>`
         })
         moves.innerHTML = html
 
