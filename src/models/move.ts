@@ -1,5 +1,6 @@
 import { Board } from './board'
 import { Piece } from './pieces/piece';
+import { MoveType } from './types';
 
 export class Move {
     constructor(
@@ -7,7 +8,8 @@ export class Move {
         public startSquareNb: number,
         public endSquareNb: number,
         public endBoard: Board,
-        public notation: string
+        public notation: string,
+        public type: MoveType
     ) {}
 }
 

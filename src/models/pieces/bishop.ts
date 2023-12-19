@@ -4,7 +4,7 @@ import { AttackTable, PieceColor, FileRank, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Bishop extends Piece {
-    static get notationChar(): PieceLetter {
+    get notationChar(): PieceLetter {
         return 'B'
     }
 

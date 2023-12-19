@@ -1,6 +1,6 @@
 import { Board } from '../board'
 import { Move } from '../move'
-import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName } from '../types'
+import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, MoveType } from '../types'
 import {
     calculateAxisOffset,
     fileRankToSquareNb,
@@ -12,6 +12,7 @@ import {
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
+    abstract get notationChar(): PieceLetter
     abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
     abstract get isSliding(): boolean
@@ -58,12 +59,16 @@ export abstract class Piece {
         board: Board,
         opponentAttackTable: AttackTable,
         letter: PieceLetter,
-        postMove?: (endBoard: Board) => void
+        postMove?: (endBoard: Board) => void,
+        isPromotion = false
     ): void {
         if (endSquareNb === null) return
 
+        let moveType: MoveType = isPromotion ? 'promotion' : 'normal'
+
         if (board.squares[startSquareNb]?.name === 'pawn' && board.enPassantTargetSquareNb === endSquareNb) {
             // En passant capture
+            moveType = 'capture'
             if (!this.isEnPassantLegal(startSquareNb, board)) return
         }
 
@@ -72,7 +77,10 @@ export abstract class Piece {
         if (!endSquarePiece || endSquarePiece.color !== this.color) {
             const endBoard = new Board(board, { switchColor: true, resetEnPassant: true })
 
-            if (endSquarePiece) endSquarePiece.eaten(endBoard)
+            if (endSquarePiece) {
+                moveType = isPromotion ? 'capturePromotion' : 'capture'
+                endSquarePiece.eaten(endBoard)
+            }
 
             endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
             endBoard.squares[startSquareNb] = null
@@ -86,7 +94,8 @@ export abstract class Piece {
                 startSquareNb,
                 endSquareNb,
                 endBoard,
-                this.encodeMove(letter, endSquarePiece ? true : false, startSquareNb, endSquareNb)
+                this.encodeMove(letter, endSquarePiece ? true : false, startSquareNb, endSquareNb),
+                moveType
             )
             moves.push(move)
         }

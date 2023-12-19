@@ -6,7 +6,9 @@ import { Piece } from './piece'
 import { Queen } from './queen'
 
 export class Pawn extends Piece {
-    private static LETTER: PieceLetter = ''
+    get notationChar(): PieceLetter {
+        return ''
+    }
 
     constructor(color: PieceColor) {
         super('pawn', color)
@@ -24,14 +26,21 @@ export class Pawn extends Piece {
         if (moveOneSquareForward !== null && board.squares[moveOneSquareForward] === null) {
             // Advance one square if not eligible for promotion
             if (startRank !== promotionStartRank) {
-                this.createMove(moves, startSquareNb, moveOneSquareForward, board, opponentAttackTable, Pawn.LETTER)
+                this.createMove(
+                    moves,
+                    startSquareNb,
+                    moveOneSquareForward,
+                    board,
+                    opponentAttackTable,
+                    this.notationChar
+                )
             }
 
             // Advance two squares
             if (
                 moveTwoSquaresForward !== null &&
                 board.squares[moveTwoSquaresForward] === null &&
-                ((this.color === 'white' && startRank === 1) || (this.color === 'black' && startRank === 6))
+                (this.color === 'white' ? startRank === 1 : startRank === 6)
             ) {
                 this.createMove(
                     moves,
@@ -39,7 +48,7 @@ export class Pawn extends Piece {
                     moveTwoSquaresForward,
                     board,
                     opponentAttackTable,
-                    Pawn.LETTER,
+                    this.notationChar,
                     (endBoard) => {
                         endBoard.enPassantTargetSquareNb = moveOneSquareForward
                     }
@@ -48,12 +57,21 @@ export class Pawn extends Piece {
         }
 
         const createPromotionMove = (endSquareNb: number) => {
-            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER, (endBoard) => {
-                endBoard.squares[endSquareNb!] = new Queen(this.color)
-            })
+            this.createMove(
+                moves,
+                startSquareNb,
+                endSquareNb,
+                board,
+                opponentAttackTable,
+                this.notationChar,
+                (endBoard) => {
+                    endBoard.squares[endSquareNb!] = new Queen(this.color)
+                },
+                true
+            )
         }
 
-        // Promotion
+        // Forward promotion. The case where the promotion is a capture is dealt within the capture loop
         if (
             moveOneSquareForward !== null &&
             board.squares[moveOneSquareForward] === null &&
@@ -74,7 +92,7 @@ export class Pawn extends Piece {
                 if (startRank === promotionStartRank) {
                     createPromotionMove(endSquareNb)
                 } else {
-                    this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, Pawn.LETTER)
+                    this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, this.notationChar)
                 }
             }
         }
@@ -90,7 +108,7 @@ export class Pawn extends Piece {
                     enPassantTargetSquareNb,
                     board,
                     opponentAttackTable,
-                    Pawn.LETTER,
+                    this.notationChar,
                     (endBoard) => {
                         endBoard.squares[enPassantTargetSquareNb - 8 * this.direction] = null
                     }

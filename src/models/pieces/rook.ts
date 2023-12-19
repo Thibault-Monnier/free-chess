@@ -4,7 +4,7 @@ import { AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Rook extends Piece {
-    static get notationChar(): PieceLetter {
+    get notationChar(): PieceLetter {
         return 'R'
     }
 

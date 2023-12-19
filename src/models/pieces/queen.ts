@@ -4,7 +4,7 @@ import { AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Queen extends Piece {
-    static get notationChar(): PieceLetter {
+    get notationChar(): PieceLetter {
         return 'Q'
     }
 

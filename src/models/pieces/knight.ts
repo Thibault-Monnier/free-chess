@@ -4,7 +4,7 @@ import { AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class Knight extends Piece {
-    static get notationChar(): PieceLetter {
+    get notationChar(): PieceLetter {
         return 'N'
     }
 
@@ -17,7 +17,7 @@ export class Knight extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, 'N')
+            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, this.notationChar)
         }
         return moves
     }

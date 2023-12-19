@@ -4,7 +4,7 @@ import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './piece'
 
 export class King extends Piece {
-    static get notationChar(): PieceLetter {
+    get notationChar(): PieceLetter {
         return 'K'
     }
 
@@ -17,11 +17,19 @@ export class King extends Piece {
 
         for (let offset of OFFSETS) {
             const endSquareNb = this.addOffset(startSquareNb, offset)
-            this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, King.notationChar, (endBoard) => {
-                const canCastle = endBoard.canCastle[this.color]
-                canCastle.queenSide = false
-                canCastle.kingSide = false
-            })
+            this.createMove(
+                moves,
+                startSquareNb,
+                endSquareNb,
+                board,
+                opponentAttackTable,
+                this.notationChar,
+                (endBoard) => {
+                    const canCastle = endBoard.canCastle[this.color]
+                    canCastle.queenSide = false
+                    canCastle.kingSide = false
+                }
+            )
         }
 
         // Castling
@@ -63,20 +71,27 @@ export class King extends Piece {
         )
     }
 
-    private createCastling(startBoard: Board, startSquareNb: number, isQueenSideCastling: boolean): Move {
+    private createCastling(startBoard: Board, startSquareNb: number, isLongCastle: boolean): Move {
         const endBoard = new Board(startBoard, { switchColor: true, resetEnPassant: true })
-        endBoard.canCastle[this.color][isQueenSideCastling ? 'queenSide' : 'kingSide'] = false
+        endBoard.canCastle[this.color][isLongCastle ? 'queenSide' : 'kingSide'] = false
 
-        const rookStartPosition = startSquareNb + (isQueenSideCastling ? -4 : 3)
-        const endSquareNb = startSquareNb + (isQueenSideCastling ? -2 : 2)
+        const rookStartPosition = startSquareNb + (isLongCastle ? -4 : 3)
+        const endSquareNb = startSquareNb + (isLongCastle ? -2 : 2)
 
         endBoard.squares[endSquareNb] = endBoard.squares[startSquareNb]
-        endBoard.squares[endSquareNb + (isQueenSideCastling ? 1 : -1)] = endBoard.squares[rookStartPosition]
+        endBoard.squares[endSquareNb + (isLongCastle ? 1 : -1)] = endBoard.squares[rookStartPosition]
         endBoard.squares[startSquareNb] = null
         endBoard.squares[rookStartPosition] = null
 
-        const moveNotation = isQueenSideCastling ? 'O-O-O' : 'O-O'
-        return new Move(startBoard.squares[startSquareNb]!, startSquareNb, endSquareNb, endBoard, moveNotation)
+        const moveNotation = isLongCastle ? 'O-O-O' : 'O-O'
+        return new Move(
+            startBoard.squares[startSquareNb]!,
+            startSquareNb,
+            endSquareNb,
+            endBoard,
+            moveNotation,
+            isLongCastle ? 'longCastle' : 'shortCastle'
+        )
     }
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
