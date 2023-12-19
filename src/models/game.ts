@@ -35,8 +35,6 @@ export class Game {
         this._moves = this._moves.slice(0, this._moveNb)
         this._moves.push(move)
         this._moveNb++
-
-        console.log(this.calculateMoveNotation())
     }
 
     private getLastMoveIndex(): number {
