@@ -1,13 +1,7 @@
 import { Board } from '../board'
 import { Move } from '../move'
 import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, MoveType } from '../types'
-import {
-    calculateAxisOffset,
-    fileRankToSquareNb,
-    isBetweenSquares,
-    squareNbToCoordinates,
-    squareNbToFileRank,
-} from '../utils'
+import { calculateAxisOffset, fileRankToSquareNb, isBetweenSquares, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
@@ -89,14 +83,7 @@ export abstract class Piece {
 
             if (this.inCheckAfterMove(startSquareNb, endSquareNb, board, endBoard, opponentAttackTable)) return
 
-            const move = new Move(
-                this,
-                startSquareNb,
-                endSquareNb,
-                endBoard,
-                this.encodeMove(letter, endSquarePiece ? true : false, startSquareNb, endSquareNb),
-                moveType
-            )
+            const move = new Move(this, startSquareNb, endSquareNb, endBoard, moveType)
             moves.push(move)
         }
     }
@@ -267,14 +254,5 @@ export abstract class Piece {
             // The first piece on the offset can't be pinning the pawn
             return true
         }
-    }
-
-    private encodeMove(letter: PieceLetter, isCapture: boolean, startSquareNb: number, endSquareNb: number): string {
-        const captureSymbol = isCapture ? 'x' : ''
-        const endSquareCoordinates = squareNbToCoordinates(endSquareNb)
-        let file = ''
-        if (isCapture && letter === '') file = squareNbToCoordinates(startSquareNb)[0]
-
-        return [letter === '' ? file : letter, captureSymbol, endSquareCoordinates].join('')
     }
 }

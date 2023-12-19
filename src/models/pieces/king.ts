@@ -89,7 +89,6 @@ export class King extends Piece {
             startSquareNb,
             endSquareNb,
             endBoard,
-            moveNotation,
             isLongCastle ? 'longCastle' : 'shortCastle'
         )
     }
