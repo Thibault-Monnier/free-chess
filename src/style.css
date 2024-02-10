@@ -25,6 +25,8 @@ body {
     background-color: #222;
     border-radius: 1rem;
     padding: 2.5rem;
+
+    line-height: 1.5;
 }
 
 .improvements h1 {
@@ -37,6 +39,7 @@ body {
 }
 .improvements p {
     font-style: italic;
+    margin: 1rem 0;
 }
 
 .header {
@@ -55,6 +58,12 @@ body {
 .white_to_move, .black_to_move {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
+}
+
+.evaluation {
+    display: flex;
+    align-items: center;
 }
 
 .square {
@@ -111,7 +120,7 @@ body {
 .move {
     cursor: pointer;
     border-radius: 0.5rem;
-    padding: 0.1rem 1.5rem;
+    padding: 0.4rem 1.5rem;
     border: thin solid transparent;
     min-width: 2rem;
     text-align: center;
