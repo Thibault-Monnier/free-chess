@@ -168,3 +168,7 @@ body {
     background-color: #444;
     border: 1px solid #888;
 }
+
+.actions button:hover:disabled {
+    cursor: not-allowed;
+}
