@@ -55,7 +55,8 @@ body {
     padding: 0.5rem 1rem;
 }
 
-.white_to_move, .black_to_move {
+.white_to_move,
+.black_to_move {
     display: flex;
     gap: 0.5rem;
     align-items: center;
@@ -146,7 +147,6 @@ body {
 }
 
 .actions button {
-    cursor: pointer;
     user-select: none;
 
     /*Draw the button background*/
@@ -167,8 +167,6 @@ body {
 .actions button:hover:not(:disabled) {
     background-color: #444;
     border: 1px solid #888;
-}
 
-.actions button:hover:disabled {
-    cursor: not-allowed;
+    cursor: pointer;
 }
