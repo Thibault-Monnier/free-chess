@@ -48,6 +48,11 @@ body {
     justify-content: space-between;
 }
 
+.next_player {
+    display: flex;
+    align-items: center;
+}
+
 .next_player,
 .evaluation {
     background-color: #222;
