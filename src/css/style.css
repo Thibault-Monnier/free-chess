@@ -14,19 +14,15 @@ body {
 
 .chess {
     display: grid;
-    grid-template-areas: '. header panel' 'improvements board panel';
+    grid-template-areas: 'improvements header panel' 'improvements board panel' 'playmode board panel';
     gap: 1.5rem;
-    grid-template-columns: 20rem calc(var(--square-size) * 8) 25rem;
-    grid-template-rows: 2.5rem calc(var(--square-size) * 8);
+    grid-template-columns: 20rem 1fr 25rem;
+    grid-template-rows: 2.5rem 1fr auto;
 }
 
 .improvements {
     grid-area: improvements;
-    background-color: #222;
-    border-radius: 1rem;
-    padding: 2.5rem;
-
-    line-height: 1.5;
+        line-height: 1.5;
 }
 
 .improvements h1 {
@@ -39,7 +35,7 @@ body {
 }
 .improvements p {
     font-style: italic;
-    margin: 1rem 0;
+    margin-top: 1rem;
 }
 
 .header {
@@ -168,9 +164,33 @@ body {
     color: rgb(119, 119, 119);
 }
 
-.actions button:hover:not(:disabled) {
+.actions button:hover:not(:disabled),
+.playmode button:hover {
     background-color: #444;
     border: 1px solid #888;
 
     cursor: pointer;
+}
+
+.playmode {
+    grid-area: playmode;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: end;
+    gap: 1rem;
+}
+
+.playmode button {
+    /*Draw the button background*/
+    background-color: #222;
+    border: 1px solid #222;
+    padding: 0.8rem 0;
+    border-radius: 1.4rem;
+
+    /*Draw the text*/
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
