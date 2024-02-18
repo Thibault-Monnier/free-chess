@@ -14,15 +14,22 @@ body {
 
 .chess {
     display: grid;
-    grid-template-areas: 'improvements header panel' 'improvements board panel' 'playmode board panel';
+    grid-template-areas: 'left_panel header panel' 'left_panel board panel';
     gap: 1.5rem;
     grid-template-columns: 20rem 1fr 25rem;
-    grid-template-rows: 2.5rem 1fr auto;
+    grid-template-rows: 2.5rem calc(var(--square-size) * 8);
+}
+
+.left_panel {
+    grid-area: left_panel;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .improvements {
-    grid-area: improvements;
-        line-height: 1.5;
+    line-height: 1.5;
 }
 
 .improvements h1 {
@@ -37,6 +44,28 @@ body {
     font-style: italic;
     margin-top: 1rem;
 }
+
+.playmode {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: end;
+    gap: 1rem;
+}
+
+.playmode button {
+    /*Draw the button background*/
+    background-color: #222;
+    border: 1px solid #222;
+    padding: 0.8rem 0;
+    border-radius: 1.4rem;
+
+    /*Draw the text*/
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
 
 .header {
     grid-area: header;
@@ -139,8 +168,8 @@ body {
 }
 
 .actions {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     font-size: 3rem;
     margin-top: 1rem;
@@ -152,7 +181,7 @@ body {
     /*Draw the button background*/
     background-color: #222;
     border: 1px solid #222;
-    padding: 0.2rem 3rem;
+    padding: 0.2rem 0;
     border-radius: 1.5rem;
 
     /*Draw the text*/
@@ -170,27 +199,4 @@ body {
     border: 1px solid #888;
 
     cursor: pointer;
-}
-
-.playmode {
-    grid-area: playmode;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: end;
-    gap: 1rem;
-}
-
-.playmode button {
-    /*Draw the button background*/
-    background-color: #222;
-    border: 1px solid #222;
-    padding: 0.8rem 0;
-    border-radius: 1.4rem;
-
-    /*Draw the text*/
-    color: whitesmoke;
-    font-size: 1.5rem;
-    font-weight: 600;
 }
