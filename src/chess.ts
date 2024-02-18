@@ -13,11 +13,16 @@ export class Chess {
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private bestMoveToDisplay: BestMove | null | undefined
+    private showBestMove: boolean = false
     private calculateBestMoveHandle: number | undefined
 
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
-        if (playMode !== '1v1') this.hideEvaluation()
+        // Show the best move if the game is in 1v1 mode
+        if (playMode === '1v1') this.showBestMove = true
+        // Hide the evaluation panel if the player is playing against the bot
+        if (playMode === '1vC') this.hideEvaluation()
+
         this.newMove()
     }
 
@@ -31,7 +36,7 @@ export class Chess {
             this.game,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
-            this.bestMoveToDisplay ? this.bestMoveToDisplay.move : null
+            this.showBestMove ? (this.bestMoveToDisplay ? this.bestMoveToDisplay.move : null) : null
         )
         this.updateMovesPanel()
         this.toggleNextPlayer()
@@ -128,10 +133,20 @@ export class Chess {
             this.bestMove = bot.run()
 
             // If the game isn't in 1v1 mode, the best move shouldn't be displayed
-            if (this.playMode === '1v1') {
-                this.bestMoveToDisplay = this.bestMove
-                this.draw()
+            switch (this.playMode) {
+                case '1v1':
+                    this.bestMoveToDisplay = this.bestMove
+                    break
+                case '1vC':
+                    if (this.currentBoard.colorToMove === 'black') this.playBestMove()
+                    break
+                case 'CvC':
+                    this.bestMoveToDisplay = this.bestMove
+                    this.playBestMove()
+                    break
             }
+
+            this.draw()
         })
     }
 
@@ -154,6 +169,12 @@ export class Chess {
         if (element) element.setAttribute('style', 'display: none;')
     }
 
+    private playBestMove() {
+        if (this.bestMove) {
+            this.game.addMove(this.bestMove.move)
+            this.newMove()
+        }
+    }
 
     jumpToMove(moveNb: number): void {
         this.game.jumpToMove(moveNb)
