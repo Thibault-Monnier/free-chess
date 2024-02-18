@@ -3,18 +3,21 @@ import { Board } from './models/board'
 import { DepthNBot } from './models/bots/depthNBot'
 import { Game } from './models/game'
 import { Move } from './models/move'
-import { BestMove } from './models/types'
+import { BestMove, PlayMode } from './models/types'
 import { invertColor } from './models/utils'
 
 export class Chess {
     private game: Game = new Game()
+    private playMode: PlayMode
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
+    private bestMoveToDisplay: BestMove | null | undefined
     private calculateBestMoveHandle: number | undefined
-    //public mode: "1v1" | "1vC" | "CvC"
 
-    constructor() {
+    constructor(playMode: PlayMode = '1v1') {
+        this.playMode = playMode
+        if (playMode !== '1v1') this.hideEvaluation()
         this.newMove()
     }
 
@@ -28,7 +31,7 @@ export class Chess {
             this.game,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
-            this.bestMove ? this.bestMove.move : null
+            this.bestMoveToDisplay ? this.bestMoveToDisplay.move : null
         )
         this.updateMovesPanel()
         this.toggleNextPlayer()
@@ -116,6 +119,22 @@ export class Chess {
         }
     }
 
+    private calculateBestMove(): void {
+        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
+
+        this.bestMove = undefined
+        this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
+            const bot = new DepthNBot(this.currentBoard, 4)
+            this.bestMove = bot.run()
+
+            // If the game isn't in 1v1 mode, the best move shouldn't be displayed
+            if (this.playMode === '1v1') {
+                this.bestMoveToDisplay = this.bestMove
+                this.draw()
+            }
+        })
+    }
+
     private updateEvaluation() {
         const element = document.getElementById('evaluation')!
         switch (this.bestMove) {
@@ -130,16 +149,11 @@ export class Chess {
         }
     }
 
-    private calculateBestMove(): void {
-        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
-
-        this.bestMove = undefined
-        this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
-            const bot = new DepthNBot(this.currentBoard, 4)
-            this.bestMove = bot.run()
-            this.draw()
-        })
+    private hideEvaluation() {
+        const element = document.getElementById('evaluation')
+        if (element) element.setAttribute('style', 'display: none;')
     }
+
 
     jumpToMove(moveNb: number): void {
         this.game.jumpToMove(moveNb)

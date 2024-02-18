@@ -27,3 +27,4 @@ export type AttackTable = {
 export type PinnedPiece = { squareNb: number; offset: FileRank }
 export type Bitboard = boolean[]
 export type MoveType = 'normal' | 'capture' | 'longCastle' | 'shortCastle' | 'promotion' | 'capturePromotion'
+export type PlayMode = '1v1' | '1vC' | 'CvC'

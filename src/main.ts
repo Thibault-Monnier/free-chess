@@ -1,7 +1,7 @@
 import { canvas, squareSize } from './draw'
 import { Chess } from './chess'
 
-const chess = new Chess()
+let chess = new Chess()
 
 canvas.onmousedown = (event: MouseEvent) => {
     const x = event.clientX - canvas.getBoundingClientRect().x - canvas.clientLeft
@@ -11,7 +11,11 @@ canvas.onmousedown = (event: MouseEvent) => {
     }
 }
 
-document.getElementById('undo')!.onclick = () => chess.undo()
+document.getElementById('player_vs_player')!.onclick = () => chess = new Chess('1v1')
+document.getElementById('player_vs_bot')!.onclick = () => chess = new Chess('1vC')
+document.getElementById('bot_vs_bot')!.onclick = () => chess = new Chess('CvC')
+
+document.getElementById('undo')!.onclick = () => chess.undo()   
 document.getElementById('redo')!.onclick = () => chess.redo()
 document.getElementById('reset')!.onclick = () => chess.reset()
 
