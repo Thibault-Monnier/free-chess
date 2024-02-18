@@ -5,6 +5,9 @@ import { BestMove } from '../types'
 import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
+    private checkmateScore = 999999999
+
+    // The following properties are only used for performance analysis
     private nbMinimax = 0
 
     private perfNbEvals = 0
@@ -23,7 +26,9 @@ export class DepthNBot extends Bot {
         let bestMove: Move | null = null
         let bestEvaluation = -Infinity
         for (let move of moves) {
-            const evaluation = this.minimax(move.endBoard, this.depth! - 1, -Infinity, Infinity) * colorMultiplier
+            const evaluation =
+                this.minimax(move.endBoard, this.depth! - 1, -this.checkmateScore, this.checkmateScore) *
+                colorMultiplier
 
             if (evaluation >= bestEvaluation) {
                 bestMove = move
@@ -39,7 +44,7 @@ export class DepthNBot extends Bot {
             'ms' + ' - Minimax calls:',
             this.nbMinimax,
             ' - Avg time per minimax (microsecs):',
-            ((endTimestamp - startTimestamp) / this.nbMinimax) * 1000,
+            ((endTimestamp - startTimestamp) / this.nbMinimax) * 1000
         )
         console.log(
             'Avg time evals (microsecs):',
@@ -47,15 +52,15 @@ export class DepthNBot extends Bot {
             'Avg time possible moves (microsecs):',
             (this.perfTimePossibleMoves / this.perfNbPossibleMoves) * 1000
         )
-        
+
         console.log('Best move:', bestMove, 'Evaluation:', bestEvaluation)
         return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
     }
 
-    private minimax(board: Board, depth: number, alpha: number, beta: number): number {
+    private minimax(board: Board, remainingDepth: number, alpha: number, beta: number): number {
         this.nbMinimax++
 
-        if (depth === 0) {
+        if (remainingDepth === 0) {
             const startTimestamp = performance.now()
             const evaluation = new PieceSquareTableEvaluator(board).run()
             const endTimestamp = performance.now()
@@ -65,7 +70,9 @@ export class DepthNBot extends Bot {
         }
 
         if (board.endOfGame === 'checkmate') {
-            return board.colorToMove === 'white' ? -Infinity : Infinity
+            return board.colorToMove === 'white'
+                ? -this.checkmateScore - remainingDepth
+                : this.checkmateScore + remainingDepth
         } else if (board.endOfGame === 'stalemate') {
             return 0
         }
@@ -79,7 +86,7 @@ export class DepthNBot extends Bot {
         if (board.colorToMove === 'white') {
             let bestEvaluation = -Infinity
             for (let move of moves) {
-                const evaluation = this.minimax(move.endBoard, depth - 1, alpha, beta)
+                const evaluation = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
                 bestEvaluation = Math.max(bestEvaluation, evaluation)
                 alpha = Math.max(alpha, evaluation)
                 if (beta <= alpha) break
@@ -88,7 +95,7 @@ export class DepthNBot extends Bot {
         } else {
             let bestEvaluation = Infinity
             for (let move of moves) {
-                const evaluation = this.minimax(move.endBoard, depth - 1, alpha, beta)
+                const evaluation = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
                 bestEvaluation = Math.min(bestEvaluation, evaluation)
                 beta = Math.min(beta, evaluation)
                 if (beta <= alpha) break
