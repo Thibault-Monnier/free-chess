@@ -21,5 +21,10 @@ document.getElementById('reset')!.onclick = () => chess.reset()
 
 canvas.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
 
+document.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') chess.undo()
+    if (event.key === 'ArrowRight') chess.redo()
+})
+
 //@ts-ignore
 window.chess = chess
