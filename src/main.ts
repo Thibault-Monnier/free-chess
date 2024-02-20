@@ -15,7 +15,7 @@ document.getElementById('player_vs_player')!.onclick = () => chess = new Chess('
 document.getElementById('player_vs_bot')!.onclick = () => chess = new Chess('1vC')
 document.getElementById('bot_vs_bot')!.onclick = () => chess = new Chess('CvC')
 
-document.getElementById('undo')!.onclick = () => chess.undo()   
+document.getElementById('undo')!.onclick = () => chess.undo()
 document.getElementById('redo')!.onclick = () => chess.redo()
 document.getElementById('reset')!.onclick = () => chess.reset()
 

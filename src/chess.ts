@@ -23,6 +23,8 @@ export class Chess {
         // Hide the evaluation panel if the player is playing against the bot
         if (playMode === '1vC') this.hideEvaluation()
 
+        this.setActivePlayModeButton()
+
         this.newMove()
     }
 
@@ -226,5 +228,23 @@ export class Chess {
 
         const currentMove = document.getElementsByClassName('currentMove')[0]
         if (currentMove) currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    private setActivePlayModeButton() {
+        document.getElementById('player_vs_player')!.classList.remove('active')
+        document.getElementById('player_vs_bot')!.classList.remove('active')
+        document.getElementById('bot_vs_bot')!.classList.remove('active')
+
+        switch (this.playMode) {
+            case '1v1':
+                document.getElementById('player_vs_player')!.classList.add('active')
+                break
+            case '1vC':
+                document.getElementById('player_vs_bot')!.classList.add('active')
+                break
+            case 'CvC':
+                document.getElementById('bot_vs_bot')!.classList.add('active')
+                break
+        }
     }
 }

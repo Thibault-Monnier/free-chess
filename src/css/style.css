@@ -66,6 +66,9 @@ body {
     font-weight: 600;
 }
 
+.playmode button.active {
+    border: 1px solid whitesmoke;
+}
 
 .header {
     grid-area: header;
