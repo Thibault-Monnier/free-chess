@@ -13,19 +13,20 @@ export class Chess {
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private bestMoveToDisplay: BestMove | null | undefined
-    private showBestMove: boolean = false
     private calculateBestMoveHandle: number | undefined
 
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
-        // Show the best move if the game is in 1v1 mode
-        if (playMode === '1v1') this.showBestMove = true
         // Hide the evaluation panel if the player is playing against the bot
         if (playMode === '1vC') this.hideEvaluation()
 
         this.setActivePlayModeButton()
 
         this.newMove()
+    }
+
+    private get showBestMove(): boolean {
+        return this.playMode === '1v1'
     }
 
     private get currentBoard(): Board {
@@ -38,7 +39,7 @@ export class Chess {
             this.game,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
-            this.showBestMove ? (this.bestMoveToDisplay ? this.bestMoveToDisplay.move : null) : null
+            this.bestMoveToDisplay && this.showBestMove ? this.bestMoveToDisplay.move : null
         )
         this.updateMovesPanel()
         this.toggleNextPlayer()
@@ -231,20 +232,12 @@ export class Chess {
     }
 
     private setActivePlayModeButton() {
-        document.getElementById('player_vs_player')!.classList.remove('active')
-        document.getElementById('player_vs_bot')!.classList.remove('active')
-        document.getElementById('bot_vs_bot')!.classList.remove('active')
-
-        switch (this.playMode) {
-            case '1v1':
-                document.getElementById('player_vs_player')!.classList.add('active')
-                break
-            case '1vC':
-                document.getElementById('player_vs_bot')!.classList.add('active')
-                break
-            case 'CvC':
-                document.getElementById('bot_vs_bot')!.classList.add('active')
-                break
+        const toggleVisibility = (id: string, visibility: boolean) => {
+            document.getElementById(id)!.style.visibility = visibility ? 'visible' : 'hidden'
         }
+
+        toggleVisibility('player_vs_player_arrow', this.playMode === '1v1')
+        toggleVisibility('player_vs_bot_arrow', this.playMode === '1vC')
+        toggleVisibility('bot_vs_bot_arrow', this.playMode === 'CvC')
     }
 }

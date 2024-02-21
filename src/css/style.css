@@ -48,16 +48,18 @@ body {
 .playmode {
     display: flex;
     flex-direction: column;
-
     justify-content: end;
     gap: 1rem;
 }
 
 .playmode button {
+    display: flex;
+    justify-content: space-evenly;
+
     /*Draw the button background*/
     background-color: #222;
     border: 1px solid #222;
-    padding: 0.8rem 0;
+    padding: 0.8rem 0.3rem;
     border-radius: 1.4rem;
 
     /*Draw the text*/
@@ -66,8 +68,14 @@ body {
     font-weight: 600;
 }
 
-.playmode button.active {
-    border: 1px solid whitesmoke;
+.playmode_arrow {
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.playmode_arrow::before {
+    content: '▶';
 }
 
 .header {
