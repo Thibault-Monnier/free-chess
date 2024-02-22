@@ -11,9 +11,18 @@ canvas.onmousedown = (event: MouseEvent) => {
     }
 }
 
-document.getElementById('player_vs_player')!.onclick = () => chess = new Chess('1v1')
-document.getElementById('player_vs_bot')!.onclick = () => chess = new Chess('1vC')
-document.getElementById('bot_vs_bot')!.onclick = () => chess = new Chess('CvC')
+document.getElementById('player_vs_player')!.onclick = () => {
+    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
+    chess = new Chess('1v1')
+}
+document.getElementById('player_vs_bot')!.onclick = () => {
+    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
+    chess = new Chess('1vC')
+}
+document.getElementById('bot_vs_bot')!.onclick = () => {
+    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
+    chess = new Chess('CvC')
+}
 
 document.getElementById('undo')!.onclick = () => chess.undo()
 document.getElementById('redo')!.onclick = () => chess.redo()
