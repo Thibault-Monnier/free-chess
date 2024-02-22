@@ -1,5 +1,6 @@
 import { canvas, squareSize } from './draw'
 import { Chess } from './chess'
+import { PlayMode } from './models/types'
 
 let chess = new Chess()
 
@@ -11,18 +12,19 @@ canvas.onmousedown = (event: MouseEvent) => {
     }
 }
 
-document.getElementById('player_vs_player')!.onclick = () => {
-    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
-    chess = new Chess('1v1')
+const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'bot_vs_bot']
+const idToPlayMode: { [key: string]: PlayMode } = {
+    player_vs_player: '1v1',
+    player_vs_bot: '1vC',
+    bot_vs_bot: 'CvC',
 }
-document.getElementById('player_vs_bot')!.onclick = () => {
-    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
-    chess = new Chess('1vC')
-}
-document.getElementById('bot_vs_bot')!.onclick = () => {
-    if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
-    chess = new Chess('CvC')
-}
+
+playmodeIDs.forEach((id) => {
+    document.getElementById(id)!.onclick = () => {
+        if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
+        chess = new Chess(idToPlayMode[id])
+    }
+})
 
 document.getElementById('undo')!.onclick = () => chess.undo()
 document.getElementById('redo')!.onclick = () => chess.redo()
