@@ -135,22 +135,26 @@ export class Chess {
             const bot = new DepthNBot(this.currentBoard, 4)
             this.bestMove = bot.run()
 
-            // If the game isn't in 1v1 mode, the best move shouldn't be displayed
-            switch (this.playMode) {
-                case '1v1':
-                    this.bestMoveToDisplay = this.bestMove
-                    break
-                case '1vC':
-                    if (this.currentBoard.colorToMove === 'black') this.playBestMove()
-                    break
-                case 'CvC':
-                    this.bestMoveToDisplay = this.bestMove
-                    this.playBestMove()
-                    break
-            }
-
-            this.draw()
+            this.updateBestMoveToDisplay()
         })
+    }
+
+    private updateBestMoveToDisplay() {
+        // If the game isn't in 1v1 mode, the best move shouldn't be displayed
+        switch (this.playMode) {
+            case '1v1':
+                this.bestMoveToDisplay = this.bestMove
+                break
+            case '1vC':
+                if (this.currentBoard.colorToMove === 'black') this.playBestMove()
+                break
+            case 'CvC':
+                this.bestMoveToDisplay = this.bestMove
+                this.playBestMove()
+                break
+        }
+
+        this.draw()
     }
 
     private updateEvaluation() {
