@@ -13,7 +13,7 @@ export class Chess {
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private bestMoveToDisplay: BestMove | null | undefined
-    private calculateBestMoveHandle: number | undefined
+    private _calculateBestMoveHandle: number | undefined
 
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
@@ -128,10 +128,10 @@ export class Chess {
     }
 
     private calculateBestMove(): void {
-        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
+        if (this._calculateBestMoveHandle) cancelIdleCallback(this._calculateBestMoveHandle)
 
         this.bestMove = undefined
-        this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
+        this._calculateBestMoveHandle = requestIdleCallback((deadline) => {
             const bot = new DepthNBot(this.currentBoard, 4)
             this.bestMove = bot.run()
 
@@ -201,6 +201,10 @@ export class Chess {
     reset(): void {
         this.game = new Game()
         this.newMove()
+    }
+
+    get calculateBestMoveHandle(): number | undefined {
+        return this._calculateBestMoveHandle
     }
 
     private toggleActions(): void {
