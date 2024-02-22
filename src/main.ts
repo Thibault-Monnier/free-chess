@@ -21,7 +21,7 @@ const idToPlayMode: { [key: string]: PlayMode } = {
 
 playmodeIDs.forEach((id) => {
     document.getElementById(id)!.onclick = () => {
-        if (chess.calculateBestMoveHandle) cancelIdleCallback(chess.calculateBestMoveHandle)
+        chess.interruptBot()
         chess = new Chess(idToPlayMode[id])
     }
 })

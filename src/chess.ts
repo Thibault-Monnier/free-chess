@@ -13,7 +13,7 @@ export class Chess {
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private bestMoveToDisplay: BestMove | null | undefined
-    private _calculateBestMoveHandle: number | undefined
+    private calculateBestMoveHandle: number | undefined
 
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
@@ -128,15 +128,8 @@ export class Chess {
     }
 
     private calculateBestMove(): void {
-        if (this._calculateBestMoveHandle) cancelIdleCallback(this._calculateBestMoveHandle)
-
-        this.bestMove = undefined
-        this._calculateBestMoveHandle = requestIdleCallback((deadline) => {
-            const bot = new DepthNBot(this.currentBoard, 4)
-            this.bestMove = bot.run()
-
-            this.updateBestMoveToDisplay()
-        })
+        this.interruptBot()
+        this.runBot(() => this.updateBestMoveToDisplay())
     }
 
     private updateBestMoveToDisplay() {
@@ -183,6 +176,19 @@ export class Chess {
         }
     }
 
+    interruptBot(): void {
+        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
+    }
+
+    runBot(after: () => void): void {
+        this.bestMove = undefined
+        this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
+            const bot = new DepthNBot(this.currentBoard, 4)
+            this.bestMove = bot.run()
+            after()
+        })
+    }
+
     jumpToMove(moveNb: number): void {
         this.game.jumpToMove(moveNb)
         this.newMove()
@@ -201,10 +207,6 @@ export class Chess {
     reset(): void {
         this.game = new Game()
         this.newMove()
-    }
-
-    get calculateBestMoveHandle(): number | undefined {
-        return this._calculateBestMoveHandle
     }
 
     private toggleActions(): void {
