@@ -55,6 +55,7 @@ body {
 .playmode button {
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 
     /*Draw the button background*/
     background-color: #222;
@@ -70,8 +71,6 @@ body {
 
 .playmode_arrow {
     visibility: hidden;
-    display: flex;
-    align-items: center;
 }
 
 .playmode_arrow::before {
