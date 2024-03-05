@@ -18,7 +18,11 @@ export class Chess {
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
         // Hide the evaluation panel if the player is playing against the bot
-        if (playMode === '1vC') this.hideEvaluation()
+        if (playMode === '1vC') {
+            this.hideEvaluation()
+        } else {
+            this.showEvaluation()
+        }
 
         this.setActivePlayModeButton()
 
@@ -162,6 +166,11 @@ export class Chess {
             default:
                 element.innerHTML = `Evaluation: ${this.bestMove.evaluation}`
         }
+    }
+
+    private showEvaluation() {
+        const element = document.getElementById('evaluation')
+        if (element) element?.setAttribute('style', 'display: flex;')
     }
 
     private hideEvaluation() {
