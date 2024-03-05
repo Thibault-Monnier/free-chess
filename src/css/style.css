@@ -12,6 +12,10 @@ body {
     --square-size: 85px;
 }
 
+button {
+    font-family: Poppins, sans-serif;
+}
+
 .chess {
     display: grid;
     grid-template-areas: 'left_panel header panel' 'left_panel board panel';
