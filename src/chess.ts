@@ -51,9 +51,14 @@ export class Chess {
     }
 
     private newMove() {
-        this.selectedSquareNb = null
+        this.resetSelectedSquare()
+        this.highlightedSquareNbs.fill(false)
         this.calculateBestMove()
         this.draw()
+    }
+
+    clickedOutside() {
+        this.resetSelectedSquare()
     }
 
     clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
@@ -87,6 +92,11 @@ export class Chess {
             this.highlightedSquareNbs[squareNb] = !this.highlightedSquareNbs[squareNb]
         }
 
+        this.draw()
+    }
+
+    resetSelectedSquare() {
+        this.selectedSquareNb = null
         this.draw()
     }
 

@@ -12,6 +12,12 @@ canvas.onmousedown = (event: MouseEvent) => {
     }
 }
 
+window.onmousedown = (event: MouseEvent) => {
+    if (event.target !== canvas) {
+        chess.clickedOutside()
+    }
+}
+
 const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'bot_vs_bot']
 const idToPlayMode: { [key: string]: PlayMode } = {
     player_vs_player: '1v1',
