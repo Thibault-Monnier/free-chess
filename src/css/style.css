@@ -8,8 +8,6 @@ body {
     align-items: center;
     overflow: hidden;
     font-family: Poppins, sans-serif;
-
-    --square-size: 85px;
 }
 
 button {
@@ -17,15 +15,17 @@ button {
 }
 
 .chess {
-    display: grid;
-    grid-template-areas: 'left_panel header panel' 'left_panel board panel';
+    height: 100%;
+    width: 100%;
+    max-width: 100rem;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
     gap: 1.5rem;
-    grid-template-columns: 20rem 1fr 25rem;
-    grid-template-rows: 2.5rem calc(var(--square-size) * 8);
 }
 
-.left_panel {
-    grid-area: left_panel;
+.control_panel {
+    width: 18rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -81,8 +81,14 @@ button {
     content: '▶';
 }
 
+.board_panel {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1.5rem;
+}
+
 .header {
-    grid-area: header;
     display: flex;
     justify-content: space-between;
 }
@@ -123,17 +129,18 @@ button {
     background-color: #000;
 }
 
-.board {
-    grid-area: board;
-    border-radius: 1rem;
-    width: calc(var(--square-size) * 8);
-    height: calc(var(--square-size) * 8);
+.board_container {
+    flex-grow: 1;
 }
 
-.panel {
-    grid-area: panel;
+.board {
+    border-radius: 1rem;
+}
+
+.moves_panel {
     display: flex;
     flex-direction: column;
+    width: 25rem;
 }
 
 .moves {

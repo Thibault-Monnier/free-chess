@@ -1,23 +1,9 @@
-import { Game } from './models/game'
-import { Move } from './models/move'
 import { PieceColor, PieceName } from './models/types'
-import { squareNbToFileRank } from './models/utils'
-import { waitOneMillisecondAsync } from './utils'
-
-export const squareSize = 85
-const pieceSize = squareSize * 0.97
-const lightSquares = '#efdfc5'
-const darkSquares = '#ae7c66'
-
-export const canvas = document.getElementById('board') as HTMLCanvasElement
-const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-canvas.width = squareSize * 8
-canvas.height = squareSize * 8
 
 //https://commons.wikimedia.org/wiki/Category:PNG_chess_pieces/Standard_transparent
 //https://www.base64-image.de/
-let imagesLoading = 0
-const piecesImages: Record<PieceColor, Record<PieceName, HTMLImageElement>> = {
+export let imagesLoading = 0
+export const piecesImages: Record<PieceColor, Record<PieceName, HTMLImageElement>> = {
     white: {
         pawn: stringToImage(
             'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAASLSURBVGiB7ZrLS2NnGIefL6YJEuM4GaOiUvDCgJIKI0Y7KFJ3BSm00j9gil1ULbRi+1cUV92U7gahSLvUzeAiVG3QCoOggxmvgRlRY2uKSLSivl3oV2JJgyfnYrw8EDgh3+X35P3ycc7JUSLCXcJ13QGc5l74tnMvfNu5F77t3Dlh93VMqpQKAmGgEVgGfheRbUcmFxHHXkAx8CMgGV4/AaV2Z1BOnVoqpaqAKPCux+Ohra2NUChELBZjZmaGw8NDgF2gXURWbAviYHVfANLS0iJLS0uSTjwel87OTl3pKFBgWw6HZD8BJBAIyNbWlmQimUxKZWWllv7MrixO7dIdAAMDA1RUVGRsUFJSwtDQ0KX2duCU8BOAcDictVHa50/sCuKUcArg5OQka6PT01N9eGRXEKeEXwFMTExkbRSJRPRhzLYkDm1a7wPi8XgkHo9n3LR2d3fF7/frTevDG7tpKaUeA88BPB4P8Xg8Y7u3b9/idv974veDUsqe37HNlS0GXgMSCoUkFotlrK5mY2NDwuGwrvImUGZ5JpuFfwakqalJDg4Osspqjo6OpKOjQ0tP3Bhhzi8MpKioSNbW1q4kq0kkElJaWqqlO6zMZedv+EuA3t5eamtrDXUMBoP09/frt19ZmsrGCq8DMj8/b6i6ms3NTV3hPStz2XK1pJRyA0cul6sglUrh9XpzGicQCJBMJgECIpK0IptdS7oMKCgpKclZFs6FL6iyIhRg65L+A5CNjY2clvTe3p4opQQ4BgqtymXnpjUDMD09nVPnaDSqv7iXInJoVSg7haMAk5OTOXWemprSh79ZlOccG5d0OyBer1dmZ2cNLedYLCbFxcV6l/7I0lx2CV9Ifw9IdXW17OzsXEl2f39fGhoatOwvlmeyWdgNRADp7OyU4+PjrLJnZ2fS09OjZReBohsjzPn+8AXwJyBut1vGxsayCkejUfF6vVr4L+BrwJ33wsBDYPYiuHR1dcni4mJWWc3q6qp0d3en369eACryVhjwAr8CUlVVJaOjo1cS/S/j4+NSV1enpV8C/rwTBhQwqjeqN2/e5CSrSSQSUl9fr6VfAO/km/B3gDx48EAWFhZMyWpWV1elrKxMSz/PG2Ggh4v7VpFIxBJZzdzcnPh8Pi39eb4IzwEyPDxsqaxmZGREC78GXNcqDHzAxV8pV72VY5STkxOpqanR0h/nmtWqc+lv4PyvFJ/PZ9GQlykoKGBwcPDSfDlhQXUbgbPCwkJJJBK2VFdzcHAggUBAV/npdVV4CFDPnj0jGAxaMNz/4/P56Ovr02+/zWkQCyq8A8jy8rKt1dVsb2+Ly+US4G/AazivSdk6QCorKx2R1TQ2Nupl3WY0s9kl/RSgtbXV5DDGSJuvzWhfs8LvATQ3N5scxhhp84WM9jUrXApQXl5uchhjpM33yGhfs8KP4NLtVEdIm8+wsKkb8UqpaaC9trYWv9+f8zhGSaVSrKysALwSEUPL2uyTeA8B1tfXTQ5jbn4jmBX+lPML/usi+0MjGXDsSbx84c49TXsvfNu5F77t3DnhfwDnGIncxPZT9AAAAABJRU5ErkJggg=='
@@ -66,87 +52,14 @@ function stringToImage(data: string): HTMLImageElement {
     image.onload = () => imagesLoading--
     image.src = data
     return image
-}
+} 
 
-function squareNbToXY(squareNb: number): { x: number; y: number } {
-    return {
-        x: squareSize * (squareNb % 8),
-        y: canvas.height - squareSize - squareSize * Math.floor(squareNb / 8),
-    }
-}
-
-export function drawBoard(
-    game: Game,
-    selectedSquareNb: number | null,
-    highlightedSquareNbs: boolean[],
-    bestMove: Move | null
-): void {
-    for (let squareNb = 0; squareNb < 64; squareNb++) {
-        const { x, y } = squareNbToXY(squareNb)
-        ctx.fillStyle = getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
-        ctx.fillRect(x, y, squareSize, squareSize)
-
-        if (selectedSquareNb === squareNb) {
-            ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'
-            ctx.fillRect(x, y, squareSize, squareSize)
-        }
-        if (highlightedSquareNbs[squareNb]) {
-            ctx.fillStyle = 'rgba(255, 80, 70, 0.75)'
-            ctx.fillRect(x, y, squareSize, squareSize)
-        }
-        if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
-            ctx.fillStyle = 'rgba(100, 255, 100, 0.75)'
-            ctx.fillRect(x, y, squareSize, squareSize)
-        }
-    }
-    drawCoordinates()
-    if (bestMove) createBestMoveArrow(bestMove)
-    drawPieces(game)
-    if (selectedSquareNb !== null) drawPossibleMoves(game, selectedSquareNb)
-}
-
-function drawPossibleMoves(game: Game, selectedSquareNb: number) {
-    const piece = game.currentBoard.squares[selectedSquareNb]!
-    const moves = piece.possibleMoves(
-        selectedSquareNb,
-        game.currentBoard,
-        game.currentBoard.createOpponentAttackTable()
-    )
-
-    for (let move of moves) {
-        const { x, y } = squareNbToXY(move.endSquareNb)
-        const isOccupied = game.currentBoard.squares[move.endSquareNb] !== null
-
-        ctx.beginPath()
-        ctx.arc(x + squareSize / 2, y + squareSize / 2, isOccupied ? squareSize / 2 : squareSize / 8, 0, Math.PI * 2)
-        ctx.fillStyle = isOccupied ? 'rgba(30, 0, 100, 0.25)' : 'rgba(0, 0, 0, 0.2)'
-        ctx.fill()
-    }
-}
-
-function createBestMoveArrow(move: Move): void {
-    const startPosition = squareNbToFileRank(move.startSquareNb)
-    const endPosition = squareNbToFileRank(move.endSquareNb)
-    const width = 8
-    const color = 'rgba(50, 150, 50, 1)'
-
-    const startCoordinates = {
-        fromX: startPosition.file * squareSize + squareSize / 2,
-        fromY: (7 - startPosition.rank) * squareSize + squareSize / 2,
-    }
-    const endCoordinates = {
-        toX: endPosition.file * squareSize + squareSize / 2,
-        toY: (7 - endPosition.rank) * squareSize + squareSize / 2,
-    }
-
-    drawArrow(startCoordinates, endCoordinates, width, color)
-}
-
-function drawArrow(
+export function drawArrow(
     { fromX, fromY }: { fromX: number; fromY: number },
     { toX, toY }: { toX: number; toY: number },
     width: number,
-    color: string
+    color: string,
+    ctx: CanvasRenderingContext2D
 ) {
     //variables to be used when creating the arrow
     var headlen = width * 2
@@ -177,37 +90,3 @@ function drawArrow(
     ctx.stroke()
 }
 
-function getSquareColor(squareNb: number) {
-    return ((squareNb >> 3) + squareNb) % 2 === 0 ? 'dark' : 'light'
-}
-
-function drawCoordinates() {
-    const fontSize = 14
-    ctx.font = `${fontSize}px Arial`
-
-    for (let file = 0; file < 8; file++) {
-        ctx.fillStyle = getSquareColor(file) === 'dark' ? lightSquares : darkSquares
-        ctx.fillText(String.fromCharCode(97 + file), squareSize * (file + 1) - fontSize, canvas.height - fontSize * 0.4)
-    }
-
-    for (let rank = 0; rank < 8; rank++) {
-        ctx.fillStyle = getSquareColor(rank * 8) === 'dark' ? lightSquares : darkSquares
-        ctx.fillText(String(rank + 1), fontSize * 0.4, squareSize * (7 - rank) + fontSize * 1.2)
-    }
-}
-
-async function drawPieces(game: Game) {
-    while (imagesLoading > 0) {
-        await waitOneMillisecondAsync()
-    }
-
-    for (let squareNb = 0; squareNb < 64; squareNb++) {
-        const piece = game.currentBoard.squares[squareNb]
-        if (!piece) continue
-        const { x, y } = squareNbToXY(squareNb)
-
-        const image = piecesImages[piece.color][piece.name]
-        const offset = (squareSize - pieceSize) / 2
-        ctx.drawImage(image, x + offset, y + offset, pieceSize, pieceSize)
-    }
-}

@@ -12,7 +12,7 @@
     </head>
     <body>
         <div class="chess">
-            <div class="left_panel">
+            <div class="control_panel">
                 <div class="improvements">
                     <h1>Work in progress:</h1>
                     <p>UI</p>
@@ -46,24 +46,28 @@
                 </div>
             </div>
 
-            <div class="header">
-                <div id="next_player" class="next_player">
-                    <div id="white_to_move" class="white_to_move">
-                        <div class="square"></div>
-                        White to move
+            <div class="board_panel">
+                <div class="header">
+                    <div id="next_player" class="next_player">
+                        <div id="white_to_move" class="white_to_move">
+                            <div class="square"></div>
+                            White to move
+                        </div>
+                        <div id="black_to_move" class="black_to_move" style="display: none">
+                            <div class="square"></div>
+                            Black to move
+                        </div>
+                        <div id="end_of_game" style="display: none"></div>
                     </div>
-                    <div id="black_to_move" class="black_to_move" style="display: none">
-                        <div class="square"></div>
-                        Black to move
-                    </div>
-                    <div id="end_of_game" style="display: none"></div>
+                    <div id="evaluation" class="evaluation"></div>
                 </div>
-                <div id="evaluation" class="evaluation"></div>
+
+                <div class="board_container" id="board_container">
+                    <canvas id="board" class="board"></canvas>
+                </div>
             </div>
 
-            <canvas id="board" class="board"> </canvas>
-
-            <div class="panel">
+            <div class="moves_panel">
                 <div id="moves" class="moves"></div>
                 <div class="actions">
                     <button id="undo" disabled>&lt;</button>

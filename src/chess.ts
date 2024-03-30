@@ -1,4 +1,4 @@
-import { drawBoard, squareSize } from './draw'
+import { Canvas } from './canvas'
 import { Board } from './models/board'
 import { DepthNBot } from './models/bots/depthNBot'
 import { Game } from './models/game'
@@ -14,19 +14,10 @@ export class Chess {
     private bestMove: BestMove | null | undefined
     private bestMoveToDisplay: BestMove | null | undefined
     private calculateBestMoveHandle: number | undefined
+    private canvas = new Canvas()
 
     constructor(playMode: PlayMode = '1v1') {
         this.playMode = playMode
-        // Hide the evaluation panel if the player is playing against the bot
-        if (playMode === '1vC') {
-            this.hideEvaluation()
-        } else {
-            this.showEvaluation()
-        }
-
-        this.setActivePlayModeButton()
-
-        this.newMove()
     }
 
     private get showBestMove(): boolean {
@@ -39,15 +30,19 @@ export class Chess {
 
     private draw() {
         this.toggleActions()
-        drawBoard(
-            this.game,
+        this.updateMovesPanel()
+        this.toggleNextPlayer()
+        this.updateEvaluation()
+        this.drawCanvas()
+    }
+
+    private drawCanvas() {
+        this.canvas.draw(
+            this.game.currentBoard,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
             this.bestMoveToDisplay && this.showBestMove ? this.bestMoveToDisplay.move : null
         )
-        this.updateMovesPanel()
-        this.toggleNextPlayer()
-        this.updateEvaluation()
     }
 
     private newMove() {
@@ -57,13 +52,11 @@ export class Chess {
         this.draw()
     }
 
-    clickedOutside() {
+    private clickedOutside() {
         this.resetSelectedSquare()
     }
 
-    clickedSquare(x: number, y: number, clickType: 'left' | 'right') {
-        const squareNb = Math.floor(x / squareSize) + Math.floor((squareSize * 8 - (y + 1)) / squareSize) * 8
-
+    private clickedSquare(squareNb: number, clickType: 'left' | 'right') {
         if (clickType === 'left') {
             this.highlightedSquareNbs.fill(false)
 
@@ -95,7 +88,7 @@ export class Chess {
         this.draw()
     }
 
-    resetSelectedSquare() {
+    private resetSelectedSquare() {
         this.selectedSquareNb = null
         this.draw()
     }
@@ -199,7 +192,7 @@ export class Chess {
         if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
     }
 
-    runBot(after: () => void): void {
+    private runBot(after: () => void): void {
         this.bestMove = undefined
         this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
             const bot = new DepthNBot(this.currentBoard, 4)
@@ -268,5 +261,43 @@ export class Chess {
         toggleVisibility('player_vs_player_arrow', this.playMode === '1v1')
         toggleVisibility('player_vs_bot_arrow', this.playMode === '1vC')
         toggleVisibility('bot_vs_bot_arrow', this.playMode === 'CvC')
+    }
+
+    setup() {
+        this.setupHandlers()
+        this.canvas.setup()
+
+        // Hide the evaluation panel if the player is playing against the bot
+        if (this.playMode === '1vC') {
+            this.hideEvaluation()
+        } else {
+            this.showEvaluation()
+        }
+
+        this.setActivePlayModeButton()
+
+        this.newMove()
+    }
+
+    private setupHandlers() {
+        window.addEventListener('resize', () => this.drawCanvas())
+
+        document.getElementById('undo')!.addEventListener('click', () => this.undo())
+        document.getElementById('redo')!.addEventListener('click', () => this.redo())
+        document.getElementById('reset')!.addEventListener('click', () => this.reset())
+
+        document.addEventListener('mousedown', (event: MouseEvent) => {
+            const squareNb = this.canvas.squareNbFromMouseEvent(event)
+            if (squareNb !== null) {
+                this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
+            } else {
+                this.clickedOutside()
+            }
+        })
+
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key === 'ArrowLeft') this.undo()
+            if (event.key === 'ArrowRight') this.redo()
+        })
     }
 }
