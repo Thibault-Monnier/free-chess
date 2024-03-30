@@ -142,12 +142,14 @@ export class Canvas {
     }
 
     private recalculateSquareSize() {
-        this.squareSize = Math.floor(
+        this.canvasDOM.style.display = 'none'
+        this.squareSize = Math.round(
             Math.min(
                 document.getElementById('board_container')!.clientWidth,
                 document.getElementById('board_container')!.clientHeight
             ) / 8
         )
+        this.canvasDOM.style.display = 'block'
     }
 }
 
