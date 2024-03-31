@@ -24,8 +24,9 @@ const idToPlayMode: Record<(typeof playmodeIDs)[number], PlayMode> = {
 }
 
 playmodeIDs.forEach((id) => {
-    document.getElementById(id)!.onclick = () => {
+    document.getElementById(id)!.addEventListener('click', () => {
         chess.interruptBot()
         chess = new Chess(idToPlayMode[id])
-    }
+        chess.setup()
+    })
 })

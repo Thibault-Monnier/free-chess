@@ -243,7 +243,7 @@ export class Chess {
             html +=
                 this.game.moveNb - 1 === index
                     ? `<div class="move currentMove">${this.game.calculateMoveNotation(index)}</div>`
-                    : `<div class="move" onClick="window.chess.jumpToMove(${
+                    : `<div class="move" onMouseDown="window.chess.jumpToMove(${
                           index + 1
                       })">${this.game.calculateMoveNotation(index)}</div>`
         })
