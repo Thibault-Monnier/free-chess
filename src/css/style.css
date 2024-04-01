@@ -3,11 +3,12 @@
 body {
     background-color: #0e0e0e;
     color: whitesmoke;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
     font-family: Poppins, sans-serif;
+    padding: 1rem;
+
+    @media (min-width:50rem) {
+        padding: 2rem;
+    }
 }
 
 button {
@@ -15,21 +16,57 @@ button {
 }
 
 .chess {
-    height: 100%;
-    width: 100%;
-    max-width: 100rem;
-    padding: 3rem;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 1.5rem;
+
+    @media (min-width:50rem) {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+.board_panel {
+    flex: 0 1 min(calc(100vh - 7.5rem), 50vw);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @media (min-width:50rem) {
+        order: 2;
+    }
+}
+
+.board {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 1rem;
+
+    @media (min-width:50rem) {
+    }
+}
+
+.moves_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @media (min-width:50rem) {
+        width: 25rem;
+        order: 3;
+    }
 }
 
 .control_panel {
-    width: 18rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 1rem;
+
+    @media (min-width:50rem) {
+        width: 18rem;
+        order: 1;
+    }
 }
 
 .improvements {
@@ -81,13 +118,6 @@ button {
     content: '▶';
 }
 
-.board_panel {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 1.5rem;
-}
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -127,20 +157,6 @@ button {
 }
 .black_to_move .square {
     background-color: #000;
-}
-
-.board_container {
-    flex-grow: 1;
-}
-
-.board {
-    border-radius: 1rem;
-}
-
-.moves_panel {
-    display: flex;
-    flex-direction: column;
-    width: 25rem;
 }
 
 .moves {
@@ -193,7 +209,6 @@ button {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     font-size: 3rem;
-    margin-top: 1rem;
 }
 
 .actions button {

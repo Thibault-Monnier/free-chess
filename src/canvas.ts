@@ -1,4 +1,4 @@
-import { drawArrow, imagesLoading, piecesImages } from './draw'
+import { drawArrow, imagesLoading, piecesImages } from './drawUtils'
 import { Board } from './models/board'
 import { Move } from './models/move'
 import { squareNbToFileRank } from './models/utils'
@@ -13,31 +13,34 @@ export class Canvas {
     draw(board: Board, selectedSquareNb: number | null, highlightedSquareNbs: boolean[], bestMove: Move | null): void {
         this.recalculateSquareSize()
 
-        this.canvasDOM.width = this.squareSize * 8
-        this.canvasDOM.height = this.squareSize * 8
+        this.canvasDOM.width = document.getElementById('board')!.clientWidth
+        this.canvasDOM.height = document.getElementById('board')!.clientHeight
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const { x, y } = this.squareNbToXY(squareNb)
-            this.ctx.fillStyle = this.getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
-            this.ctx.fillRect(x, y, this.squareSize, this.squareSize)
+            
+            const squareColor = this.getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
+            this.fillRect(x, y, this.squareSize, this.squareSize, squareColor)
 
             if (selectedSquareNb === squareNb) {
-                this.ctx.fillStyle = 'rgba(255, 255, 0, 0.5)'
-                this.ctx.fillRect(x, y, this.squareSize, this.squareSize)
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 255, 0, 0.5)')
             }
             if (highlightedSquareNbs[squareNb]) {
-                this.ctx.fillStyle = 'rgba(255, 80, 70, 0.75)'
-                this.ctx.fillRect(x, y, this.squareSize, this.squareSize)
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255,80,70,0.75)')
             }
             if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
-                this.ctx.fillStyle = 'rgba(100, 255, 100, 0.75)'
-                this.ctx.fillRect(x, y, this.squareSize, this.squareSize)
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.75)')
             }
         }
         this.drawCoordinates()
         if (bestMove) this.createBestMoveArrow(bestMove)
         this.drawPieces(board)
         if (selectedSquareNb !== null) this.drawPossibleMoves(board, selectedSquareNb)
+    }
+
+    private fillRect(x: number, y: number, width: number, height: number, color: string) {
+        this.ctx.fillStyle = color
+        this.ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height))
     }
 
     setup() {
@@ -142,14 +145,8 @@ export class Canvas {
     }
 
     private recalculateSquareSize() {
-        this.canvasDOM.style.display = 'none'
-        this.squareSize = Math.round(
-            Math.min(
-                document.getElementById('board_container')!.clientWidth,
-                document.getElementById('board_container')!.clientHeight
-            ) / 8
-        )
-        this.canvasDOM.style.display = 'block'
+        this.squareSize =
+            Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) / 8
     }
 }
 
