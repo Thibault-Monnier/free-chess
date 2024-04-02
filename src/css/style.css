@@ -6,7 +6,7 @@ body {
     font-family: Poppins, sans-serif;
     padding: 1rem;
 
-    @media (min-width:50rem) {
+    @media (min-width: 50rem) {
         padding: 2rem;
     }
 }
@@ -20,7 +20,7 @@ button {
     flex-direction: column;
     gap: 1.5rem;
 
-    @media (min-width:50rem) {
+    @media (min-width: 50rem) {
         flex-direction: row;
         justify-content: center;
     }
@@ -32,7 +32,7 @@ button {
     flex-direction: column;
     gap: 1rem;
 
-    @media (min-width:50rem) {
+    @media (min-width: 50rem) {
         order: 2;
     }
 }
@@ -41,9 +41,6 @@ button {
     width: 100%;
     aspect-ratio: 1;
     border-radius: 1rem;
-
-    @media (min-width:50rem) {
-    }
 }
 
 .moves_panel {
@@ -51,7 +48,7 @@ button {
     flex-direction: column;
     gap: 1rem;
 
-    @media (min-width:50rem) {
+    @media (min-width: 50rem) {
         width: 25rem;
         order: 3;
     }
@@ -63,7 +60,7 @@ button {
     justify-content: space-between;
     gap: 1rem;
 
-    @media (min-width:50rem) {
+    @media (min-width: 50rem) {
         width: 18rem;
         order: 1;
     }
