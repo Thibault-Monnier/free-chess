@@ -199,6 +199,10 @@ export class Chess {
             this.bestMove = bot.run()
             after()
         })
+
+        const botWorker = new Worker('./dist/botWorker.js')
+        botWorker.onmessage = (event) => console.log(event.data)
+        botWorker.postMessage(this.currentBoard)
     }
 
     jumpToMove(moveNb: number): void {
