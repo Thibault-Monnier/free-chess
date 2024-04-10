@@ -149,12 +149,6 @@ export class Canvas {
             (Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) /
                 8) *
             window.devicePixelRatio
-
-        document.getElementById('temp_log_information')!.innerText = `SquareSize : ${this.squareSize}px \n DPR : ${
-            window.devicePixelRatio
-        } \n ClientWidth : ${document.getElementById('board')!.clientWidth}px \n ClientHeight : ${
-            document.getElementById('board')!.clientHeight
-        }px`
     }
 }
 
