@@ -13,8 +13,8 @@ export class Canvas {
     draw(board: Board, selectedSquareNb: number | null, highlightedSquareNbs: boolean[], bestMove: Move | null): void {
         this.recalculateSquareSize()
 
-        this.canvasDOM.width = document.getElementById('board')!.clientWidth
-        this.canvasDOM.height = document.getElementById('board')!.clientHeight
+        this.canvasDOM.width = document.getElementById('board')!.clientWidth * window.devicePixelRatio
+        this.canvasDOM.height = document.getElementById('board')!.clientHeight * window.devicePixelRatio
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const { x, y } = this.squareNbToXY(squareNb)
