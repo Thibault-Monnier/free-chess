@@ -1,4 +1,4 @@
-import { drawArrow, imagesLoading, piecesImages } from './drawUtils'
+import { drawArrow, freeChessPiecesImages, imagesLoading, lichessPiecesImages } from './drawUtils'
 import { Board } from './models/board'
 import { Move } from './models/move'
 import { squareNbToFileRank } from './models/utils'
@@ -134,7 +134,7 @@ export class Canvas {
             if (!piece) continue
             const { x, y } = this.squareNbToXY(squareNb)
 
-            const image = piecesImages[piece.color][piece.name]
+            const image = freeChessPiecesImages[piece.color][piece.name]
             const offset = (this.squareSize - this.pieceSize) / 2
             this.ctx.drawImage(image, x + offset, y + offset, this.pieceSize, this.pieceSize)
         }
