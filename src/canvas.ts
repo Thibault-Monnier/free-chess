@@ -13,12 +13,12 @@ export class Canvas {
     draw(board: Board, selectedSquareNb: number | null, highlightedSquareNbs: boolean[], bestMove: Move | null): void {
         this.recalculateSquareSize()
 
-        this.canvasDOM.width = document.getElementById('board')!.clientWidth
-        this.canvasDOM.height = document.getElementById('board')!.clientHeight
+        this.canvasDOM.width = document.getElementById('board')!.clientWidth * window.devicePixelRatio
+        this.canvasDOM.height = document.getElementById('board')!.clientHeight * window.devicePixelRatio
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const { x, y } = this.squareNbToXY(squareNb)
-            
+
             const squareColor = this.getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
             this.fillRect(x, y, this.squareSize, this.squareSize, squareColor)
 
@@ -146,7 +146,9 @@ export class Canvas {
 
     private recalculateSquareSize() {
         this.squareSize =
-            Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) / 8
+            (Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) /
+                8) *
+            window.devicePixelRatio
     }
 }
 
