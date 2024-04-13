@@ -250,7 +250,13 @@ export class Chess {
         moves.innerHTML = html
 
         const currentMove = document.getElementsByClassName('currentMove')[0]
-        if (currentMove) currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        if (currentMove) {
+            if (window.matchMedia('(min-width: 50rem)').matches) {
+                currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else {
+                moves.scrollTop = moves.scrollHeight
+            }
+        }
     }
 
     private setActivePlayModeButton() {

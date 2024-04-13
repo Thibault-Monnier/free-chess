@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 
 body {
-    background-color: #0e0e0e;
+    background-color: #111;
     color: whitesmoke;
     font-family: Poppins, sans-serif;
     padding: 1rem;
@@ -161,9 +161,11 @@ button {
 
 .moves {
     flex-grow: 1;
+    max-height: 40vh;
     background-color: #222;
     border-radius: 1rem;
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
+    gap: 0.25rem;
     overflow-y: auto;
 
     display: grid;
@@ -173,14 +175,20 @@ button {
     align-items: center;
     justify-items: center;
     align-content: start;
-    gap: 0.25rem;
+
+    @media (min-width: 50rem) {
+        max-height: none;
+        padding: 2.5rem 2rem;
+    }
 }
 
-.moves::-webkit-scrollbar, .improvements::-webkit-scrollbar {
+.moves::-webkit-scrollbar,
+.improvements::-webkit-scrollbar {
     width: 0.8rem;
 }
 
-.moves::-webkit-scrollbar-thumb, .improvements::-webkit-scrollbar-thumb{
+.moves::-webkit-scrollbar-thumb,
+.improvements::-webkit-scrollbar-thumb {
     background: whitesmoke;
     border-radius: 1rem;
 }
@@ -188,19 +196,20 @@ button {
 .move {
     cursor: pointer;
     border-radius: 0.5rem;
-    padding: 0.4rem 1.5rem;
+    padding: 0.4rem 15%;
     border: thin solid transparent;
     min-width: 2rem;
     text-align: center;
 }
 
 .move:hover {
-    background-color: #0e0e0e;
+    background-color: #111;
     border-color: #888;
 }
 
 .currentMove {
     font-weight: 700;
+    background-color: #111;
     border-color: whitesmoke;
 }
 

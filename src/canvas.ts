@@ -142,7 +142,7 @@ export class Canvas {
             if (!piece) continue
             const { x, y } = this.squareNbToXY(squareNb)
 
-            const image = cburnettPiecesImages[piece.color][piece.name]
+            const image = freeChessPiecesImages[piece.color][piece.name]
             const offset = (this.squareSize - this.pieceSize) / 2
             this.ctx.drawImage(image, x + offset, y + offset, this.pieceSize, this.pieceSize)
         }
@@ -160,5 +160,5 @@ export class Canvas {
     }
 }
 
-const lightSquares = '#efdfc5'
-const darkSquares = '#ae7c66'
+const lightSquares = '#e5d7bf'
+const darkSquares = '#b88465'
