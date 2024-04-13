@@ -23,22 +23,22 @@ export const freeChessPiecesImages: Record<PieceColor, Record<PieceName, HTMLIma
 }
 
 // Lichess pieces https://github.com/lichess-org/lila/tree/master/public/piece/cburnett, license: https://creativecommons.org/licenses/by/3.0/
-export const lichessPiecesImages: Record<PieceColor, Record<PieceName, HTMLImageElement>> = {
+export const cburnettPiecesImages: Record<PieceColor, Record<PieceName, HTMLImageElement>> = {
     white: {
-        pawn: stringToImage('src/assets/lichess/wP.svg'),
-        rook: stringToImage('src/assets/lichess/wR.svg'),
-        knight: stringToImage('src/assets/lichess/wN.svg'),
-        bishop: stringToImage('src/assets/lichess/wB.svg'),
-        queen: stringToImage('src/assets/lichess/wQ.svg'),
-        king: stringToImage('src/assets/lichess/wK.svg'),
+        pawn: stringToImage('src/assets/cburnett/wP.svg'),
+        rook: stringToImage('src/assets/cburnett/wR.svg'),
+        knight: stringToImage('src/assets/cburnett/wN.svg'),
+        bishop: stringToImage('src/assets/cburnett/wB.svg'),
+        queen: stringToImage('src/assets/cburnett/wQ.svg'),
+        king: stringToImage('src/assets/cburnett/wK.svg'),
     },
     black: {
-        pawn: stringToImage('src/assets/lichess/bP.svg'),
-        rook: stringToImage('src/assets/lichess/bR.svg'),
-        knight: stringToImage('src/assets/lichess/bN.svg'),
-        bishop: stringToImage('src/assets/lichess/bB.svg'),
-        queen: stringToImage('src/assets/lichess/bQ.svg'),
-        king: stringToImage('src/assets/lichess/bK.svg'),
+        pawn: stringToImage('src/assets/cburnett/bP.svg'),
+        rook: stringToImage('src/assets/cburnett/bR.svg'),
+        knight: stringToImage('src/assets/cburnett/bN.svg'),
+        bishop: stringToImage('src/assets/cburnett/bB.svg'),
+        queen: stringToImage('src/assets/cburnett/bQ.svg'),
+        king: stringToImage('src/assets/cburnett/bK.svg'),
     },
 }
 
