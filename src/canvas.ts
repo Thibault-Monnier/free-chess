@@ -82,11 +82,17 @@ export class Canvas {
     squareNbFromMouseEvent(event: MouseEvent): number | null {
         const cssSquareSize = this.squareSize / window.devicePixelRatio
 
-        const x = event.clientX - this.canvasDOM.getBoundingClientRect().x - this.canvasDOM.clientLeft
-        const y = event.clientY - this.canvasDOM.getBoundingClientRect().y - this.canvasDOM.clientTop
-        if (x < 0 || y < 0 || x >= this.canvasDOM.width || y >= this.canvasDOM.height) return null
+        const cssX = event.clientX - this.canvasDOM.getBoundingClientRect().x - this.canvasDOM.clientLeft
+        const cssY = event.clientY - this.canvasDOM.getBoundingClientRect().y - this.canvasDOM.clientTop
+        if (
+            cssX < 0 ||
+            cssY < 0 ||
+            cssX * devicePixelRatio >= this.canvasDOM.width /* canvasDOM.width is in js width, but cssX isn't */ ||
+            cssY * devicePixelRatio >= this.canvasDOM.height /* canvasDOM.height is in js width, but cssY isn't */
+        )
+            return null
 
-        return Math.floor(x / cssSquareSize) + Math.floor((cssSquareSize * 8 - (y + 1)) / cssSquareSize) * 8
+        return Math.floor(cssX / cssSquareSize) + Math.floor((cssSquareSize * 8 - (cssY + 1)) / cssSquareSize) * 8
     }
 
     private drawCoordinates() {
@@ -151,8 +157,6 @@ export class Canvas {
             (Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) /
                 8) *
             window.devicePixelRatio
-        
-        console.log(this.squareSize)
     }
 }
 
