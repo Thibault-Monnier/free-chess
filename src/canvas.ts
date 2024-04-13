@@ -80,15 +80,17 @@ export class Canvas {
     }
 
     squareNbFromMouseEvent(event: MouseEvent): number | null {
+        const cssSquareSize = this.squareSize / window.devicePixelRatio
+
         const x = event.clientX - this.canvasDOM.getBoundingClientRect().x - this.canvasDOM.clientLeft
         const y = event.clientY - this.canvasDOM.getBoundingClientRect().y - this.canvasDOM.clientTop
         if (x < 0 || y < 0 || x >= this.canvasDOM.width || y >= this.canvasDOM.height) return null
 
-        return Math.floor(x / this.squareSize) + Math.floor((this.squareSize * 8 - (y + 1)) / this.squareSize) * 8
+        return Math.floor(x / cssSquareSize) + Math.floor((cssSquareSize * 8 - (y + 1)) / cssSquareSize) * 8
     }
 
     private drawCoordinates() {
-        const fontSize = 14
+        const fontSize = this.squareSize / 5
         this.ctx.font = `${fontSize}px Arial`
 
         for (let file = 0; file < 8; file++) {
@@ -109,7 +111,7 @@ export class Canvas {
     private createBestMoveArrow(move: Move): void {
         const startPosition = squareNbToFileRank(move.startSquareNb)
         const endPosition = squareNbToFileRank(move.endSquareNb)
-        const width = 8
+        const width = this.squareSize / 12
         const color = 'rgba(50, 150, 50, 1)'
 
         const startCoordinates = {
@@ -149,6 +151,8 @@ export class Canvas {
             (Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) /
                 8) *
             window.devicePixelRatio
+        
+        console.log(this.squareSize)
     }
 }
 
