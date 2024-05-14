@@ -41,6 +41,7 @@ export class Chess {
             this.game.currentBoard,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
+            this.game.lastMove,
             this.bestMoveToDisplay && this.showBestMove ? this.bestMoveToDisplay.move : null
         )
     }

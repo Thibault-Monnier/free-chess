@@ -10,7 +10,13 @@ export class Canvas {
 
     private squareSize = 0
 
-    draw(board: Board, selectedSquareNb: number | null, highlightedSquareNbs: boolean[], bestMove: Move | null): void {
+    draw(
+        board: Board,
+        selectedSquareNb: number | null,
+        highlightedSquareNbs: boolean[],
+        lastMove: Move | undefined,
+        bestMove: Move | null
+    ): void {
         this.recalculateSquareSize()
 
         this.canvasDOM.width = document.getElementById('board')!.clientWidth * window.devicePixelRatio
@@ -25,11 +31,14 @@ export class Canvas {
             if (selectedSquareNb === squareNb) {
                 this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 255, 0, 0.5)')
             }
-            if (highlightedSquareNbs[squareNb]) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255,80,70,0.75)')
+            if (lastMove?.startSquareNb === squareNb || lastMove?.endSquareNb === squareNb) {
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(150, 150, 50, 0.75)')
             }
             if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.75)')
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.5)')
+            }
+            if (highlightedSquareNbs[squareNb]) {
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 80, 70,0.75)')
             }
         }
         this.drawCoordinates()
