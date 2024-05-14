@@ -1,8 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 
 body {
-    background-color: #111;
-    color: whitesmoke;
+    --website-background-color: #111;
+    --text-color: whitesmoke;
+    --box-color: #222;
+
+    background-color: var(--website-background-color);
+    color: var(--text-color);
     font-family: Poppins, sans-serif;
     padding: 1rem;
 
@@ -99,13 +103,13 @@ button {
     align-items: center;
 
     /*Draw the button background*/
-    background-color: #222;
-    border: 1px solid #222;
+    background-color: var(--box-color);
+    border: 1px solid var(--box-color);
     padding: 0.8rem 0.3rem;
     border-radius: 1.4rem;
 
     /*Draw the text*/
-    color: whitesmoke;
+    color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
 }
@@ -130,7 +134,7 @@ button {
 
 .next_player,
 .evaluation {
-    background-color: #222;
+    background-color: var(--box-color);
     border-radius: 1rem;
     padding: 0.5rem 1rem;
 }
@@ -153,7 +157,7 @@ button {
     border-radius: 0.75rem;
 }
 .white_to_move .square {
-    background-color: whitesmoke;
+    background-color: var(--text-color);
 }
 .black_to_move .square {
     background-color: #000;
@@ -162,7 +166,7 @@ button {
 .moves {
     flex-grow: 1;
     max-height: 40vh;
-    background-color: #222;
+    background-color: var(--box-color);
     border-radius: 1rem;
     padding: 1.5rem 1rem;
     gap: 0.25rem;
@@ -189,7 +193,7 @@ button {
 
 .moves::-webkit-scrollbar-thumb,
 .improvements::-webkit-scrollbar-thumb {
-    background: whitesmoke;
+    background: var(--text-color);
     border-radius: 1rem;
 }
 
@@ -203,14 +207,14 @@ button {
 }
 
 .move:hover {
-    background-color: #111;
+    background-color: var(--website-background-color);
     border-color: #888;
 }
 
 .currentMove {
     font-weight: 700;
-    background-color: #111;
-    border-color: whitesmoke;
+    background-color: var(--website-background-color);
+    border-color: var(--text-color);
 }
 
 .actions {
@@ -224,13 +228,13 @@ button {
     user-select: none;
 
     /*Draw the button background*/
-    background-color: #222;
-    border: 1px solid #222;
+    background-color: var(--box-color);
+    border: 1px solid var(--box-color);
     padding: 0.2rem 0;
     border-radius: 1.5rem;
 
     /*Draw the text*/
-    color: whitesmoke;
+    color: var(--text-color);
     font-size: 2.5rem;
 }
 
