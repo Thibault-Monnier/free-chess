@@ -140,10 +140,15 @@ button {
 }
 
 .white_to_move,
-.black_to_move {
+.black_to_move,
+.end_of_game {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+}
+
+.end_of_game {
+    gap: 0;
 }
 
 .evaluation {
@@ -157,10 +162,10 @@ button {
     border-radius: 0.75rem;
 }
 .white_to_move .square {
-    background-color: var(--text-color);
+    background-color: whitesmoke;
 }
 .black_to_move .square {
-    background-color: #000;
+    background-color: black;
 }
 
 .moves {

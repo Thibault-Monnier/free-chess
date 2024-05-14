@@ -12,7 +12,6 @@ export class Chess {
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
-    private bestMoveToDisplay: BestMove | null | undefined
     private calculateBestMoveHandle: number | undefined
     private canvas = new Canvas()
 
@@ -42,7 +41,7 @@ export class Chess {
             this.selectedSquareNb,
             this.highlightedSquareNbs,
             this.game.lastMove,
-            this.bestMoveToDisplay && this.showBestMove ? this.bestMoveToDisplay.move : null
+            this.bestMove && this.showBestMove ? this.bestMove.move : null
         )
     }
 
@@ -110,6 +109,7 @@ export class Chess {
         const whiteToMoveElement = document.getElementById('white_to_move')!
         const blackToMoveElement = document.getElementById('black_to_move')!
         const endOfGameElement = document.getElementById('end_of_game')!
+        const endOfGameText = document.getElementById('end_of_game_text')!
 
         whiteToMoveElement.setAttribute('style', 'display: none;')
         blackToMoveElement.setAttribute('style', 'display: none;')
@@ -119,13 +119,13 @@ export class Chess {
         switch (endOfGame) {
             case 'checkmate':
                 const colorWinner = invertColor(this.currentBoard.colorToMove)
-                endOfGameElement.innerHTML = `${
+                endOfGameText.innerText = `${
                     colorWinner.charAt(0).toUpperCase() + colorWinner.slice(1)
                 } wins by checkmate!`
                 endOfGameElement.setAttribute('style', '')
                 break
             case 'stalemate':
-                endOfGameElement.innerHTML = 'Stalemate!'
+                endOfGameText.innerText = 'Stalemate!'
                 endOfGameElement.setAttribute('style', '')
                 break
             case null:
@@ -137,25 +137,7 @@ export class Chess {
 
     private calculateBestMove(): void {
         this.interruptBot()
-        this.runBot(() => this.updateBestMoveToDisplay())
-    }
-
-    private updateBestMoveToDisplay() {
-        // If the game isn't in 1v1 mode, the best move shouldn't be displayed
-        switch (this.playMode) {
-            case '1v1':
-                this.bestMoveToDisplay = this.bestMove
-                break
-            case '1vC':
-                if (this.currentBoard.colorToMove === 'black') this.playBestMove()
-                break
-            case 'CvC':
-                this.bestMoveToDisplay = this.bestMove
-                this.playBestMove()
-                break
-        }
-
-        this.draw()
+        this.runBot(() => this.playBestMove())
     }
 
     private updateEvaluation() {
@@ -183,10 +165,14 @@ export class Chess {
     }
 
     private playBestMove() {
-        if (this.bestMove) {
-            this.game.addMove(this.bestMove.move)
-            this.newMove()
+        if (this.playMode === 'CvC' || (this.playMode === '1vC' && this.currentBoard.colorToMove === 'black')) {
+            if (this.bestMove) {
+                this.game.addMove(this.bestMove.move)
+                this.newMove()
+            }
         }
+
+        this.draw()
     }
 
     interruptBot(): void {

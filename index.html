@@ -25,7 +25,10 @@
                             <div class="square"></div>
                             Black to move
                         </div>
-                        <div id="end_of_game" style="display: none"></div>
+                        <div id="end_of_game" class="end_of_game" style="display: none;">
+                            <div class="square" style="width: 0;"></div>
+                            <span id="end_of_game_text"></span>
+                        </div>
                     </div>
                     <div id="evaluation" class="evaluation"></div>
                 </div>
@@ -44,10 +47,11 @@
 
             <div class="control_panel">
                 <div class="improvements">
-                    <h1>Work in progress:</h1>
-                    <p>UI</p>
-
                     <h1>TODO:</h1>
+                    <p>
+                        - Switch Piece Set<br />
+                        - Switch Bot Analysis ON/OFF<br />
+                    </p>
                     <p>
                         - Pawn Promotion: Variants<br />
                         - Game End: Treefold Repetition<br />
