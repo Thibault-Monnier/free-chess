@@ -7,11 +7,12 @@ import { BestMove, PlayMode } from './models/types'
 import { invertColor } from './models/utils'
 
 export class Chess {
-    private game: Game = new Game()
+    private game = new Game()
     private playMode: PlayMode
     private selectedSquareNb: number | null = null
-    private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
+    private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
+    private showBestMove = false
     private calculateBestMoveHandle: number | undefined
     private canvas = new Canvas()
 
@@ -19,12 +20,19 @@ export class Chess {
         this.playMode = playMode
     }
 
-    private get showBestMove(): boolean {
-        return this.playMode === '1v1'
-    }
-
     private get currentBoard(): Board {
         return this.game.currentBoard
+    }
+
+    setup() {
+        this.canvas.setup()
+
+        if (this.playMode === '1v1') this.showBestMove = true
+        if (this.playMode === '1vC') this.hideEvaluation()
+        else this.showEvaluation()
+
+        this.setActivePlayModeButton()
+        this.newMove()
     }
 
     private draw() {
@@ -37,7 +45,7 @@ export class Chess {
 
     private drawCanvas() {
         this.canvas.draw(
-            this.game.currentBoard,
+            this.currentBoard,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
             this.game.lastMove,
@@ -52,32 +60,52 @@ export class Chess {
         this.draw()
     }
 
+    clicked(event: any) {
+        if (event.target === document.getElementById('undo')) this.undo()
+        if (event.target === document.getElementById('redo')) this.redo()
+        if (event.target === document.getElementById('reset')) this.reset()
+
+        const squareNb = this.canvas.squareNbFromMouseEvent(event)
+        if (event.type === 'mousedown') {
+            if (squareNb !== null) {
+                this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
+            } else {
+                this.clickedOutside()
+            }
+        }
+    }
+
+    keydown(event: KeyboardEvent) {
+        if (event.key === 'ArrowLeft') this.undo()
+        if (event.key === 'ArrowRight') this.redo()
+    }
+
+    windowResize() {
+        this.drawCanvas()
+    }
+
     private clickedOutside() {
         this.resetSelectedSquare()
     }
 
     private clickedSquare(squareNb: number, clickType: 'left' | 'right') {
         if (clickType === 'left') {
-            this.highlightedSquareNbs.fill(false)
-
             const piece = this.currentBoard.squares[squareNb]
-            //Deselects the square if it was already selected
+
+            this.highlightedSquareNbs.fill(false)
             if (squareNb === this.selectedSquareNb) {
+                // Deselects the square if it was already selected
                 this.selectedSquareNb = null
-            }
-            //Makes a move if possible
-            else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
+            } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
+                // Makes a move if possible
                 const move = this.getMove(squareNb)!
                 this.game.addMove(move)
-
                 this.newMove()
-            }
-            //Deselects the square if it is empty
-            else if (piece === null) {
+            } else if (piece === null) {
+                // Deselects the square if it is empty
                 this.selectedSquareNb = null
-            }
-            //Selects the square if it contains a piece of the current player
-            else if (piece.color === this.currentBoard.colorToMove) {
+            } else if (piece.color === this.currentBoard.colorToMove) {
+                // Selects the square if it contains a piece of the current player
                 this.selectedSquareNb = squareNb
             }
         } else {
@@ -136,7 +164,7 @@ export class Chess {
     }
 
     private calculateBestMove(): void {
-        this.interruptBot()
+        this.stopBot()
         this.runBot(() => this.playBestMove())
     }
 
@@ -175,8 +203,8 @@ export class Chess {
         this.draw()
     }
 
-    interruptBot(): void {
-        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
+    stopBot(): void {
+        if (this.calculateBestMoveHandle !== undefined) cancelIdleCallback(this.calculateBestMoveHandle)
     }
 
     private runBot(after: () => void): void {
@@ -254,43 +282,5 @@ export class Chess {
         toggleVisibility('player_vs_player_arrow', this.playMode === '1v1')
         toggleVisibility('player_vs_bot_arrow', this.playMode === '1vC')
         toggleVisibility('bot_vs_bot_arrow', this.playMode === 'CvC')
-    }
-
-    setup() {
-        this.setupHandlers()
-        this.canvas.setup()
-
-        // Hide the evaluation panel if the player is playing against the bot
-        if (this.playMode === '1vC') {
-            this.hideEvaluation()
-        } else {
-            this.showEvaluation()
-        }
-
-        this.setActivePlayModeButton()
-
-        this.newMove()
-    }
-
-    private setupHandlers() {
-        window.addEventListener('resize', () => this.drawCanvas())
-
-        document.getElementById('undo')!.addEventListener('click', () => this.undo())
-        document.getElementById('redo')!.addEventListener('click', () => this.redo())
-        document.getElementById('reset')!.addEventListener('click', () => this.reset())
-
-        document.addEventListener('mousedown', (event: MouseEvent) => {
-            const squareNb = this.canvas.squareNbFromMouseEvent(event)
-            if (squareNb !== null) {
-                this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
-            } else {
-                this.clickedOutside()
-            }
-        })
-
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.key === 'ArrowLeft') this.undo()
-            if (event.key === 'ArrowRight') this.redo()
-        })
     }
 }
