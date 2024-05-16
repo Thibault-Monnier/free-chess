@@ -61,9 +61,11 @@ export class Chess {
     }
 
     clicked(event: any) {
-        if (event.target === document.getElementById('undo')) this.undo()
-        if (event.target === document.getElementById('redo')) this.redo()
-        if (event.target === document.getElementById('reset')) this.reset()
+        if (event.type === 'click') {
+            if (event.target === document.getElementById('undo')) this.undo()
+            if (event.target === document.getElementById('redo')) this.redo()
+            if (event.target === document.getElementById('reset')) this.reset()
+        }
 
         const squareNb = this.canvas.squareNbFromMouseEvent(event)
         if (event.type === 'mousedown') {
@@ -222,7 +224,7 @@ export class Chess {
     }
 
     undo(): void {
-        this.game.undo()
+        this.game.undo(this.playMode === '1vC' ? 2 : 1)
         this.newMove()
     }
 
