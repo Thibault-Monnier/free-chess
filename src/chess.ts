@@ -62,9 +62,11 @@ export class Chess {
 
     clicked(event: any) {
         if (event.type === 'click') {
-            if (event.target === document.getElementById('undo')) this.undo()
-            if (event.target === document.getElementById('redo')) this.redo()
-            if (event.target === document.getElementById('reset')) this.reset()
+            // Make sure the event is triggered on child elements of the buttons
+            const targetButton = event.target.closest('button')
+            if (targetButton === document.getElementById('undo')) this.undo()
+            if (targetButton === document.getElementById('redo')) this.redo()
+            if (targetButton === document.getElementById('reset')) this.reset()
         }
 
         const squareNb = this.canvas.squareNbFromMouseEvent(event)
