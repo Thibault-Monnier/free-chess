@@ -1,4 +1,4 @@
-## What is Free Chess?
+# What is Free Chess?
 
 Free Chess is an open source chess game and engine developed in Typescript by Thibault Monnier as a study project.
 
@@ -12,9 +12,9 @@ To run it locally, clone this repository, and open `index.html` in your browser.
 
 If you wish to make local changes:
 
-- Install Yarn (or NPM).
-- In a terminal, change directory to the project root, and run `yarn install`. This will install Typescript.
-- From the terminal, run `yarn dev`. This will start Typescript in watch mode.
+-   Install Yarn (or NPM).
+-   In a terminal, change directory to the project root, and run `yarn install`. This will install Typescript.
+-   From the terminal, run `yarn dev`. This will start Typescript in watch mode.
 
 Every change you make to any TS file will be compiled into the `dist/main.js` file, which is used by the browser. Don't manually change this JS file.
 
@@ -31,3 +31,22 @@ The engine has an evaluation function to evaluate each position, used to decide 
 ## What next?
 
 Many improvements to the engine are currently planned, along with improvements to the website itself, a few additional features and bug fixes.
+
+<br>
+
+### GPL v3 LICENSE:
+
+    Copyright (C), 2024, Thibault Monnier
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
