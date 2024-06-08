@@ -20,7 +20,7 @@ export class Board {
     }
     public enPassantTargetSquareNb: number | null = null
 
-    //Test if constructor can be called in each of the following ways
+    // Test if constructor can be called in each of the following ways
     constructor()
     constructor(board: Board, options?: { switchColor: boolean; resetEnPassant: boolean })
     constructor(FEN: string)
@@ -91,7 +91,7 @@ export class Board {
         return moves
     }
 
-    get endOfGame(): EndOfGame | null {
+    public get endOfGame(): EndOfGame | null {
         if (this.possibleMoves().length === 0) {
             return this.isInCheck() ? 'checkmate' : 'stalemate'
         } else return null

@@ -100,19 +100,23 @@ export class Chess {
             if (squareNb === this.selectedSquareNb) {
                 // Deselects the square if it was already selected
                 this.selectedSquareNb = null
-            } else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
-                // Makes a move if possible
-                const move = this.getMove(squareNb)!
-                this.game.addMove(move)
-                this.newMove()
-            } else if (piece === null) {
-                // Deselects the square if it is empty
-                this.selectedSquareNb = null
-            } else if (piece.color === this.currentBoard.colorToMove) {
-                // Selects the square if it contains a piece of the current player
-                this.selectedSquareNb = squareNb
+            } else {
+                const move = this.getMove(squareNb)
+                if (this.selectedSquareNb !== null && move) {
+                    // Makes a move if possible
+                    this.game.addMove(move)
+                    this.newMove()
+                } else if (piece === null) {
+                    // Deselects the square if it is empty
+                    this.selectedSquareNb = null
+                } else if (piece.color === this.currentBoard.colorToMove) {
+                    // Selects the square if it contains a piece of the current player
+                    this.selectedSquareNb = squareNb
+                }
             }
-        } else {
+        }
+
+        if (clickType === 'right') {
             this.selectedSquareNb = null
             this.highlightedSquareNbs[squareNb] = !this.highlightedSquareNbs[squareNb]
         }
@@ -125,9 +129,10 @@ export class Chess {
         this.draw()
     }
 
-    //Calls the possibleMoves() method of the piece on the selected square
+    // Calls the possibleMoves() method of the piece on the selected square
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
+
         const piece = this.currentBoard.squares[this.selectedSquareNb]
         const possibleMoves = piece!.possibleMoves(
             this.selectedSquareNb,
