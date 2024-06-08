@@ -116,19 +116,4 @@ export class Board {
 
         return table
     }
-
-    debug() {
-        let debugBoard = []
-
-        for (let rank = 0; rank < 8; rank++) {
-            //@ts-ignore
-            debugBoard[rank] = []
-            for (let file = 0; file < 8; file++) {
-                //@ts-ignore
-                debugBoard[rank].push(this.squares[rank * 8 + file])
-            }
-        }
-
-        console.log(debugBoard)
-    }
 }
