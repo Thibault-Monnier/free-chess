@@ -170,11 +170,28 @@ button {
 }
 
 .moves_container {
+    position: relative;
     overflow-y: hidden;
     flex-grow: 1;
     background-color: var(--box-color);
     border-radius: 1rem;
     padding: 0.5rem;
+}
+
+.copy_moves {
+    display: flex;
+    position: absolute;
+    padding: 0.5rem;
+    bottom: 0;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.copy_moves_image {
+    height: 1.2rem;
+    width: 1.2rem;
 }
 
 .moves {

@@ -37,7 +37,6 @@ export class Chess {
 
     private draw() {
         this.toggleActions()
-        this.updateMovesPanel()
         this.toggleNextPlayer()
         this.updateEvaluation()
         this.drawCanvas()
@@ -54,6 +53,7 @@ export class Chess {
     }
 
     private newMove() {
+        this.updateMovesPanel()
         this.resetSelectedSquare()
         this.highlightedSquareNbs.fill(false)
         this.calculateBestMove()
@@ -67,6 +67,12 @@ export class Chess {
             if (targetButton === document.getElementById('undo')) this.undo()
             if (targetButton === document.getElementById('redo')) this.redo()
             if (targetButton === document.getElementById('reset')) this.reset()
+
+            if (targetButton === document.getElementById('copy_moves')) {
+                navigator.clipboard.writeText(
+                    this.game.moves.map((_, move) => this.game.calculateMoveNotation(move)).join(' ')
+                )
+            }
         }
 
         const squareNb = this.canvas.squareNbFromMouseEvent(event)
