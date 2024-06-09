@@ -174,7 +174,9 @@ export class Chess {
 
     private calculateBestMove(): void {
         this.stopBot()
-        this.runBot(() => this.playBestMove())
+        if (!(this.playMode === '1vC' && this.currentBoard.colorToMove === 'white')) {
+            this.runBot(() => this.playBestMove())
+        }
     }
 
     private updateEvaluation() {
