@@ -9,6 +9,9 @@ if (document.readyState === 'complete') {
     document.onreadystatechange = () => document.readyState === 'complete' && chess.setup()
 }
 
+//@ts-ignore
+window.chess = chess
+
 const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'bot_vs_bot']
 const idToPlayMode: Record<(typeof playmodeIDs)[number], PlayMode> = {
     player_vs_player: '1v1',
@@ -21,6 +24,9 @@ playmodeIDs.forEach((id) => {
         chess.stopBot()
         chess = new Chess(idToPlayMode[id])
         chess.setup()
+
+        //@ts-ignore
+        window.chess = chess
     })
 })
 
