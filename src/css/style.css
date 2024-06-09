@@ -55,6 +55,7 @@ button {
     gap: 1rem;
 
     @media (min-width: 50rem) {
+        height: 100%;
         width: 25rem;
         order: 3;
     }
@@ -168,12 +169,17 @@ button {
     background-color: black;
 }
 
-.moves {
+.moves_container {
+    overflow-y: hidden;
     flex-grow: 1;
-    max-height: 40vh;
     background-color: var(--box-color);
     border-radius: 1rem;
-    padding: 1.5rem 1rem;
+    padding: 0.5rem;
+}
+
+.moves {
+    max-height: calc(40vh - 1rem);
+    padding: 1rem;
     gap: 0.25rem;
     overflow-y: auto;
 
@@ -187,7 +193,8 @@ button {
 
     @media (min-width: 50rem) {
         max-height: none;
-        padding: 2.5rem 2rem;
+        height: 100%;
+        padding: 2rem;
     }
 }
 
