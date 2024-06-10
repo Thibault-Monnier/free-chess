@@ -7,12 +7,12 @@ import { BestMove, PlayMode } from './models/types'
 import { invertColor } from './models/utils'
 
 export class Chess {
-    private game: Game = new Game()
+    private game = new Game()
     private playMode: PlayMode
     private selectedSquareNb: number | null = null
-    private highlightedSquareNbs: boolean[] = new Array(64).fill(false)
+    private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
-    private bestMoveToDisplay: BestMove | null | undefined
+    private showBestMove = false
     private calculateBestMoveHandle: number | undefined
     private canvas = new Canvas()
 
@@ -20,17 +20,23 @@ export class Chess {
         this.playMode = playMode
     }
 
-    private get showBestMove(): boolean {
-        return this.playMode === '1v1'
-    }
-
     private get currentBoard(): Board {
         return this.game.currentBoard
     }
 
+    setup() {
+        this.canvas.setup()
+
+        if (this.playMode === '1v1') this.showBestMove = true
+        if (this.playMode === '1vC') this.hideEvaluation()
+        else this.showEvaluation()
+
+        this.setActivePlayModeButton()
+        this.newMove()
+    }
+
     private draw() {
         this.toggleActions()
-        this.updateMovesPanel()
         this.toggleNextPlayer()
         this.updateEvaluation()
         this.drawCanvas()
@@ -38,18 +44,54 @@ export class Chess {
 
     private drawCanvas() {
         this.canvas.draw(
-            this.game.currentBoard,
+            this.currentBoard,
             this.selectedSquareNb,
             this.highlightedSquareNbs,
-            this.bestMoveToDisplay && this.showBestMove ? this.bestMoveToDisplay.move : null
+            this.game.lastMove,
+            this.bestMove && this.showBestMove ? this.bestMove.move : null
         )
     }
 
     private newMove() {
+        this.updateMovesPanel()
         this.resetSelectedSquare()
         this.highlightedSquareNbs.fill(false)
         this.calculateBestMove()
         this.draw()
+    }
+
+    clicked(event: any) {
+        if (event.type === 'click') {
+            // Make sure the event is triggered on child elements of the buttons
+            const targetButton = event.target.closest('button')
+            if (targetButton === document.getElementById('undo')) this.undo()
+            if (targetButton === document.getElementById('redo')) this.redo()
+            if (targetButton === document.getElementById('reset')) this.reset()
+
+            if (targetButton === document.getElementById('copy_moves')) {
+                navigator.clipboard.writeText(
+                    this.game.moves.map((_, move) => this.game.calculateMoveNotation(move)).join(' ')
+                )
+            }
+        }
+
+        const squareNb = this.canvas.squareNbFromMouseEvent(event)
+        if (event.type === 'mousedown') {
+            if (squareNb !== null) {
+                this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
+            } else {
+                this.clickedOutside()
+            }
+        }
+    }
+
+    keydown(event: KeyboardEvent) {
+        if (event.key === 'ArrowLeft') this.undo()
+        if (event.key === 'ArrowRight') this.redo()
+    }
+
+    windowResize() {
+        this.drawCanvas()
     }
 
     private clickedOutside() {
@@ -58,29 +100,29 @@ export class Chess {
 
     private clickedSquare(squareNb: number, clickType: 'left' | 'right') {
         if (clickType === 'left') {
-            this.highlightedSquareNbs.fill(false)
-
             const piece = this.currentBoard.squares[squareNb]
-            //Deselects the square if it was already selected
-            if (squareNb === this.selectedSquareNb) {
-                this.selectedSquareNb = null
-            }
-            //Makes a move if possible
-            else if (this.selectedSquareNb !== null && this.getMove(squareNb)) {
-                const move = this.getMove(squareNb)!
-                this.game.addMove(move)
 
-                this.newMove()
-            }
-            //Deselects the square if it is empty
-            else if (piece === null) {
+            this.highlightedSquareNbs.fill(false)
+            if (squareNb === this.selectedSquareNb) {
+                // Deselects the square if it was already selected
                 this.selectedSquareNb = null
+            } else {
+                const move = this.getMove(squareNb)
+                if (this.selectedSquareNb !== null && move) {
+                    // Makes a move if possible
+                    this.game.addMove(move)
+                    this.newMove()
+                } else if (piece === null) {
+                    // Deselects the square if it is empty
+                    this.selectedSquareNb = null
+                } else if (piece.color === this.currentBoard.colorToMove) {
+                    // Selects the square if it contains a piece of the current player
+                    this.selectedSquareNb = squareNb
+                }
             }
-            //Selects the square if it contains a piece of the current player
-            else if (piece.color === this.currentBoard.colorToMove) {
-                this.selectedSquareNb = squareNb
-            }
-        } else {
+        }
+
+        if (clickType === 'right') {
             this.selectedSquareNb = null
             this.highlightedSquareNbs[squareNb] = !this.highlightedSquareNbs[squareNb]
         }
@@ -93,9 +135,10 @@ export class Chess {
         this.draw()
     }
 
-    //Calls the possibleMoves() method of the piece on the selected square
+    // Calls the possibleMoves() method of the piece on the selected square
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
+
         const piece = this.currentBoard.squares[this.selectedSquareNb]
         const possibleMoves = piece!.possibleMoves(
             this.selectedSquareNb,
@@ -109,6 +152,7 @@ export class Chess {
         const whiteToMoveElement = document.getElementById('white_to_move')!
         const blackToMoveElement = document.getElementById('black_to_move')!
         const endOfGameElement = document.getElementById('end_of_game')!
+        const endOfGameText = document.getElementById('end_of_game_text')!
 
         whiteToMoveElement.setAttribute('style', 'display: none;')
         blackToMoveElement.setAttribute('style', 'display: none;')
@@ -118,13 +162,13 @@ export class Chess {
         switch (endOfGame) {
             case 'checkmate':
                 const colorWinner = invertColor(this.currentBoard.colorToMove)
-                endOfGameElement.innerHTML = `${
+                endOfGameText.innerText = `${
                     colorWinner.charAt(0).toUpperCase() + colorWinner.slice(1)
                 } wins by checkmate!`
                 endOfGameElement.setAttribute('style', '')
                 break
             case 'stalemate':
-                endOfGameElement.innerHTML = 'Stalemate!'
+                endOfGameText.innerText = 'Stalemate!'
                 endOfGameElement.setAttribute('style', '')
                 break
             case null:
@@ -135,26 +179,10 @@ export class Chess {
     }
 
     private calculateBestMove(): void {
-        this.interruptBot()
-        this.runBot(() => this.updateBestMoveToDisplay())
-    }
-
-    private updateBestMoveToDisplay() {
-        // If the game isn't in 1v1 mode, the best move shouldn't be displayed
-        switch (this.playMode) {
-            case '1v1':
-                this.bestMoveToDisplay = this.bestMove
-                break
-            case '1vC':
-                if (this.currentBoard.colorToMove === 'black') this.playBestMove()
-                break
-            case 'CvC':
-                this.bestMoveToDisplay = this.bestMove
-                this.playBestMove()
-                break
+        this.stopBot()
+        if (!(this.playMode === '1vC' && this.currentBoard.colorToMove === 'white')) {
+            this.runBot(() => this.playBestMove())
         }
-
-        this.draw()
     }
 
     private updateEvaluation() {
@@ -182,14 +210,18 @@ export class Chess {
     }
 
     private playBestMove() {
-        if (this.bestMove) {
-            this.game.addMove(this.bestMove.move)
-            this.newMove()
+        if (this.playMode === 'CvC' || (this.playMode === '1vC' && this.currentBoard.colorToMove === 'black')) {
+            if (this.bestMove) {
+                this.game.addMove(this.bestMove.move)
+                this.newMove()
+            }
         }
+
+        this.draw()
     }
 
-    interruptBot(): void {
-        if (this.calculateBestMoveHandle) cancelIdleCallback(this.calculateBestMoveHandle)
+    stopBot(): void {
+        if (this.calculateBestMoveHandle !== undefined) cancelIdleCallback(this.calculateBestMoveHandle)
     }
 
     private runBot(after: () => void): void {
@@ -211,7 +243,7 @@ export class Chess {
     }
 
     undo(): void {
-        this.game.undo()
+        this.game.undo(this.playMode === '1vC' ? 2 : 1)
         this.newMove()
     }
 
@@ -254,7 +286,13 @@ export class Chess {
         moves.innerHTML = html
 
         const currentMove = document.getElementsByClassName('currentMove')[0]
-        if (currentMove) currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        if (currentMove) {
+            if (window.matchMedia('(min-width: 50rem)').matches) {
+                currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else {
+                moves.scrollTop = moves.scrollHeight
+            }
+        }
     }
 
     private setActivePlayModeButton() {
@@ -265,43 +303,5 @@ export class Chess {
         toggleVisibility('player_vs_player_arrow', this.playMode === '1v1')
         toggleVisibility('player_vs_bot_arrow', this.playMode === '1vC')
         toggleVisibility('bot_vs_bot_arrow', this.playMode === 'CvC')
-    }
-
-    setup() {
-        this.setupHandlers()
-        this.canvas.setup()
-
-        // Hide the evaluation panel if the player is playing against the bot
-        if (this.playMode === '1vC') {
-            this.hideEvaluation()
-        } else {
-            this.showEvaluation()
-        }
-
-        this.setActivePlayModeButton()
-
-        this.newMove()
-    }
-
-    private setupHandlers() {
-        window.addEventListener('resize', () => this.drawCanvas())
-
-        document.getElementById('undo')!.addEventListener('click', () => this.undo())
-        document.getElementById('redo')!.addEventListener('click', () => this.redo())
-        document.getElementById('reset')!.addEventListener('click', () => this.reset())
-
-        document.addEventListener('mousedown', (event: MouseEvent) => {
-            const squareNb = this.canvas.squareNbFromMouseEvent(event)
-            if (squareNb !== null) {
-                this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
-            } else {
-                this.clickedOutside()
-            }
-        })
-
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.key === 'ArrowLeft') this.undo()
-            if (event.key === 'ArrowRight') this.redo()
-        })
     }
 }

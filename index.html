@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Chess</title>
         <script
             data-main="dist/main"
@@ -25,7 +25,10 @@
                             <div class="square"></div>
                             Black to move
                         </div>
-                        <div id="end_of_game" style="display: none"></div>
+                        <div id="end_of_game" class="end_of_game" style="display: none">
+                            <div class="square" style="width: 0"></div>
+                            <span id="end_of_game_text"></span>
+                        </div>
                     </div>
                     <div id="evaluation" class="evaluation"></div>
                 </div>
@@ -34,20 +37,26 @@
             </div>
 
             <div class="moves_panel">
-                <div id="moves" class="moves"></div>
+                <div class="moves_container">
+                    <button id="copy_moves" class="copy_moves" title="Copy moves">
+                        <img class="copy_moves_image" src="images/copy-icon.svg" alt="copy moves" />
+                    </button>
+                    <div id="moves" class="moves"></div>
+                </div>
                 <div class="actions">
-                    <button id="undo" disabled>&lt;</button>
-                    <button id="redo" disabled>&gt;</button>
-                    <button id="reset">↺</button>
+                    <button id="undo" disabled><span>&lt;</span></button>
+                    <button id="redo" disabled><span>&gt;</span></button>
+                    <button id="reset"><span>↺</span></button>
                 </div>
             </div>
 
             <div class="control_panel">
                 <div class="improvements">
-                    <h1>Work in progress:</h1>
-                    <p>UI</p>
-
                     <h1>TODO:</h1>
+                    <p>
+                        - Switch Piece Set<br />
+                        - Switch Bot Analysis ON/OFF<br />
+                    </p>
                     <p>
                         - Pawn Promotion: Variants<br />
                         - Game End: Treefold Repetition<br />

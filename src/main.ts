@@ -3,18 +3,14 @@ import { PlayMode } from './models/types'
 
 let chess = new Chess()
 
+if (document.readyState === 'complete') {
+    chess.setup()
+} else {
+    document.onreadystatechange = () => document.readyState === 'complete' && chess.setup()
+}
+
 //@ts-ignore
 window.chess = chess
-
-function setup() {
-    chess.setup()
-}
-
-if (document.readyState === 'complete') {
-    setup()
-} else {
-    document.onreadystatechange = () => document.readyState === 'complete' && setup()
-}
 
 const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'bot_vs_bot']
 const idToPlayMode: Record<(typeof playmodeIDs)[number], PlayMode> = {
@@ -25,8 +21,23 @@ const idToPlayMode: Record<(typeof playmodeIDs)[number], PlayMode> = {
 
 playmodeIDs.forEach((id) => {
     document.getElementById(id)!.addEventListener('click', () => {
-        chess.interruptBot()
+        chess.stopBot()
         chess = new Chess(idToPlayMode[id])
         chess.setup()
+
+        //@ts-ignore
+        window.chess = chess
     })
 })
+
+document.addEventListener('click', (event) => {
+    chess.clicked(event)
+})
+document.addEventListener('mousedown', (event: MouseEvent) => {
+    chess.clicked(event)
+})
+document.addEventListener('keydown', (event: KeyboardEvent) => {
+    chess.keydown(event)
+})
+
+window.addEventListener('resize', () => chess.windowResize())

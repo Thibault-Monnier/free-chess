@@ -1,8 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
 
 body {
-    background-color: #0e0e0e;
-    color: whitesmoke;
+    --website-background-color: #111;
+    --text-color: whitesmoke;
+    --box-color: #222;
+
+    background-color: var(--website-background-color);
+    color: var(--text-color);
     font-family: Poppins, sans-serif;
     padding: 1rem;
 
@@ -51,6 +55,7 @@ button {
     gap: 1rem;
 
     @media (min-width: 50rem) {
+        height: 100%;
         width: 25rem;
         order: 3;
     }
@@ -99,13 +104,13 @@ button {
     align-items: center;
 
     /*Draw the button background*/
-    background-color: #222;
-    border: 1px solid #222;
+    background-color: var(--box-color);
+    border: 1px solid var(--box-color);
     padding: 0.8rem 0.3rem;
     border-radius: 1.4rem;
 
     /*Draw the text*/
-    color: whitesmoke;
+    color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
 }
@@ -130,16 +135,21 @@ button {
 
 .next_player,
 .evaluation {
-    background-color: #222;
+    background-color: var(--box-color);
     border-radius: 1rem;
     padding: 0.5rem 1rem;
 }
 
 .white_to_move,
-.black_to_move {
+.black_to_move,
+.end_of_game {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+}
+
+.end_of_game {
+    gap: 0;
 }
 
 .evaluation {
@@ -156,14 +166,38 @@ button {
     background-color: whitesmoke;
 }
 .black_to_move .square {
-    background-color: #000;
+    background-color: black;
+}
+
+.moves_container {
+    position: relative;
+    overflow-y: hidden;
+    flex-grow: 1;
+    background-color: var(--box-color);
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.copy_moves {
+    display: flex;
+    position: absolute;
+    padding: 0.5rem;
+    bottom: 0;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.copy_moves_image {
+    height: 1.2rem;
+    width: 1.2rem;
 }
 
 .moves {
-    flex-grow: 1;
-    background-color: #222;
-    border-radius: 1rem;
-    padding: 2.5rem 2rem;
+    max-height: calc(40vh - 1rem);
+    padding: 1rem;
+    gap: 0.25rem;
     overflow-y: auto;
 
     display: grid;
@@ -173,35 +207,43 @@ button {
     align-items: center;
     justify-items: center;
     align-content: start;
-    gap: 0.25rem;
+
+    @media (min-width: 50rem) {
+        max-height: none;
+        height: 100%;
+        padding: 2rem;
+    }
 }
 
-.moves::-webkit-scrollbar, .improvements::-webkit-scrollbar {
+.moves::-webkit-scrollbar,
+.improvements::-webkit-scrollbar {
     width: 0.8rem;
 }
 
-.moves::-webkit-scrollbar-thumb, .improvements::-webkit-scrollbar-thumb{
-    background: whitesmoke;
+.moves::-webkit-scrollbar-thumb,
+.improvements::-webkit-scrollbar-thumb {
+    background: var(--text-color);
     border-radius: 1rem;
 }
 
 .move {
     cursor: pointer;
     border-radius: 0.5rem;
-    padding: 0.4rem 1.5rem;
+    padding: 0.4rem 15%;
     border: thin solid transparent;
     min-width: 2rem;
     text-align: center;
 }
 
 .move:hover {
-    background-color: #0e0e0e;
+    background-color: var(--website-background-color);
     border-color: #888;
 }
 
 .currentMove {
     font-weight: 700;
-    border-color: whitesmoke;
+    background-color: var(--website-background-color);
+    border-color: var(--text-color);
 }
 
 .actions {
@@ -213,15 +255,14 @@ button {
 
 .actions button {
     user-select: none;
+    vertical-align: middle;
 
-    /*Draw the button background*/
-    background-color: #222;
-    border: 1px solid #222;
+    background-color: var(--box-color);
+    border: 1px solid var(--box-color);
     padding: 0.2rem 0;
     border-radius: 1.5rem;
 
-    /*Draw the text*/
-    color: whitesmoke;
+    color: var(--text-color);
     font-size: 2.5rem;
 }
 

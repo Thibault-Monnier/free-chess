@@ -49,8 +49,8 @@ export class Game {
         return this._moveNb > 0
     }
 
-    undo(): void {
-        if (this.canUndo) this._moveNb--
+    undo(undoAmount: number): void {
+        if (this.canUndo) this._moveNb -= undoAmount
     }
 
     get canRedo(): boolean {

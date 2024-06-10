@@ -1,4 +1,4 @@
-import { drawArrow, imagesLoading, piecesImages } from './drawUtils'
+import { cburnettPiecesImages, drawArrow, freeChessPiecesImages, imagesLoading } from './drawUtils'
 import { Board } from './models/board'
 import { Move } from './models/move'
 import { squareNbToFileRank } from './models/utils'
@@ -10,26 +10,35 @@ export class Canvas {
 
     private squareSize = 0
 
-    draw(board: Board, selectedSquareNb: number | null, highlightedSquareNbs: boolean[], bestMove: Move | null): void {
+    draw(
+        board: Board,
+        selectedSquareNb: number | null,
+        highlightedSquareNbs: boolean[],
+        lastMove: Move | undefined,
+        bestMove: Move | null
+    ): void {
         this.recalculateSquareSize()
 
-        this.canvasDOM.width = document.getElementById('board')!.clientWidth
-        this.canvasDOM.height = document.getElementById('board')!.clientHeight
+        this.canvasDOM.width = document.getElementById('board')!.clientWidth * window.devicePixelRatio
+        this.canvasDOM.height = document.getElementById('board')!.clientHeight * window.devicePixelRatio
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const { x, y } = this.squareNbToXY(squareNb)
-            
+
             const squareColor = this.getSquareColor(squareNb) === 'dark' ? darkSquares : lightSquares
             this.fillRect(x, y, this.squareSize, this.squareSize, squareColor)
 
             if (selectedSquareNb === squareNb) {
                 this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 255, 0, 0.5)')
             }
-            if (highlightedSquareNbs[squareNb]) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255,80,70,0.75)')
+            if (lastMove?.startSquareNb === squareNb || lastMove?.endSquareNb === squareNb) {
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(150, 150, 50, 0.75)')
             }
             if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.75)')
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.5)')
+            }
+            if (highlightedSquareNbs[squareNb]) {
+                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 80, 70,0.75)')
             }
         }
         this.drawCoordinates()
@@ -80,15 +89,23 @@ export class Canvas {
     }
 
     squareNbFromMouseEvent(event: MouseEvent): number | null {
-        const x = event.clientX - this.canvasDOM.getBoundingClientRect().x - this.canvasDOM.clientLeft
-        const y = event.clientY - this.canvasDOM.getBoundingClientRect().y - this.canvasDOM.clientTop
-        if (x < 0 || y < 0 || x >= this.canvasDOM.width || y >= this.canvasDOM.height) return null
+        const cssSquareSize = this.squareSize / window.devicePixelRatio
 
-        return Math.floor(x / this.squareSize) + Math.floor((this.squareSize * 8 - (y + 1)) / this.squareSize) * 8
+        const cssX = event.clientX - this.canvasDOM.getBoundingClientRect().x - this.canvasDOM.clientLeft
+        const cssY = event.clientY - this.canvasDOM.getBoundingClientRect().y - this.canvasDOM.clientTop
+        if (
+            cssX < 0 ||
+            cssY < 0 ||
+            cssX * devicePixelRatio >= this.canvasDOM.width /* canvasDOM.width is in js width, but cssX isn't */ ||
+            cssY * devicePixelRatio >= this.canvasDOM.height /* canvasDOM.height is in js width, but cssY isn't */
+        )
+            return null
+
+        return Math.floor(cssX / cssSquareSize) + Math.floor((cssSquareSize * 8 - (cssY + 1)) / cssSquareSize) * 8
     }
 
     private drawCoordinates() {
-        const fontSize = 14
+        const fontSize = this.squareSize / 5
         this.ctx.font = `${fontSize}px Arial`
 
         for (let file = 0; file < 8; file++) {
@@ -109,7 +126,7 @@ export class Canvas {
     private createBestMoveArrow(move: Move): void {
         const startPosition = squareNbToFileRank(move.startSquareNb)
         const endPosition = squareNbToFileRank(move.endSquareNb)
-        const width = 8
+        const width = this.squareSize / 12
         const color = 'rgba(50, 150, 50, 1)'
 
         const startCoordinates = {
@@ -134,7 +151,7 @@ export class Canvas {
             if (!piece) continue
             const { x, y } = this.squareNbToXY(squareNb)
 
-            const image = piecesImages[piece.color][piece.name]
+            const image = freeChessPiecesImages[piece.color][piece.name]
             const offset = (this.squareSize - this.pieceSize) / 2
             this.ctx.drawImage(image, x + offset, y + offset, this.pieceSize, this.pieceSize)
         }
@@ -146,9 +163,11 @@ export class Canvas {
 
     private recalculateSquareSize() {
         this.squareSize =
-            Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) / 8
+            (Math.min(document.getElementById('board')!.clientWidth, document.getElementById('board')!.clientHeight) /
+                8) *
+            window.devicePixelRatio
     }
 }
 
-const lightSquares = '#efdfc5'
-const darkSquares = '#ae7c66'
+const lightSquares = '#e5d7bf'
+const darkSquares = '#b88465'
