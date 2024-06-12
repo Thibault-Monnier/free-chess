@@ -80,13 +80,10 @@ button {
 }
 
 .improvements h1 {
-    margin-top: 3rem;
     font-size: 1.5rem;
     font-weight: 600;
 }
-.improvements h1:first-child {
-    margin-top: 0;
-}
+
 .improvements p {
     font-style: italic;
     margin-top: 1rem;
