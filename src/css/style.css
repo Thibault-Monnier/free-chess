@@ -4,6 +4,7 @@ body {
     --website-background-color: #111;
     --text-color: whitesmoke;
     --box-color: #222;
+    --scrollbar-width: 0.8rem;
 
     background-color: var(--website-background-color);
     color: var(--text-color);
@@ -197,6 +198,7 @@ button {
 .moves {
     max-height: calc(40vh - 1rem);
     padding: 1rem;
+    padding-left: calc(1rem + var(--scrollbar-width));
     gap: 0.25rem;
     overflow-y: auto;
 
@@ -217,7 +219,7 @@ button {
 
 .moves::-webkit-scrollbar,
 .improvements::-webkit-scrollbar {
-    width: 0.8rem;
+    width: var(--scrollbar-width);
 }
 
 .moves::-webkit-scrollbar-thumb,
