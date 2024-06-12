@@ -200,7 +200,9 @@ button {
     padding: 1rem;
     padding-left: calc(1rem + var(--scrollbar-width));
     gap: 0.25rem;
+
     overflow-y: auto;
+    scroll-behavior: smooth;
 
     display: grid;
     grid-template-columns: 1fr 3fr 3fr;
