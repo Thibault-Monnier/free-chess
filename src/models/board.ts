@@ -7,7 +7,13 @@ import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
 import { CanCastle, Coordinates, EndOfGame, AttackTable, PieceColor } from './types'
-import { coordinatesToSquareNb, createEmptyAttackTable, fileRankToSquareNb, invertColor } from './utils'
+import {
+    coordinatesToSquareNb,
+    createEmptyAttackTable,
+    fileRankToSquareNb,
+    invertColor,
+    squareNbToCoordinates,
+} from './utils'
 
 export class Board {
     public static startBoardFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
@@ -78,6 +84,39 @@ export class Board {
 
         this.enPassantTargetSquareNb =
             enPassantTargetSquare === '-' ? null : coordinatesToSquareNb(enPassantTargetSquare as Coordinates)
+    }
+
+    public exportFEN(): string {
+        const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
+
+        let FEN = ''
+        for (let rank = 7; rank >= 0; rank--) {
+            let emptySquares = 0
+            for (let file = 0; file < 8; file++) {
+                const piece = this.squares[fileRankToSquareNb({ file, rank })]
+                if (piece) {
+                    if (emptySquares > 0) {
+                        FEN += emptySquares
+                        emptySquares = 0
+                    }
+                    const pieceId = Object.entries(piecesId).find(([_, Piece]) => piece instanceof Piece)?.[0]
+                    FEN += piece.color === 'white' ? pieceId!.toUpperCase() : pieceId
+                } else {
+                    emptySquares++
+                }
+            }
+            if (emptySquares > 0) FEN += emptySquares
+            if (rank > 0) FEN += '/'
+        }
+
+        FEN += ` ${this.colorToMove === 'white' ? 'w' : 'b'} `
+        FEN += `${this.canCastle.white.kingSide ? 'K' : ''}`
+        FEN += `${this.canCastle.white.queenSide ? 'Q' : ''}`
+        FEN += `${this.canCastle.black.kingSide ? 'k' : ''}`
+        FEN += `${this.canCastle.black.queenSide ? 'q' : ''}`
+        FEN += ` ${this.enPassantTargetSquareNb ? squareNbToCoordinates(this.enPassantTargetSquareNb) : '-'}`
+        FEN += ` ${0} ${0}`
+        return FEN
     }
 
     public possibleMoves(): Move[] {
