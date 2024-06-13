@@ -8,17 +8,14 @@ import { invertColor } from './models/utils'
 
 export class Chess {
     private game = new Game()
-    private playMode: PlayMode
+    private canvas = new Canvas()
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private showBestMove = false
     private calculateBestMoveHandle: number | undefined
-    private canvas = new Canvas()
 
-    constructor(playMode: PlayMode = '1v1') {
-        this.playMode = playMode
-    }
+    constructor(private playMode: PlayMode = '1v1') {}
 
     private get currentBoard(): Board {
         return this.game.currentBoard
@@ -28,15 +25,13 @@ export class Chess {
         this.canvas.setup()
 
         if (this.playMode === '1v1') this.showBestMove = true
-        if (this.playMode === '1vC') this.hideEvaluation()
-        else this.showEvaluation()
 
+        this.toggleEvaluationDisplay(this.playMode !== '1vC')
         this.setActivePlayModeButton()
         this.newMove()
     }
 
     private draw() {
-        this.toggleActions()
         this.toggleNextPlayer()
         this.updateEvaluation()
         this.drawCanvas()
@@ -53,9 +48,11 @@ export class Chess {
     }
 
     private newMove() {
-        this.updateMovesPanel()
         this.resetSelectedSquare()
         this.highlightedSquareNbs.fill(false)
+
+        this.updateMovesPanel()
+        this.toggleActions()
         this.calculateBestMove()
         this.draw()
     }
@@ -63,20 +60,20 @@ export class Chess {
     clicked(event: any) {
         if (event.type === 'click') {
             // Make sure the event is triggered on child elements of the buttons
-            const targetButton = event.target.closest('button')
-            if (targetButton === document.getElementById('undo')) this.undo()
-            if (targetButton === document.getElementById('redo')) this.redo()
-            if (targetButton === document.getElementById('reset')) this.reset()
-
-            if (targetButton === document.getElementById('copy_moves')) {
+            const targetButton = (event.target as HTMLElement).closest('button')
+            const id = targetButton?.id
+            if (id === 'undo') this.undo()
+            if (id === 'redo') this.redo()
+            if (id === 'reset') this.reset()
+            if (id === 'copy_moves') {
                 navigator.clipboard.writeText(
                     this.game.moves.map((_, move) => this.game.calculateMoveNotation(move)).join(' ')
                 )
             }
         }
 
-        const squareNb = this.canvas.squareNbFromMouseEvent(event)
         if (event.type === 'mousedown') {
+            const squareNb = this.canvas.squareNbFromMouseEvent(event)
             if (squareNb !== null) {
                 this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
             } else {
@@ -135,7 +132,7 @@ export class Chess {
         this.draw()
     }
 
-    // Calls the possibleMoves() method of the piece on the selected square
+    // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
     private getMove(endSquareNb: number): Move | undefined {
         if (this.selectedSquareNb === null) return
 
@@ -199,14 +196,8 @@ export class Chess {
         }
     }
 
-    private showEvaluation() {
-        const element = document.getElementById('evaluation')
-        if (element) element?.setAttribute('style', 'display: flex;')
-    }
-
-    private hideEvaluation() {
-        const element = document.getElementById('evaluation')
-        if (element) element.setAttribute('style', 'display: none;')
+    private toggleEvaluationDisplay(visible: boolean) {
+        document.getElementById('evaluation')!.style.display = visible ? 'flex' : 'none'
     }
 
     private playBestMove() {
@@ -238,27 +229,29 @@ export class Chess {
         this.newMove()
     }
 
-    undo(): void {
+    private undo(): void {
         this.game.undo(this.playMode === '1vC' ? 2 : 1)
         this.newMove()
     }
 
-    redo(): void {
+    private redo(): void {
         this.game.redo()
         this.newMove()
     }
 
-    reset(): void {
+    private reset(): void {
         this.game = new Game()
         this.newMove()
     }
 
     private toggleActions(): void {
-        if (this.game.canUndo) document.getElementById('undo')!.removeAttribute('disabled')
-        else document.getElementById('undo')!.setAttribute('disabled', '')
+        const setButtonState = (button: HTMLElement, condition: boolean) => {
+            if (condition) button.removeAttribute('disabled')
+            else button.setAttribute('disabled', '')
+        }
 
-        if (this.game.canRedo) document.getElementById('redo')!.removeAttribute('disabled')
-        else document.getElementById('redo')!.setAttribute('disabled', '')
+        setButtonState(document.getElementById('undo')!, this.game.canUndo)
+        setButtonState(document.getElementById('redo')!, this.game.canRedo)
     }
 
     private updateMovesPanel(): void {
@@ -282,9 +275,12 @@ export class Chess {
         moves.innerHTML = html
 
         const currentMove = document.getElementsByClassName('currentMove')[0]
-        if (currentMove instanceof HTMLElement) {
-            moves.scrollTop =
-                currentMove.offsetTop - moves.offsetTop - (moves.clientHeight / 2 - currentMove.clientHeight / 2)
+        if (currentMove) {
+            if (window.matchMedia('(min-width: 50rem)').matches) {
+                currentMove.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else {
+                moves.scrollTop = moves.scrollHeight
+            }
         }
     }
 
