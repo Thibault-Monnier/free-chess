@@ -110,10 +110,15 @@ export class Board {
         }
 
         FEN += ` ${this.colorToMove === 'white' ? 'w' : 'b'} `
-        FEN += `${this.canCastle.white.kingSide ? 'K' : ''}`
-        FEN += `${this.canCastle.white.queenSide ? 'Q' : ''}`
-        FEN += `${this.canCastle.black.kingSide ? 'k' : ''}`
-        FEN += `${this.canCastle.black.queenSide ? 'q' : ''}`
+
+        const castlingOptions = [
+            this.canCastle.white.kingSide ? 'K' : '',
+            this.canCastle.white.queenSide ? 'Q' : '',
+            this.canCastle.black.kingSide ? 'k' : '',
+            this.canCastle.black.queenSide ? 'q' : '',
+        ].join('')
+        FEN += castlingOptions || '-'
+
         FEN += ` ${this.enPassantTargetSquareNb ? squareNbToCoordinates(this.enPassantTargetSquareNb) : '-'}`
         FEN += ` ${0} ${0}`
         return FEN
