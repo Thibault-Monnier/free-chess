@@ -7,7 +7,13 @@ import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
 import { CanCastle, Coordinates, EndOfGame, AttackTable, PieceColor } from './types'
-import { coordinatesToSquareNb, createEmptyAttackTable, fileRankToSquareNb, invertColor, squareNbToCoordinates } from './utils'
+import {
+    coordinatesToSquareNb,
+    createEmptyAttackTable,
+    fileRankToSquareNb,
+    invertColor,
+    squareNbToCoordinates,
+} from './utils'
 
 export class Board {
     public static startBoardFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
@@ -104,10 +110,15 @@ export class Board {
         }
 
         FEN += ` ${this.colorToMove === 'white' ? 'w' : 'b'} `
-        FEN += `${this.canCastle.white.kingSide ? 'K' : ''}`
-        FEN += `${this.canCastle.white.queenSide ? 'Q' : ''}`
-        FEN += `${this.canCastle.black.kingSide ? 'k' : ''}`
-        FEN += `${this.canCastle.black.queenSide ? 'q' : ''}`
+
+        const castlingOptions = [
+            this.canCastle.white.kingSide ? 'K' : '',
+            this.canCastle.white.queenSide ? 'Q' : '',
+            this.canCastle.black.kingSide ? 'k' : '',
+            this.canCastle.black.queenSide ? 'q' : '',
+        ].join('')
+        FEN += castlingOptions || '-'
+
         FEN += ` ${this.enPassantTargetSquareNb ? squareNbToCoordinates(this.enPassantTargetSquareNb) : '-'}`
         FEN += ` ${0} ${0}`
         return FEN
