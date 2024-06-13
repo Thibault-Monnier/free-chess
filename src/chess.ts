@@ -215,16 +215,16 @@ export class Chess {
     }
 
     private runBot(after: () => void): void {
-        this.bestMove = undefined
+        /*this.bestMove = undefined
         this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
             const bot = new DepthNBot(this.currentBoard, 4)
             this.bestMove = bot.run()
             after()
-        })
+        })*/
 
         const botWorker = new Worker('./dist/botWorker.js')
+        botWorker.postMessage({ board: this.currentBoard.exportFEN(), depth: 4 })
         botWorker.onmessage = (event) => console.log(event.data)
-        botWorker.postMessage(this.currentBoard)
     }
 
     jumpToMove(moveNb: number): void {
