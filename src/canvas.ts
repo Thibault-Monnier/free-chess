@@ -15,7 +15,8 @@ export class Canvas {
         selectedSquareNb: number | null,
         highlightedSquareNbs: boolean[],
         lastMove: Move | undefined,
-        bestMove: Move | null
+        bestMove: Move | null,
+        possibleMoves: Move[] | undefined
     ): void {
         this.recalculateSquareSize()
 
@@ -41,10 +42,11 @@ export class Canvas {
                 this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 80, 70,0.75)')
             }
         }
+
         this.drawCoordinates()
         if (bestMove) this.createBestMoveArrow(bestMove)
         this.drawPieces(board)
-        if (selectedSquareNb !== null) this.drawPossibleMoves(board, selectedSquareNb)
+        if (possibleMoves) this.drawPossibleMoves(board, possibleMoves)
     }
 
     private fillRect(x: number, y: number, width: number, height: number, color: string) {
@@ -56,11 +58,8 @@ export class Canvas {
         this.canvasDOM.addEventListener('contextmenu', (event: MouseEvent) => event.preventDefault())
     }
 
-    private drawPossibleMoves(board: Board, selectedSquareNb: number) {
-        const piece = board.squares[selectedSquareNb]!
-        const moves = piece.possibleMoves(selectedSquareNb, board, board.createOpponentAttackTable())
-
-        for (let move of moves) {
+    private drawPossibleMoves(board: Board, possibleMoves: Move[]) {
+        for (let move of possibleMoves) {
             const { x, y } = this.squareNbToXY(move.endSquareNb)
             const isOccupied = board.squares[move.endSquareNb] !== null
 

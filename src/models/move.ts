@@ -1,6 +1,7 @@
 import { Board } from './board'
-import { Piece } from './pieces/piece';
-import { MoveType } from './types';
+import { SerializedMove } from './serializedTypes'
+import { Piece } from './pieces/piece'
+import { MoveType } from './types'
 
 export class Move {
     constructor(
@@ -10,6 +11,14 @@ export class Move {
         public endBoard: Board,
         public type: MoveType
     ) {}
+
+    serialize(): SerializedMove {
+        return {
+            pieceData: this.piece.serialize(),
+            startSquareNb: this.startSquareNb,
+            endSquareNb: this.endSquareNb,
+            endBoardFEN: this.endBoard.serialize(),
+            type: this.type,
+        }
+    }
 }
-
-
