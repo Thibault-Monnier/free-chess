@@ -13,7 +13,6 @@ export class Chess {
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
-    private showBestMove = false
     private botWorker: Worker | undefined
 
     constructor(private playMode: PlayMode = '1v1') {}
@@ -24,8 +23,6 @@ export class Chess {
 
     setup() {
         this.canvas.setup()
-
-        if (this.playMode === '1v1') this.showBestMove = true
 
         this.toggleEvaluationDisplay(this.playMode !== '1vC')
         this.setActivePlayModeButton()
@@ -44,7 +41,7 @@ export class Chess {
             this.selectedSquareNb,
             this.highlightedSquareNbs,
             this.game.lastMove,
-            this.bestMove && this.showBestMove ? this.bestMove.move : null,
+            this.bestMove && this.shouldShowBestMove ? this.bestMove.move : null,
             this.getPossibleMoves()
         )
     }
@@ -138,6 +135,24 @@ export class Chess {
         this.highlightedSquareNbs.fill(false)
     }
 
+    private shouldCalculateBestMove(): boolean {
+        if (this.shouldPlayBestMove()) return true
+        if (this.playMode === '1v1') return true
+
+        return false
+    }
+
+    private shouldPlayBestMove(): boolean {
+        if (this.playMode === 'CvC') return true
+        if (this.playMode === '1vC' && this.currentBoard.colorToMove === 'black') return true
+
+        return false
+    }
+
+    private get shouldShowBestMove(): boolean {
+        return this.playMode === '1v1'
+    }
+
     // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
     private getPossibleMoves(): Move[] | undefined {
         if (this.selectedSquareNb === null) return
@@ -184,8 +199,9 @@ export class Chess {
 
     private calculateBestMove(): void {
         this.stopBot()
-        if (this.playMode === '1vC' && this.currentBoard.colorToMove === 'white') return
-        this.runBot(() => this.playBestMove())
+        if (this.shouldCalculateBestMove()) {
+            this.runBot(() => this.playBestMove())
+        }
     }
 
     private updateEvaluation() {
@@ -207,7 +223,7 @@ export class Chess {
     }
 
     private playBestMove() {
-        if (this.playMode === 'CvC' || (this.playMode === '1vC' && this.currentBoard.colorToMove === 'black')) {
+        if (this.shouldPlayBestMove()) {
             if (this.bestMove) {
                 this.game.addMove(this.bestMove.move)
                 this.newMove()
