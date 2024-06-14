@@ -1,9 +1,10 @@
 import { Canvas } from './canvas'
+import { BestMove } from './models/bestMove'
 import { Board } from './models/board'
-import { DepthNBot } from './models/bots/depthNBot'
+import { deserializeBestMove } from './models/deserialize'
 import { Game } from './models/game'
 import { Move } from './models/move'
-import { BestMove, PlayMode } from './models/types'
+import { PlayMode } from './models/types'
 import { invertColor } from './models/utils'
 
 export class Chess {
@@ -215,16 +216,12 @@ export class Chess {
     }
 
     private runBot(after: () => void): void {
-        /*this.bestMove = undefined
-        this.calculateBestMoveHandle = requestIdleCallback((deadline) => {
-            const bot = new DepthNBot(this.currentBoard, 4)
-            this.bestMove = bot.run()
-            after()
-        })*/
-
         const botWorker = new Worker('./dist/botWorker.js')
-        botWorker.postMessage({ board: this.currentBoard.exportFEN(), depth: 4 })
-        botWorker.onmessage = (event) => console.log(event.data)
+        botWorker.postMessage({ boardFEN: this.currentBoard.serialize(), depth: 4 })
+        botWorker.onmessage = (event) => {
+            this.bestMove = event.data ? deserializeBestMove(event.data) : null
+            after()
+        }
     }
 
     jumpToMove(moveNb: number): void {

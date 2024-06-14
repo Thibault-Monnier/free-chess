@@ -1,7 +1,7 @@
+import { BestMove } from '../bestMove'
 import { Board } from '../board'
 import { PieceSquareTableEvaluator } from '../evaluators/pieceSquareTableEvaluator'
 import { Move } from '../move'
-import { BestMove } from '../types'
 import { Bot } from './bot'
 
 export class DepthNBot extends Bot {
@@ -54,7 +54,7 @@ export class DepthNBot extends Bot {
         )
 
         console.log('Best move:', bestMove, 'Evaluation:', bestEvaluation)
-        return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
+        return bestMove ? new BestMove(bestMove, bestEvaluation) : null
     }
 
     private minimax(board: Board, remainingDepth: number, alpha: number, beta: number): number {

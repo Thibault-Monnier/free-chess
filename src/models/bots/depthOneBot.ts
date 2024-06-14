@@ -1,6 +1,6 @@
+import { BestMove } from '../bestMove'
 import { PieceSquareTableEvaluator } from '../evaluators/pieceSquareTableEvaluator'
 import { Move } from '../move'
-import { BestMove } from '../types'
 import { Bot } from './bot'
 
 export class DepthOneBot extends Bot {
@@ -20,6 +20,6 @@ export class DepthOneBot extends Bot {
             }
         }
 
-        return bestMove ? { move: bestMove, evaluation: bestEvaluation } : null
+        return bestMove ? new BestMove(bestMove, bestEvaluation) : null
     }
 }

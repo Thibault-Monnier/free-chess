@@ -47,6 +47,10 @@ export class Board {
         }
     }
 
+    serialize(): string {
+        return this.exportFEN()
+    }
+
     public importFEN(FEN: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
         const [placement, colorToMove, canCastle, enPassantTargetSquare] = FEN.split(' ')

@@ -1,4 +1,5 @@
 import { Board } from '../board'
+import { SerializedPiece } from '../serializedTypes'
 import { Move } from '../move'
 import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, MoveType } from '../types'
 import { calculateAxisOffset, fileRankToSquareNb, isBetweenSquares, squareNbToFileRank } from '../utils'
@@ -10,6 +11,10 @@ export abstract class Piece {
     abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
     abstract get isSliding(): boolean
+
+    serialize(): SerializedPiece {
+        return this
+    }
 
     eaten(board: Board): void {}
 
