@@ -1,10 +1,12 @@
+import { Board } from '../../board'
 import { PieceColor, PieceName } from '../../types'
 import { squareNbToFileRank } from '../../utils'
-import { Evaluator } from './evaluator'
 
 //Coefficients from https://www.chessprogramming.org/Simplified_Evaluation_Function
 
-export class PieceSquareTableEvaluator extends Evaluator {
+export class Evaluator {
+    constructor(public board: Board) {}
+
     run(): number {
         let evaluation = 0
 

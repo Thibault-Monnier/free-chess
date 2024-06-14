@@ -1,10 +1,10 @@
 import { Board } from '../../board'
-import { PieceSquareTableEvaluator } from './pieceSquareTableEvaluator'
+import { Evaluator } from './Evaluator'
 
 describe('PieceSquareTableEvaluator', () => {
     const evaluate = (FEN: string): number => {
         const board = new Board(FEN)
-        const evaluator = new PieceSquareTableEvaluator(board)
+        const evaluator = new Evaluator(board)
         return evaluator.run()
     }
 

@@ -2,7 +2,7 @@ import { BestMove } from '../bestMove'
 import { Board } from '../board'
 import { Move } from '../move'
 import { Bot } from './bot'
-import { PieceSquareTableEvaluator } from './evaluators/pieceSquareTableEvaluator'
+import { Evaluator } from './evaluator/Evaluator'
 
 export class DepthNBot extends Bot {
     private checkmateScore = 999999999
@@ -62,7 +62,7 @@ export class DepthNBot extends Bot {
 
         if (remainingDepth === 0) {
             const startTimestamp = performance.now()
-            const evaluation = new PieceSquareTableEvaluator(board).run()
+            const evaluation = new Evaluator(board).run()
             const endTimestamp = performance.now()
             this.perfNbEvals++
             this.perfTimeEvals += endTimestamp - startTimestamp

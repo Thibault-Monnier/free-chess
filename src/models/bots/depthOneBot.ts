@@ -1,7 +1,7 @@
 import { BestMove } from '../bestMove'
 import { Move } from '../move'
 import { Bot } from './bot'
-import { PieceSquareTableEvaluator } from './evaluators/pieceSquareTableEvaluator'
+import { Evaluator } from './evaluator/Evaluator'
 
 export class DepthOneBot extends Bot {
     run(): BestMove | null {
@@ -11,7 +11,7 @@ export class DepthOneBot extends Bot {
         let bestMove: Move | null = null
         let bestEvaluation = -Infinity
         for (let move of moves) {
-            const evaluator = new PieceSquareTableEvaluator(move.endBoard)
+            const evaluator = new Evaluator(move.endBoard)
             const evaluation = evaluator.run() * colorMultiplier
 
             if (evaluation > bestEvaluation) {
