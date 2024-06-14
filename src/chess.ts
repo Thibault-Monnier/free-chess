@@ -50,9 +50,7 @@ export class Chess {
     }
 
     private newMove() {
-        this.resetSelectedSquare()
         this.resetHighlightedSquares()
-
         this.updateMovesPanel()
         this.toggleActions()
         this.calculateBestMove()
