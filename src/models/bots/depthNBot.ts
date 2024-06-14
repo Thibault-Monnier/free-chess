@@ -60,14 +60,6 @@ export class DepthNBot extends Bot {
     private minimax(board: Board, remainingDepth: number, alpha: number, beta: number): number {
         this.nbMinimax++
 
-        if (board.endOfGame === 'checkmate') {
-            return board.colorToMove === 'white'
-                ? -this.checkmateScore - remainingDepth
-                : this.checkmateScore + remainingDepth
-        } else if (board.endOfGame === 'stalemate') {
-            return 0
-        }
-
         if (remainingDepth === 0) {
             const startTimestamp = performance.now()
             const evaluation = new Evaluator(board).run()
@@ -75,6 +67,14 @@ export class DepthNBot extends Bot {
             this.perfNbEvals++
             this.perfTimeEvals += endTimestamp - startTimestamp
             return evaluation
+        }
+
+        if (board.endOfGame === 'checkmate') {
+            return board.colorToMove === 'white'
+                ? -this.checkmateScore - remainingDepth
+                : this.checkmateScore + remainingDepth
+        } else if (board.endOfGame === 'stalemate') {
+            return 0
         }
 
         const startTimestamp = performance.now()
