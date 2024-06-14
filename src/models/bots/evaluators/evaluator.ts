@@ -1,4 +1,4 @@
-import { Board } from '../board'
+import { Board } from "../../board";
 
 export abstract class Evaluator {
     constructor(public board: Board) {}

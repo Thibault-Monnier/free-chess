@@ -1,4 +1,4 @@
-import { Board } from '../board'
+import { Board } from '../../board'
 import { PieceSquareTableEvaluator } from './pieceSquareTableEvaluator'
 
 describe('PieceSquareTableEvaluator', () => {
