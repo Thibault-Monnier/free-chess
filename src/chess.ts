@@ -47,6 +47,7 @@ export class Chess {
     }
 
     private newMove() {
+        this.bestMove = undefined
         this.resetHighlightedSquares()
         this.updateMovesPanel()
         this.toggleActions()
