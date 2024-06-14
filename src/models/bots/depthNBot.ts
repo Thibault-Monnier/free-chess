@@ -2,7 +2,7 @@ import { BestMove } from '../bestMove'
 import { Board } from '../board'
 import { Move } from '../move'
 import { Bot } from './bot'
-import { Evaluator } from './evaluator/evaluator'
+import { Evaluator } from './evaluator/temp'
 
 export class DepthNBot extends Bot {
     private checkmateScore = 999999999

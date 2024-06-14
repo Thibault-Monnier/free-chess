@@ -1,7 +1,7 @@
 import { BestMove } from '../bestMove'
 import { Move } from '../move'
 import { Bot } from './bot'
-import { Evaluator } from './evaluator/evaluator'
+import { Evaluator } from './evaluator/temp'
 
 export class DepthOneBot extends Bot {
     run(): BestMove | null {
