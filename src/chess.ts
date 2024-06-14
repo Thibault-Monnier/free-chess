@@ -33,7 +33,7 @@ export class Chess {
     }
 
     private draw() {
-        this.toggleNextPlayer()
+        this.updateGameState()
         this.updateEvaluation()
         this.drawCanvas()
     }
@@ -44,13 +44,14 @@ export class Chess {
             this.selectedSquareNb,
             this.highlightedSquareNbs,
             this.game.lastMove,
-            this.bestMove && this.showBestMove ? this.bestMove.move : null
+            this.bestMove && this.showBestMove ? this.bestMove.move : null,
+            this.getPossibleMoves()
         )
     }
 
     private newMove() {
         this.resetSelectedSquare()
-        this.highlightedSquareNbs.fill(false)
+        this.resetHighlightedSquares()
 
         this.updateMovesPanel()
         this.toggleActions()
@@ -81,6 +82,8 @@ export class Chess {
                 this.clickedOutside()
             }
         }
+
+        this.draw()
     }
 
     keydown(event: KeyboardEvent) {
@@ -98,55 +101,60 @@ export class Chess {
 
     private clickedSquare(squareNb: number, clickType: 'left' | 'right') {
         if (clickType === 'left') {
-            const piece = this.currentBoard.squares[squareNb]
+            this.resetHighlightedSquares()
 
-            this.highlightedSquareNbs.fill(false)
             if (squareNb === this.selectedSquareNb) {
                 // Deselects the square if it was already selected
                 this.selectedSquareNb = null
-            } else {
-                const move = this.getMove(squareNb)
-                if (this.selectedSquareNb !== null && move) {
-                    // Makes a move if possible
-                    this.game.addMove(move)
-                    this.newMove()
-                } else if (piece === null) {
-                    // Deselects the square if it is empty
-                    this.selectedSquareNb = null
-                } else if (piece.color === this.currentBoard.colorToMove) {
-                    // Selects the square if it contains a piece of the current player
-                    this.selectedSquareNb = squareNb
-                }
+                return
             }
-        }
 
-        if (clickType === 'right') {
-            this.selectedSquareNb = null
+            const piece = this.currentBoard.squares[squareNb]
+            const move = this.getPossibleMoves()?.find((move) => move.endSquareNb === squareNb)
+
+            if (this.selectedSquareNb !== null && move) {
+                // Makes a move if possible
+                this.game.addMove(move)
+                this.newMove()
+                return
+            }
+
+            if (piece === null) {
+                // Deselects the square if it is empty
+                this.selectedSquareNb = null
+            } else {
+                // Selects the square if it contains a piece
+                this.selectedSquareNb = squareNb
+            }
+        } else if (clickType === 'right') {
+            this.resetSelectedSquare()
             this.highlightedSquareNbs[squareNb] = !this.highlightedSquareNbs[squareNb]
         }
-
-        this.draw()
     }
 
     private resetSelectedSquare() {
         this.selectedSquareNb = null
-        this.draw()
+    }
+
+    private resetHighlightedSquares() {
+        this.highlightedSquareNbs.fill(false)
     }
 
     // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
-    private getMove(endSquareNb: number): Move | undefined {
+    private getPossibleMoves(): Move[] | undefined {
         if (this.selectedSquareNb === null) return
 
         const piece = this.currentBoard.squares[this.selectedSquareNb]
-        const possibleMoves = piece!.possibleMoves(
+        if (piece?.color !== this.currentBoard.colorToMove) return
+
+        return piece!.possibleMoves(
             this.selectedSquareNb,
             this.currentBoard,
             this.currentBoard.createOpponentAttackTable()
         )
-        return possibleMoves.find((move) => move.endSquareNb === endSquareNb)
     }
 
-    private toggleNextPlayer() {
+    private updateGameState() {
         const whiteToMoveElement = document.getElementById('white_to_move')!
         const blackToMoveElement = document.getElementById('black_to_move')!
         const endOfGameElement = document.getElementById('end_of_game')!
