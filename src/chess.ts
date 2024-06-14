@@ -14,7 +14,7 @@ export class Chess {
     private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private showBestMove = false
-    private calculateBestMoveHandle: number | undefined
+    private botWorker: Worker | undefined
 
     constructor(private playMode: PlayMode = '1v1') {}
 
@@ -218,13 +218,16 @@ export class Chess {
     }
 
     stopBot(): void {
-        if (this.calculateBestMoveHandle !== undefined) cancelIdleCallback(this.calculateBestMoveHandle)
+        if (this.botWorker !== undefined) {
+            this.botWorker.terminate()
+        }
     }
 
     private runBot(after: () => void): void {
-        const botWorker = new Worker('./dist/botWorker.js')
-        botWorker.postMessage({ boardFEN: this.currentBoard.serialize(), depth: 4 })
-        botWorker.onmessage = (event) => {
+        this.botWorker = new Worker('./dist/botWorker.js')
+        this.botWorker.postMessage({ boardFEN: this.currentBoard.serialize(), depth: 4 })
+
+        this.botWorker.onmessage = (event) => {
             this.bestMove = event.data ? deserializeBestMove(event.data) : null
             after()
         }
