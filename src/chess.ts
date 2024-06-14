@@ -156,6 +156,7 @@ export class Chess {
     // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
     private getPossibleMoves(): Move[] | undefined {
         if (this.selectedSquareNb === null) return
+        if (this.shouldPlayBestMove()) return
 
         const piece = this.currentBoard.squares[this.selectedSquareNb]
         if (piece?.color !== this.currentBoard.colorToMove) return
