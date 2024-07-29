@@ -6,17 +6,18 @@ Free Chess is an open source chess game and engine developed in Typescript by Th
 
 You can play [Free Chess](https://free-chess.netlify.app) from your browser.
 
-To run it locally, clone this repository, and open `index.html` in your browser.
+To run it locally, clone this repository, then open it on a live server in your browser.
 
 ## How to change the program locally?
 
 If you wish to make local changes:
 
 -   Install Yarn (or NPM).
--   In a terminal, change directory to the project root, and run `yarn install`. This will install Typescript.
--   From the terminal, run `yarn dev`. This will start Typescript in watch mode.
+-   In a terminal, change directory to the project root, and run `yarn install`. This will install all the required dependencies.
+-   From the terminal, run `yarn dev`. This will start Webpack in watch mode.
+-   To run the tests, enter `yarn test` in your command terminal, or download an extension that runs them automatically.
 
-Every change you make to any TS file will be transpiled into the `dist/main.js` file, which is used by the browser. Don't manually change this JS file.
+Every change you make to any TS file will be transpiled into the `dist` folder, which is used by the browser. Don't manually change any JS file in this folder.
 
 ## How does the engine work?
 
