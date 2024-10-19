@@ -6,12 +6,8 @@ export function invertColor(color: PieceColor): PieceColor {
 
 export function squareNbToFileRank(squareNb: number): FileRank {
     const file = squareNb % 8
-    const rank = squareNb >= 0 ? Math.floor(squareNb / 8) : Math.ceil(squareNb / 8)
-
-    return {
-        file,
-        rank,
-    }
+    const rank = ~~(squareNb / 8)
+    return { file, rank }
 }
 
 export function fileRankToSquareNb({ file, rank }: FileRank): number {
