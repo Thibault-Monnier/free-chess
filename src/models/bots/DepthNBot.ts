@@ -1,8 +1,8 @@
-import { BestMove } from '../bestMove'
-import { Board } from '../board'
-import { Move } from '../move'
-import { Bot } from './bot'
-import { Evaluator } from './evaluator/evaluator'
+import { BestMove } from '../BestMove'
+import { Board } from '../Board'
+import { Move } from '../Move'
+import { Bot } from './Bot'
+import { Evaluator } from './evaluator/Evaluator'
 
 export class DepthNBot extends Bot {
     private checkmateScore = 999999999

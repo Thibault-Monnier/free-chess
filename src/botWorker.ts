@@ -1,5 +1,5 @@
-import { Board } from './models/board'
-import { DepthNBot } from './models/bots/depthNBot'
+import { Board } from './models/Board'
+import { DepthNBot } from './models/bots/DepthNBot'
 
 self.onmessage = (event: { data: { boardFEN: string; depth: number } }) => {
     const board = new Board(event.data.boardFEN)

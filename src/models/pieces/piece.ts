@@ -1,6 +1,6 @@
-import { Board } from '../board'
+import { Board } from '../Board'
 import { SerializedPiece } from '../serializedTypes'
-import { Move } from '../move'
+import { Move } from '../Move'
 import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, MoveType } from '../types'
 import { calculateAxisOffset, fileRankToSquareNb, isBetweenSquares, squareNbToFileRank } from '../utils'
 

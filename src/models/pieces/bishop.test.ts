@@ -1,4 +1,4 @@
-import { Board } from '../board'
+import { Board } from '../Board'
 import { AttackTable } from '../types'
 import { createEmptyAttackTable } from '../utils'
 

@@ -1,5 +1,5 @@
-import { Board } from './board'
-import { Move } from './move'
+import { Board } from './Board'
+import { Move } from './Move'
 import { CanCastle, EndOfGame } from './types'
 
 describe('importFEN', () => {

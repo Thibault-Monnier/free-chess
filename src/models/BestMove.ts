@@ -1,4 +1,4 @@
-import { Move } from './move'
+import { Move } from './Move'
 import { SerializedBestMove } from './serializedTypes'
 
 export class BestMove {

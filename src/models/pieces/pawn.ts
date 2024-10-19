@@ -1,5 +1,5 @@
-import { Board } from '../board'
-import { Move } from '../move'
+import { Board } from '../Board'
+import { Move } from '../Move'
 import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { squareNbToFileRank } from '../utils'
 import { Piece } from './piece'

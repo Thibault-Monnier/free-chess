@@ -1,4 +1,4 @@
-import { Board } from './board'
+import { Board } from './Board'
 import { SerializedMove } from './serializedTypes'
 import { Piece } from './pieces/piece'
 import { MoveType } from './types'

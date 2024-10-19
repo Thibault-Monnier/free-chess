@@ -1,4 +1,4 @@
-import { Chess } from './chess'
+import { Chess } from './Chess'
 import { PlayMode } from './models/types'
 
 let chess = new Chess()

@@ -1,5 +1,5 @@
-import { Board } from '../../board'
-import { Evaluator } from './evaluator'
+import { Board } from '../../Board'
+import { Evaluator } from './Evaluator'
 
 describe('PieceSquareTableEvaluator', () => {
     const evaluate = (FEN: string): number => {

@@ -1,6 +1,6 @@
-import { Board } from '../board'
-import { Move } from '../move'
-import { DepthNBot } from './depthNBot'
+import { Board } from '../Board'
+import { Move } from '../Move'
+import { DepthNBot } from './DepthNBot'
 
 describe('PieceSquareTableEvaluator', () => {
     it('tests that the bot detects checkmate', () => {

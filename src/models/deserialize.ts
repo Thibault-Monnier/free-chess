@@ -1,6 +1,6 @@
-import { Board } from './board'
+import { Board } from './Board'
 import { SerializedBestMove, SerializedMove, SerializedPiece } from './serializedTypes'
-import { Move } from './move'
+import { Move } from './Move'
 import { Bishop } from './pieces/bishop'
 import { King } from './pieces/king'
 import { Knight } from './pieces/knight'
@@ -8,7 +8,7 @@ import { Pawn } from './pieces/pawn'
 import { Piece } from './pieces/piece'
 import { Queen } from './pieces/queen'
 import { Rook } from './pieces/rook'
-import { BestMove } from './bestMove'
+import { BestMove } from './BestMove'
 
 // NOTE: These functions cannot be in the same file as the classes they deserialize, because of circular dependencies
 

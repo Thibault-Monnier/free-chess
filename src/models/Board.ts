@@ -1,4 +1,4 @@
-import { Move } from './move'
+import { Move } from './Move'
 import { Bishop } from './pieces/bishop'
 import { King } from './pieces/king'
 import { Knight } from './pieces/knight'

@@ -1,4 +1,4 @@
-import { Board } from '../../board'
+import { Board } from '../../Board'
 import { PieceColor, PieceName } from '../../types'
 import { squareNbToFileRank } from '../../utils'
 

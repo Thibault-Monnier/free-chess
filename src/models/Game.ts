@@ -1,5 +1,5 @@
-import { Board } from './board'
-import { Move } from './move'
+import { Board } from './Board'
+import { Move } from './Move'
 import { squareNbToCoordinates, squareNbToFileRank } from './utils'
 
 export class Game {

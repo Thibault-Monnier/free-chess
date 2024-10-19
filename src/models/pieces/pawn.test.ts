@@ -1,6 +1,6 @@
-import { Board } from "../board"
-import { AttackTable } from "../types"
-import { createEmptyAttackTable } from "../utils"
+import { Board } from '../Board'
+import { AttackTable } from '../types'
+import { createEmptyAttackTable } from '../utils'
 
 describe('updateAttackTable', () => {
     describe('test with specific FEN', () => {

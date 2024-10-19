@@ -1,4 +1,4 @@
-import { Game } from './game'
+import { Game } from './Game'
 
 describe('check notation calculation', () => {
     const notation = (FEN: string, startSquareNb: number, endSquareNb: number): string => {

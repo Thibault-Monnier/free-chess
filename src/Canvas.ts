@@ -1,6 +1,6 @@
 import { cburnettPiecesImages, drawArrow, freeChessPiecesImages, imagesLoading } from './drawUtils'
-import { Board } from './models/board'
-import { Move } from './models/move'
+import { Board } from './models/Board'
+import { Move } from './models/Move'
 import { squareNbToFileRank } from './models/utils'
 import { waitOneMillisecondAsync } from './utils'
 
