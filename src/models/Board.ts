@@ -1,11 +1,11 @@
 import { Move } from './Move'
-import { Bishop } from './pieces/bishop'
-import { King } from './pieces/king'
-import { Knight } from './pieces/knight'
-import { Pawn } from './pieces/pawn'
-import { Piece } from './pieces/piece'
-import { Queen } from './pieces/queen'
-import { Rook } from './pieces/rook'
+import { Bishop } from './pieces/Bishop'
+import { King } from './pieces/King'
+import { Knight } from './pieces/Knight'
+import { Pawn } from './pieces/Pawn'
+import { Piece } from './pieces/Piece'
+import { Queen } from './pieces/Queen'
+import { Rook } from './pieces/Rook'
 import { CanCastle, Coordinates, EndOfGame, AttackTable, PieceColor } from './types'
 import {
     coordinatesToSquareNb,

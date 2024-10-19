@@ -2,8 +2,8 @@ import { Board } from '../Board'
 import { Move } from '../Move'
 import { FileRank, AttackTable, PieceColor, PieceLetter } from '../types'
 import { squareNbToFileRank } from '../utils'
-import { Piece } from './piece'
-import { Queen } from './queen'
+import { Piece } from './Piece'
+import { Queen } from './Queen'
 
 export class Pawn extends Piece {
     get notationChar(): PieceLetter {

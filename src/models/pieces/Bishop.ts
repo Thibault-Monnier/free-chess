@@ -1,19 +1,19 @@
 import { Board } from '../Board'
 import { Move } from '../Move'
-import { AttackTable, PieceColor, PieceLetter } from '../types'
-import { Piece } from './piece'
+import { AttackTable, PieceColor, FileRank, PieceLetter } from '../types'
+import { Piece } from './Piece'
 
-export class Queen extends Piece {
+export class Bishop extends Piece {
     get notationChar(): PieceLetter {
-        return 'Q'
+        return 'B'
     }
 
     constructor(color: PieceColor) {
-        super('queen', color)
+        super('bishop', color)
     }
 
     possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
-        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'Q')
+        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'B')
     }
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {
@@ -25,13 +25,9 @@ export class Queen extends Piece {
     }
 }
 
-const OFFSETS = [
+const OFFSETS: FileRank[] = [
     { file: 1, rank: 1 },
-    { file: 1, rank: 0 },
     { file: 1, rank: -1 },
-    { file: 0, rank: 1 },
-    { file: 0, rank: -1 },
     { file: -1, rank: 1 },
-    { file: -1, rank: 0 },
     { file: -1, rank: -1 },
 ]

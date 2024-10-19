@@ -1,6 +1,6 @@
 import { Board } from './Board'
 import { SerializedMove } from './serializedTypes'
-import { Piece } from './pieces/piece'
+import { Piece } from './pieces/Piece'
 import { MoveType } from './types'
 
 export class Move {

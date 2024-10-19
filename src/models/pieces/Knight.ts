@@ -1,7 +1,7 @@
 import { Board } from '../Board'
 import { Move } from '../Move'
 import { AttackTable, PieceColor, PieceLetter } from '../types'
-import { Piece } from './piece'
+import { Piece } from './Piece'
 
 export class Knight extends Piece {
     get notationChar(): PieceLetter {
