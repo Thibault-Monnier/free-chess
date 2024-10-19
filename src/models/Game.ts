@@ -61,7 +61,7 @@ export class Game {
         if (this.canRedo) this._moveNb++
     }
 
-    public calculateMoveNotation(moveIndex = this.getLastMoveIndex()): string {
+    calculateMoveNotation(moveIndex = this.getLastMoveIndex()): string {
         let notation: string = ''
 
         const move = this._moves[moveIndex]

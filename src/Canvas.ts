@@ -5,7 +5,7 @@ import { squareNbToFileRank } from './models/utils'
 import { waitOneMillisecondAsync } from './utils'
 
 export class Canvas {
-    public readonly canvasDOM = document.getElementById('board') as HTMLCanvasElement
+    readonly canvasDOM = document.getElementById('board') as HTMLCanvasElement
     private readonly ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D
 
     private squareSize = 0

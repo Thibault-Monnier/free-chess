@@ -16,15 +16,15 @@ import {
 } from './utils'
 
 export class Board {
-    public static startBoardFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
+    static startBoardFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
 
-    public squares: (Piece | null)[]
-    public colorToMove: PieceColor = 'white'
-    public canCastle: CanCastle = {
+    squares: (Piece | null)[]
+    colorToMove: PieceColor = 'white'
+    canCastle: CanCastle = {
         white: { queenSide: false, kingSide: false },
         black: { queenSide: false, kingSide: false },
     }
-    public enPassantTargetSquareNb: number | null = null
+    enPassantTargetSquareNb: number | null = null
 
     // Test if constructor can be called in each of the following ways
     constructor()
@@ -51,7 +51,7 @@ export class Board {
         return this.exportFEN()
     }
 
-    public importFEN(FEN: string) {
+    importFEN(FEN: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
         const [placement, colorToMove, canCastle, enPassantTargetSquare] = FEN.split(' ')
 
@@ -90,7 +90,7 @@ export class Board {
             enPassantTargetSquare === '-' ? null : coordinatesToSquareNb(enPassantTargetSquare as Coordinates)
     }
 
-    public exportFEN(): string {
+    exportFEN(): string {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
 
         let FEN = ''
@@ -128,31 +128,32 @@ export class Board {
         return FEN
     }
 
-    public possibleMoves(): Move[] {
+    possibleMoves(): Move[] {
         const opponentAttackTable = this.createOpponentAttackTable()
         let moves: Move[] = []
-        this.squares.forEach((piece, squareNb) => {
+        for (let squareNb = 0; squareNb < 64; squareNb++) {
+            const piece = this.squares[squareNb]
             if (piece && piece.color === this.colorToMove) {
                 moves = [...moves, ...piece.possibleMoves(squareNb, this, opponentAttackTable)]
             }
-        })
+        }
         return moves
     }
 
-    public get endOfGame(): EndOfGame | null {
+    get endOfGame(): EndOfGame | null {
         if (this.possibleMoves().length === 0) {
             return this.isInCheck() ? 'checkmate' : 'stalemate'
         } else return null
     }
 
-    public isInCheck(opponentAttackTable = this.createOpponentAttackTable()): boolean {
+    isInCheck(opponentAttackTable = this.createOpponentAttackTable()): boolean {
         const kingSquareNb = this.squares.findIndex(
             (piece) => piece?.name === 'king' && piece.color === this.colorToMove
         )
         return opponentAttackTable.attackedSquares[kingSquareNb]
     }
 
-    public createOpponentAttackTable(): AttackTable {
+    createOpponentAttackTable(): AttackTable {
         const table: AttackTable = createEmptyAttackTable()
 
         for (let squareNb = 0; squareNb < 64; squareNb++) {
