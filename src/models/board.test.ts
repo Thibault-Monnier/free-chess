@@ -119,7 +119,7 @@ describe('possibleMoves', () => {
 describe('endOfGame', () => {
     const endOfGame = (FEN: string): EndOfGame | null => {
         const board = new Board(FEN)
-        return board.endOfGame
+        return board.endOfGame()
     }
 
     it('tests checkmate', () => expect(endOfGame('r1K5/r7/8/8/8/8/8/7k w - - 0 0')).toBe('checkmate'))

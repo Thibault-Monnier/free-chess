@@ -131,11 +131,11 @@ export class Game {
         }
 
         // Add the check / checkmate / stalemate symbol
-        if (endBoard.endOfGame === 'checkmate') {
+        if (endBoard.endOfGame() === 'checkmate') {
             notation += '#'
         } else if (endBoard.isInCheck()) {
             notation += '+'
-        } else if (endBoard.endOfGame === 'stalemate') {
+        } else if (endBoard.endOfGame() === 'stalemate') {
             notation += '½'
         }
 

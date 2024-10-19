@@ -61,27 +61,27 @@ export class DepthNBot extends Bot {
         this.nbMinimax++
 
         if (remainingDepth === 0) {
-            const startTimestamp = performance.now()
+            //const startTimestamp = performance.now()
             const evaluation = new Evaluator(board).run()
-            const endTimestamp = performance.now()
+            //const endTimestamp = performance.now()
+            //this.perfTimeEvals += endTimestamp - startTimestamp
             this.perfNbEvals++
-            this.perfTimeEvals += endTimestamp - startTimestamp
             return evaluation
         }
 
-        if (board.endOfGame === 'checkmate') {
+        //const startTimestamp = performance.now()
+        const moves = board.possibleMoves()
+        this.perfNbPossibleMoves++
+        //const endTimestamp = performance.now()
+        //this.perfTimePossibleMoves += endTimestamp - startTimestamp
+
+        if (board.endOfGame(moves) === 'checkmate') {
             return board.colorToMove === 'white'
                 ? -this.checkmateScore - remainingDepth
                 : this.checkmateScore + remainingDepth
-        } else if (board.endOfGame === 'stalemate') {
+        } else if (board.endOfGame(moves) === 'stalemate') {
             return 0
         }
-
-        const startTimestamp = performance.now()
-        const moves = board.possibleMoves()
-        const endTimestamp = performance.now()
-        this.perfNbPossibleMoves++
-        this.perfTimePossibleMoves += endTimestamp - startTimestamp
 
         if (board.colorToMove === 'white') {
             let bestEvaluation = -Infinity

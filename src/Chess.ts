@@ -179,7 +179,7 @@ export class Chess {
         blackToMoveElement.setAttribute('style', 'display: none;')
         endOfGameElement.setAttribute('style', 'display: none;')
 
-        const endOfGame = this.currentBoard.endOfGame
+        const endOfGame = this.currentBoard.endOfGame()
         switch (endOfGame) {
             case 'checkmate':
                 const colorWinner = invertColor(this.currentBoard.colorToMove)
