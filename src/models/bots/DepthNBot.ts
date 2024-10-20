@@ -8,13 +8,12 @@ export class DepthNBot extends Bot {
     private checkmateScore = 999999999
 
     // The following properties are only used for performance analysis
-    private nbMinimax = 0
-
-    private perfNbEvals = 0
-    private perfTimeEvals = 0
-
-    private perfNbPossibleMoves = 0
-    private perfTimePossibleMoves = 0
+    nbMinimax = 0
+    perfTotalTime = 0
+    perfNbEvals = 0
+    perfTimeEvals = 0
+    perfNbPossibleMoves = 0
+    perfTimePossibleMoves = 0
 
     run(): BestMove | null {
         this.nbMinimax = 0
@@ -38,22 +37,8 @@ export class DepthNBot extends Bot {
         bestEvaluation *= colorMultiplier
 
         const endTimestamp = performance.now()
-        console.log(
-            'Time:',
-            Math.round(endTimestamp - startTimestamp),
-            'ms' + ' - Minimax calls:',
-            this.nbMinimax,
-            ' - Avg time per minimax (microsecs):',
-            ((endTimestamp - startTimestamp) / this.nbMinimax) * 1000
-        )
-        console.log(
-            'Avg time evals (microsecs):',
-            (this.perfTimeEvals / this.perfNbEvals) * 1000,
-            'Avg time possible moves (microsecs):',
-            (this.perfTimePossibleMoves / this.perfNbPossibleMoves) * 1000
-        )
+        this.perfTotalTime = endTimestamp - startTimestamp
 
-        console.log('Best move:', bestMove, 'Evaluation:', bestEvaluation)
         return bestMove ? new BestMove(bestMove, bestEvaluation) : null
     }
 
