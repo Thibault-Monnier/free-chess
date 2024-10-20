@@ -4,16 +4,12 @@ import { AttackTable, PieceColor, FileRank, PieceLetter } from '../types'
 import { Piece } from './Piece'
 
 export class Bishop extends Piece {
-    get notationChar(): PieceLetter {
-        return 'B'
-    }
-
     constructor(color: PieceColor) {
         super('bishop', color)
     }
 
     possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
-        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'B')
+        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable)
     }
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {

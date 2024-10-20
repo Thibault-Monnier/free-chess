@@ -6,10 +6,6 @@ import { Piece } from './Piece'
 import { Queen } from './Queen'
 
 export class Pawn extends Piece {
-    get notationChar(): PieceLetter {
-        return ''
-    }
-
     constructor(color: PieceColor) {
         super('pawn', color)
     }
@@ -26,14 +22,7 @@ export class Pawn extends Piece {
         if (moveOneSquareForward !== null && board.squares[moveOneSquareForward] === null) {
             // Advance one square if not eligible for promotion
             if (startRank !== promotionStartRank) {
-                this.createMove(
-                    moves,
-                    startSquareNb,
-                    moveOneSquareForward,
-                    board,
-                    opponentAttackTable,
-                    this.notationChar
-                )
+                this.createMove(moves, startSquareNb, moveOneSquareForward, board, opponentAttackTable)
             }
 
             // Advance two squares
@@ -42,17 +31,9 @@ export class Pawn extends Piece {
                 board.squares[moveTwoSquaresForward] === null &&
                 (this.color === 'white' ? startRank === 1 : startRank === 6)
             ) {
-                this.createMove(
-                    moves,
-                    startSquareNb,
-                    moveTwoSquaresForward,
-                    board,
-                    opponentAttackTable,
-                    this.notationChar,
-                    (endBoard) => {
-                        endBoard.enPassantTargetSquareNb = moveOneSquareForward
-                    }
-                )
+                this.createMove(moves, startSquareNb, moveTwoSquaresForward, board, opponentAttackTable, (endBoard) => {
+                    endBoard.enPassantTargetSquareNb = moveOneSquareForward
+                })
             }
         }
 
@@ -63,7 +44,6 @@ export class Pawn extends Piece {
                 endSquareNb,
                 board,
                 opponentAttackTable,
-                this.notationChar,
                 (endBoard) => {
                     endBoard.squares[endSquareNb!] = new Queen(this.color)
                 },
@@ -92,7 +72,7 @@ export class Pawn extends Piece {
                 if (startRank === promotionStartRank) {
                     createPromotionMove(endSquareNb)
                 } else {
-                    this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, this.notationChar)
+                    this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable)
                 }
             }
         }
@@ -108,7 +88,6 @@ export class Pawn extends Piece {
                     enPassantTargetSquareNb,
                     board,
                     opponentAttackTable,
-                    this.notationChar,
                     (endBoard) => {
                         endBoard.squares[enPassantTargetSquareNb - 8 * this.direction] = null
                     }

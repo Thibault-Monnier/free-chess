@@ -1,5 +1,6 @@
 import { Board } from './Board'
 import { Move } from './Move'
+import { Piece } from './pieces/Piece'
 import { squareNbToCoordinates, squareNbToFileRank } from './utils'
 
 export class Game {
@@ -78,7 +79,7 @@ export class Game {
                 // The pawn file is added only if it is a capture
                 notation += squareNbToCoordinates(move.startSquareNb)[0]
             } else {
-                notation += piece.notationChar
+                notation += this.notationChar(piece)
             }
         }
 
@@ -121,13 +122,12 @@ export class Game {
 
         // Add the end square coordinates
         if (move.type !== 'shortCastle' && move.type !== 'longCastle') {
-            const endSquareCoordinates = squareNbToCoordinates(move.endSquareNb)
-            notation += endSquareCoordinates
+            notation += squareNbToCoordinates(move.endSquareNb)
         }
 
         // Add the promotion symbol if it is a promotion
         if (move.type === 'promotion' || move.type === 'capturePromotion') {
-            notation += '=' + endBoard.squares[move.endSquareNb]!.notationChar
+            notation += '=' + this.notationChar(endBoard.squares[move.endSquareNb]!)
         }
 
         // Add the check / checkmate / stalemate symbol
@@ -140,5 +140,22 @@ export class Game {
         }
 
         return notation
+    }
+
+    private notationChar(piece: Piece) {
+        switch (piece.name) {
+            case 'bishop':
+                return 'B'
+            case 'king':
+                return 'K'
+            case 'knight':
+                return 'N'
+            case 'queen':
+                return 'Q'
+            case 'rook':
+                return 'R'
+            case 'pawn':
+                return ''
+        }
     }
 }

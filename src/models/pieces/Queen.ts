@@ -4,16 +4,12 @@ import { AttackTable, PieceColor, PieceLetter } from '../types'
 import { Piece } from './Piece'
 
 export class Queen extends Piece {
-    get notationChar(): PieceLetter {
-        return 'Q'
-    }
-
     constructor(color: PieceColor) {
         super('queen', color)
     }
 
     possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[] {
-        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable, 'Q')
+        return this.createMovesForRepeatedOffsets(startSquareNb, OFFSETS, board, opponentAttackTable)
     }
 
     updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void {

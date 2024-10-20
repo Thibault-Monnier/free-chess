@@ -7,7 +7,6 @@ import { calculateAxisOffset, fileRankToSquareNb, isBetweenSquares, squareNbToFi
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
 
-    abstract get notationChar(): PieceLetter
     abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
     abstract get isSliding(): boolean
@@ -33,8 +32,7 @@ export abstract class Piece {
         startSquareNb: number,
         offsets: FileRank[],
         board: Board,
-        opponentAttackTable: AttackTable,
-        PieceLetter: PieceLetter
+        opponentAttackTable: AttackTable
     ): Move[] {
         const moves: Move[] = []
 
@@ -44,7 +42,7 @@ export abstract class Piece {
             while (true) {
                 endSquareNb = this.addOffset(endSquareNb, offset)
                 if (endSquareNb === null) break
-                this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable, PieceLetter)
+                this.createMove(moves, startSquareNb, endSquareNb, board, opponentAttackTable)
                 if (board.squares[endSquareNb]) break
             }
         }
@@ -57,7 +55,6 @@ export abstract class Piece {
         endSquareNb: number | null,
         board: Board,
         opponentAttackTable: AttackTable,
-        letter: PieceLetter,
         postMove?: (endBoard: Board) => void,
         isPromotion = false
     ): void {
