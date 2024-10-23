@@ -3,7 +3,6 @@ import { DepthNBot } from './models/bots/DepthNBot'
 
 self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeMs: number } }) => {
     const board = new Board(event.data.boardFEN)
-    const depth = event.data.depth
 
     let bot
     let botCurrentDepth = event.data.depth

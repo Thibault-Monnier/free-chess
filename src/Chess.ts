@@ -243,7 +243,7 @@ export class Chess {
 
     private runBot(after: () => void): void {
         this.botWorker = new Worker('./dist/botWorker.js')
-        this.botWorker.postMessage({ boardFEN: this.currentBoard.serialize(), depth: 4, maxRedoTimeMs: 250 })
+        this.botWorker.postMessage({ boardFEN: this.currentBoard.serialize(), depth: 4, maxRedoTimeMs: 350 })
 
         this.botWorker.onmessage = (event) => {
             this.bestMove = event.data ? deserializeBestMove(event.data) : null
