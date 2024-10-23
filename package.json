@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack serve --static . --open",
+        "dev": "webpack --watch",
         "build": "webpack",
         "test": "jest"
     },

@@ -22,11 +22,4 @@ module.exports = {
         extensions: ['.ts', '.js'],
     },
     mode: 'development',
-    devServer: {
-        static: './dist',
-        hot: true,
-        devMiddleware: {
-            writeToDisk: true,
-        },
-    },
 }
