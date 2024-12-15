@@ -143,29 +143,44 @@ button:disabled {
 .playmode_player_vs_bot {
     display: flex;
     flex-direction: column;
-    background-color: var(--box-color);
     border-radius: var(--border-radius);
-    padding: 0 1rem;
     transition: 0.3s padding ease, 0.3s background-color ease;
+
+    @media (min-width: 50rem) {
+        padding: 0 1rem;
+        background-color: var(--box-color);
+    }
 }
 
 .playmode_player_vs_bot:hover {
-    background-color: rgba(var(--box-color-rgb), 0.3);
-    padding: 1rem;
+    @media (min-width: 50rem) {
+        padding: 1rem;
+        background-color: rgba(var(--box-color-rgb), 0.3);
+    }
 }
 
 .playmode_player_vs_bot_color {
     display: flex;
-    justify-content: space-between;
+    gap: 0.5rem;
     transition: 0.3s margin ease;
+
+    @media (min-width: 50rem) {
+        gap: 1rem;
+    }
 }
 
 .playmode_player_vs_bot:hover .playmode_player_vs_bot_color {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+
+    @media (min-width: 50rem) {
+        margin-top: 1rem;
+    }
 }
 
 .playing_color_selector {
     display: flex;
+    flex: 1;
+    justify-content: center;
     gap: 0.5rem;
     align-items: center;
     padding: 0 0.75rem;
@@ -188,7 +203,12 @@ button:disabled {
 }
 
 .playing_color_selector span {
-    line-height: 0;
+    height: 0;
+    transition: 0.3s height ease;
+}
+
+.playmode_player_vs_bot:hover .playing_color_selector span {
+    height: 1em;
 }
 
 .playmode_arrow {
