@@ -9,13 +9,17 @@ import { invertColor } from './models/utils'
 
 export class Chess {
     private game = new Game()
-    private canvas = new Canvas()
+    private canvas: Canvas
     private selectedSquareNb: number | null = null
     private highlightedSquareNbs = new Array(64).fill(false)
     private bestMove: BestMove | null | undefined
     private botWorker: Worker | undefined
+    private playMode: PlayMode
 
-    constructor(private playMode: PlayMode = '1v1') {}
+    constructor(playMode: PlayMode) {
+        this.playMode = playMode
+        this.canvas = new Canvas(playMode.mode === '1vC' ? playMode.playerColor : 'white')
+    }
 
     private get currentBoard(): Board {
         return this.game.currentBoard
@@ -24,7 +28,7 @@ export class Chess {
     setup() {
         this.canvas.setup()
 
-        this.toggleEvaluationDisplay(this.playMode !== '1vC')
+        this.toggleEvaluationDisplay(this.playMode.mode !== '1vC')
         this.setActivePlayModeButton()
         this.newMove()
     }
@@ -138,20 +142,20 @@ export class Chess {
 
     private shouldCalculateBestMove(): boolean {
         if (this.shouldPlayBestMove()) return true
-        if (this.playMode === '1v1') return true
+        if (this.playMode.mode === '1v1') return true
 
         return false
     }
 
     private shouldPlayBestMove(): boolean {
-        if (this.playMode === 'CvC') return true
-        if (this.playMode === '1vC' && this.currentBoard.colorToMove === 'black') return true
+        if (this.playMode.mode === 'CvC') return true
+        if (this.playMode.mode === '1vC' && this.currentBoard.colorToMove !== this.playMode.playerColor) return true
 
         return false
     }
 
     private get shouldShowBestMove(): boolean {
-        return this.playMode === '1v1'
+        return this.playMode.mode === '1v1'
     }
 
     // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
@@ -257,7 +261,7 @@ export class Chess {
     }
 
     private undo(): void {
-        this.game.undo(this.playMode === '1vC' ? 2 : 1)
+        this.game.undo(this.playMode.mode === '1vC' ? 2 : 1)
         this.newMove()
     }
 
@@ -316,8 +320,8 @@ export class Chess {
             document.getElementById(id)!.style.visibility = visibility ? 'visible' : 'hidden'
         }
 
-        toggleVisibility('player_vs_player_arrow', this.playMode === '1v1')
-        toggleVisibility('player_vs_bot_arrow', this.playMode === '1vC')
-        toggleVisibility('bot_vs_bot_arrow', this.playMode === 'CvC')
+        toggleVisibility('player_vs_player_arrow', this.playMode.mode === '1v1')
+        toggleVisibility('player_vs_bot_arrow', this.playMode.mode === '1vC')
+        toggleVisibility('bot_vs_bot_arrow', this.playMode.mode === 'CvC')
     }
 }

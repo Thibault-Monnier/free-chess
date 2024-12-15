@@ -1,6 +1,7 @@
 import { cburnettPiecesImages, drawArrow, freeChessPiecesImages, imagesLoading } from './drawUtils'
 import { Board } from './models/Board'
 import { Move } from './models/Move'
+import { PieceColor } from './models/types'
 import { squareNbToFileRank } from './models/utils'
 import { waitOneMillisecondAsync } from './utils'
 
@@ -8,7 +9,29 @@ export class Canvas {
     readonly canvasDOM = document.getElementById('board') as HTMLCanvasElement
     private readonly ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D
 
+    private bottomPlayerColor: PieceColor
+
     private squareSize = 0
+
+    constructor(bottomPlayerColor: PieceColor) {
+        this.bottomPlayerColor = bottomPlayerColor
+    }
+
+    private squareNbToDisplaySquareNb(squareNb: number): number {
+        return this.bottomPlayerColor === 'white' ? squareNb : 63 - squareNb
+    }
+
+    private displaySquareNbToSquareNb(displaySquareNb: number): number {
+        return this.bottomPlayerColor === 'white' ? displaySquareNb : 63 - displaySquareNb
+    }
+
+    private fileToDisplayFile(file: number): number {
+        return this.bottomPlayerColor === 'white' ? file : 7 - file
+    }
+
+    private rankToDisplayRank(rank: number): number {
+        return this.bottomPlayerColor === 'white' ? rank : 7 - rank
+    }
 
     draw(
         board: Board,
@@ -77,14 +100,16 @@ export class Canvas {
     }
 
     private squareNbToXY(squareNb: number): { x: number; y: number } {
+        const displaySquareNb = this.squareNbToDisplaySquareNb(squareNb)
         return {
-            x: this.squareSize * (squareNb % 8),
-            y: this.canvasDOM.height - this.squareSize - this.squareSize * Math.floor(squareNb / 8),
+            x: this.squareSize * (displaySquareNb % 8),
+            y: this.canvasDOM.height - this.squareSize - this.squareSize * Math.floor(displaySquareNb / 8),
         }
     }
 
     private getSquareColor(squareNb: number) {
-        return ((squareNb >> 3) + squareNb) % 2 === 0 ? 'dark' : 'light'
+        const displaySquareNb = this.squareNbToDisplaySquareNb(squareNb)
+        return ((displaySquareNb >> 3) + displaySquareNb) % 2 === 0 ? 'dark' : 'light'
     }
 
     squareNbFromMouseEvent(event: MouseEvent): number | null {
@@ -100,7 +125,9 @@ export class Canvas {
         )
             return null
 
-        return Math.floor(cssX / cssSquareSize) + Math.floor((cssSquareSize * 8 - (cssY + 1)) / cssSquareSize) * 8
+        const displaySquareNb =
+            Math.floor(cssX / cssSquareSize) + Math.floor((cssSquareSize * 8 - (cssY + 1)) / cssSquareSize) * 8
+        return this.displaySquareNbToSquareNb(displaySquareNb)
     }
 
     private drawCoordinates() {
@@ -108,33 +135,37 @@ export class Canvas {
         this.ctx.font = `${fontSize}px Arial`
 
         for (let file = 0; file < 8; file++) {
-            this.ctx.fillStyle = this.getSquareColor(file) === 'dark' ? lightSquares : darkSquares
+            const displayFile = this.fileToDisplayFile(file)
+            this.ctx.fillStyle =
+                this.getSquareColor(this.squareNbToDisplaySquareNb(file)) === 'dark' ? lightSquares : darkSquares
             this.ctx.fillText(
-                String.fromCharCode(97 + file),
+                String.fromCharCode(97 + displayFile),
                 this.squareSize * (file + 1) - fontSize,
                 this.canvasDOM.height - fontSize * 0.4
             )
         }
 
         for (let rank = 0; rank < 8; rank++) {
-            this.ctx.fillStyle = this.getSquareColor(rank * 8) === 'dark' ? lightSquares : darkSquares
-            this.ctx.fillText(String(rank + 1), fontSize * 0.4, this.squareSize * (7 - rank) + fontSize * 1.2)
+            const displayRank = this.rankToDisplayRank(rank)
+            this.ctx.fillStyle =
+                this.getSquareColor(this.displaySquareNbToSquareNb(rank * 8)) === 'dark' ? lightSquares : darkSquares
+            this.ctx.fillText(String(displayRank + 1), fontSize * 0.4, this.squareSize * (7 - rank) + fontSize * 1.2)
         }
     }
 
     private createBestMoveArrow(move: Move): void {
-        const startPosition = squareNbToFileRank(move.startSquareNb)
-        const endPosition = squareNbToFileRank(move.endSquareNb)
+        const displayStartPosition = squareNbToFileRank(this.squareNbToDisplaySquareNb(move.startSquareNb))
+        const displayEndPosition = squareNbToFileRank(this.squareNbToDisplaySquareNb(move.endSquareNb))
         const width = this.squareSize / 12
         const color = 'rgba(50, 150, 50, 1)'
 
         const startCoordinates = {
-            fromX: startPosition.file * this.squareSize + this.squareSize / 2,
-            fromY: (7 - startPosition.rank) * this.squareSize + this.squareSize / 2,
+            fromX: displayStartPosition.file * this.squareSize + this.squareSize / 2,
+            fromY: (7 - displayStartPosition.rank) * this.squareSize + this.squareSize / 2,
         }
         const endCoordinates = {
-            toX: endPosition.file * this.squareSize + this.squareSize / 2,
-            toY: (7 - endPosition.rank) * this.squareSize + this.squareSize / 2,
+            toX: displayEndPosition.file * this.squareSize + this.squareSize / 2,
+            toY: (7 - displayEndPosition.rank) * this.squareSize + this.squareSize / 2,
         }
 
         drawArrow(startCoordinates, endCoordinates, width, color, this.ctx)

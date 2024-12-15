@@ -1,7 +1,7 @@
 import { Chess } from './Chess'
 import { PlayMode } from './models/types'
 
-let chess = new Chess()
+let chess = new Chess({ mode: '1v1' })
 
 if (document.readyState === 'complete') {
     chess.setup()
@@ -11,11 +11,13 @@ if (document.readyState === 'complete') {
 
 window.chess = chess
 
-const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'bot_vs_bot']
+const playmodeIDs = ['player_vs_player', 'player_vs_bot', 'player_vs_bot_white', 'player_vs_bot_black', 'bot_vs_bot']
 const idToPlayMode: Record<(typeof playmodeIDs)[number], PlayMode> = {
-    player_vs_player: '1v1',
-    player_vs_bot: '1vC',
-    bot_vs_bot: 'CvC',
+    player_vs_player: { mode: '1v1' },
+    player_vs_bot: { mode: '1vC', playerColor: 'white' },
+    player_vs_bot_white: { mode: '1vC', playerColor: 'white' },
+    player_vs_bot_black: { mode: '1vC', playerColor: 'black' },
+    bot_vs_bot: { mode: 'CvC' },
 }
 
 playmodeIDs.forEach((id) => {

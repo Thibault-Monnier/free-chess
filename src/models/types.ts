@@ -1,5 +1,3 @@
-import { Move } from './Move'
-
 export type PieceColor = 'white' | 'black'
 export type PieceName = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 export type PieceLetter = 'K' | 'Q' | 'R' | 'B' | 'N' | ''
@@ -26,4 +24,4 @@ export type AttackTable = {
 export type PinnedPiece = { squareNb: number; offset: FileRank }
 export type Bitboard = boolean[]
 export type MoveType = 'normal' | 'capture' | 'longCastle' | 'shortCastle' | 'promotion' | 'capturePromotion'
-export type PlayMode = '1v1' | '1vC' | 'CvC'
+export type PlayMode = { mode: '1v1' } | { mode: '1vC'; playerColor: PieceColor } | { mode: 'CvC' }

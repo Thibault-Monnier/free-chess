@@ -144,7 +144,7 @@ button:disabled {
     display: flex;
     flex-direction: column;
     border-radius: var(--border-radius);
-    transition: 0.3s padding ease, 0.3s background-color ease;
+    transition: 0.3s 0.15s padding ease, 0.3s 0.15s background-color ease;
 
     @media (min-width: 50rem) {
         padding: 0 1rem;
@@ -162,7 +162,7 @@ button:disabled {
 .playmode_player_vs_bot_color {
     display: flex;
     gap: 0.5rem;
-    transition: 0.3s margin ease;
+    transition: 0.3s 0.15s margin ease;
 
     @media (min-width: 50rem) {
         gap: 1rem;
@@ -184,7 +184,7 @@ button:disabled {
     gap: 0.5rem;
     align-items: center;
     padding: 0 0.75rem;
-    transition: 0.3s padding ease;
+    transition: 0.3s 0.15s padding ease;
     overflow: hidden;
 }
 
@@ -195,7 +195,7 @@ button:disabled {
 .playing_color_selector_icon {
     width: 1.8rem;
     height: 0;
-    transition: 0.3s height ease;
+    transition: 0.3s 0.15s height ease;
 }
 
 .playmode_player_vs_bot:hover .playing_color_selector_icon {
@@ -206,7 +206,7 @@ button:disabled {
     display: flex;
     align-items: center;
     height: 0;
-    transition: 0.3s height ease;
+    transition: 0.3s 0.15s height ease;
 }
 
 .playmode_player_vs_bot:hover .playing_color_selector span {
