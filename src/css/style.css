@@ -104,6 +104,9 @@ button:disabled {
 
 .improvements ul {
     font-style: italic;
+}
+
+.improvements ul:not(:last-child) {
     margin-bottom: 1rem;
 }
 
