@@ -94,15 +94,45 @@
                 </div>
 
                 <div class="playmode">
-                    <button id="player_vs_player">
+                    <button class="playmode_selector" id="player_vs_player">
                         <span class="playmode_arrow" id="player_vs_player_arrow">▶</span>
                         <span>Player vs Player</span>
                     </button>
-                    <button id="player_vs_bot">
-                        <span class="playmode_arrow" id="player_vs_bot_arrow">▶</span>
-                        <span>Player vs Bot</span>
-                    </button>
-                    <button id="bot_vs_bot">
+                    <div class="playmode_player_vs_bot">
+                        <button class="playmode_selector" id="player_vs_bot">
+                            <span class="playmode_arrow" id="player_vs_bot_arrow">▶</span>
+                            <span>Player vs Bot</span>
+                        </button>
+                        <div class="playmode_player_vs_bot_color">
+                            <button
+                                id="player_vs_bot_white"
+                                class="playing_color_selector"
+                                disabled
+                                title="Coming soon"
+                            >
+                                <img
+                                    class="playing_color_selector_icon"
+                                    id="player_vs_bot_white_arrow"
+                                    src="src/assets/cburnett/wN.svg"
+                                />
+                                <span>White</span>
+                            </button>
+                            <button
+                                id="player_vs_bot_black"
+                                class="playing_color_selector"
+                                disabled
+                                title="Coming soon"
+                            >
+                                <img
+                                    class="playing_color_selector_icon"
+                                    id="player_vs_bot_black_arrow"
+                                    src="src/assets/cburnett/bN.svg"
+                                />
+                                <span>Black</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="playmode_selector" id="bot_vs_bot">
                         <span class="playmode_arrow" id="bot_vs_bot_arrow">▶</span>
                         <span>Bot vs Bot</span>
                     </button>
