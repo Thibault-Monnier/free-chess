@@ -203,6 +203,8 @@ button:disabled {
 }
 
 .playing_color_selector span {
+    display: flex;
+    align-items: center;
     height: 0;
     transition: 0.3s height ease;
 }
