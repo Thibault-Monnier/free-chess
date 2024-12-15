@@ -8,16 +8,13 @@ body {
     background-color: var(--website-background-color);
     color: var(--text-color);
     font-family: Poppins, sans-serif;
+    line-height: 1.2;
     padding: 1rem;
 
     @media (min-width: 50rem) {
         height: 100vh;
         padding: 2rem;
     }
-}
-
-button {
-    font-family: Poppins, sans-serif;
 }
 
 .chess {
@@ -79,16 +76,19 @@ button {
 }
 
 .improvements h1 {
-    margin-top: 3rem;
     font-size: 1.5rem;
     font-weight: 600;
+    margin-bottom: 1rem;
 }
-.improvements h1:first-child {
-    margin-top: 0;
-}
-.improvements p {
+
+.improvements ul {
     font-style: italic;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.improvements li {
+    list-style-position: inside;
+    list-style-type: disc;
 }
 
 .playmode {
@@ -99,17 +99,12 @@ button {
 }
 
 .playmode button {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-    /*Draw the button background*/
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     background-color: var(--box-color);
     border: 1px solid var(--box-color);
     padding: 0.8rem 0.3rem;
     border-radius: 1.4rem;
-
-    /*Draw the text*/
     color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
@@ -117,10 +112,6 @@ button {
 
 .playmode_arrow {
     visibility: hidden;
-}
-
-.playmode_arrow::before {
-    content: '▶';
 }
 
 .header {
@@ -254,12 +245,15 @@ button {
 }
 
 .actions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     user-select: none;
-    vertical-align: middle;
 
     background-color: var(--box-color);
     border: 1px solid var(--box-color);
-    padding: 0.2rem 0;
+    padding: 0.4rem 0;
     border-radius: 1.5rem;
 
     color: var(--text-color);
@@ -276,4 +270,9 @@ button {
     border: 1px solid #888;
 
     cursor: pointer;
+}
+
+.reset_icon {
+    height: 0.8em;
+    width: 0.8em;
 }

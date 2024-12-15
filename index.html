@@ -40,43 +40,71 @@
                     <div id="moves" class="moves"></div>
                 </div>
                 <div class="actions">
-                    <button id="undo" disabled><span>&lt;</span></button>
-                    <button id="redo" disabled><span>&gt;</span></button>
-                    <button id="reset"><span>↺</span></button>
+                    <button id="undo" disabled>&lt;</button>
+                    <button id="redo" disabled>&gt;</button>
+                    <button id="reset">
+                        <svg
+                            class="reset_icon"
+                            width="100"
+                            height="100"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g
+                                fill="none"
+                                fill-rule="evenodd"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                transform="rotate(-45, 12, 12)"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="8.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="square"
+                                    stroke-dasharray="41.5 18"
+                                />
+                                <path
+                                    d="m23,10 v4 h-4"
+                                    transform="rotate(225,21,13)"
+                                    stroke-linecap="round"
+                                    stroke-linejoin=""
+                                />
+                            </g>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
             <div class="control_panel">
                 <div class="improvements">
                     <h1>TODO:</h1>
-                    <p>
-                        - Switch Piece Set<br />
-                        - Switch Bot Analysis ON/OFF<br />
-                    </p>
-                    <p>
-                        - Pawn Promotion: Variants<br />
-                        - Game End: Threefold Repetition<br />
-                        - Game End: 50 Moves Rule<br />
-                        - Game End: Insufficient Material
-                    </p>
-                    <p>Arrows?</p>
+                    <ul>
+                        <li>Switch Piece Set</li>
+                        <li>Switch Bot Analysis ON/OFF</li>
+                    </ul>
+                    <ul>
+                        <li>Pawn Promotion: Variants</li>
+                        <li>Game End: Threefold Repetition</li>
+                        <li>Game End: 50 Moves Rule</li>
+                        <li>Game End: Insufficient Material</li>
+                    </ul>
                 </div>
 
                 <div class="playmode">
                     <button id="player_vs_player">
-                        <div class="playmode_arrow" id="player_vs_player_arrow"></div>
+                        <span class="playmode_arrow" id="player_vs_player_arrow">▶</span>
                         <span>Player vs Player</span>
-                        <div class="playmode_arrow"></div>
                     </button>
                     <button id="player_vs_bot">
-                        <div class="playmode_arrow" id="player_vs_bot_arrow"></div>
+                        <span class="playmode_arrow" id="player_vs_bot_arrow">▶</span>
                         <span>Player vs Bot</span>
-                        <div class="playmode_arrow"></div>
                     </button>
                     <button id="bot_vs_bot">
-                        <div class="playmode_arrow" id="bot_vs_bot_arrow"></div>
+                        <span class="playmode_arrow" id="bot_vs_bot_arrow">▶</span>
                         <span>Bot vs Bot</span>
-                        <div class="playmode_arrow"></div>
                     </button>
                 </div>
             </div>
