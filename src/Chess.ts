@@ -71,6 +71,12 @@ export class Chess {
                 navigator.clipboard.writeText(
                     this.game.moves.map((_, move) => this.game.calculateMoveNotation(move)).join(' ')
                 )
+                document.getElementById('copy_moves_icon')!.style.display = 'none'
+                document.getElementById('copied_icon')!.style.display = ''
+                setTimeout(() => {
+                    document.getElementById('copy_moves_icon')!.style.display = ''
+                    document.getElementById('copied_icon')!.style.display = 'none'
+                }, 4000)
             }
         }
 
