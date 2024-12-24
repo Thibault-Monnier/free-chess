@@ -60,11 +60,12 @@ export class DepthNBot extends Bot {
         //const endTimestamp = performance.now()
         //this.perfTimePossibleMoves += endTimestamp - startTimestamp
 
-        if (board.endOfGame(moves) === 'checkmate') {
+        const endOfGame = board.endOfGame(moves)
+        if (endOfGame === 'checkmate') {
             return board.colorToMove === 'white'
                 ? -this.checkmateScore - remainingDepth
                 : this.checkmateScore + remainingDepth
-        } else if (board.endOfGame(moves) === 'stalemate') {
+        } else if (endOfGame === 'stalemate') {
             return 0
         }
 

@@ -37,7 +37,7 @@ export class Board {
             this.importFEN(boardOrFEN)
         } else if (boardOrFEN) {
             const board = boardOrFEN
-            this.squares = [...board.squares]
+            this.squares = board.squares.slice()
             this.colorToMove = options?.switchColor ? invertColor(board.colorToMove) : board.colorToMove
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
             this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
@@ -134,7 +134,7 @@ export class Board {
         for (let squareNb = 0; squareNb < 64; squareNb++) {
             const piece = this.squares[squareNb]
             if (piece && piece.color === this.colorToMove) {
-                moves = [...moves, ...piece.possibleMoves(squareNb, this, opponentAttackTable)]
+                moves.push(...piece.possibleMoves(squareNb, this, opponentAttackTable))
             }
         }
         return moves

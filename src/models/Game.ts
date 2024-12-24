@@ -143,19 +143,14 @@ export class Game {
     }
 
     private notationChar(piece: Piece) {
-        switch (piece.name) {
-            case 'bishop':
-                return 'B'
-            case 'king':
-                return 'K'
-            case 'knight':
-                return 'N'
-            case 'queen':
-                return 'Q'
-            case 'rook':
-                return 'R'
-            case 'pawn':
-                return ''
+        const map = {
+            bishop: 'B',
+            king: 'K',
+            knight: 'N',
+            queen: 'Q',
+            rook: 'R',
+            pawn: '',
         }
+        return map[piece.name]
     }
 }
