@@ -53,16 +53,13 @@ export class Canvas {
             this.fillRect(x, y, this.squareSize, this.squareSize, squareColor)
 
             if (selectedSquareNb === squareNb) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 255, 0, 0.5)')
+                this.fillRect(x, y, this.squareSize, this.squareSize, moveSquareColor)
             }
             if (lastMove?.startSquareNb === squareNb || lastMove?.endSquareNb === squareNb) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(150, 150, 50, 0.75)')
-            }
-            if (bestMove?.startSquareNb === squareNb || bestMove?.endSquareNb === squareNb) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(100, 255, 100, 0.5)')
+                this.fillRect(x, y, this.squareSize, this.squareSize, previousMoveColor)
             }
             if (highlightedSquareNbs[squareNb]) {
-                this.fillRect(x, y, this.squareSize, this.squareSize, 'rgba(255, 80, 70,0.75)')
+                this.fillRect(x, y, this.squareSize, this.squareSize, highlightedSquareColor)
             }
         }
 
@@ -94,7 +91,7 @@ export class Canvas {
                 0,
                 Math.PI * 2
             )
-            this.ctx.fillStyle = isOccupied ? 'rgba(30, 0, 100, 0.25)' : 'rgba(0, 0, 0, 0.2)'
+            this.ctx.fillStyle = moveSquareColor
             this.ctx.fill()
         }
     }
@@ -157,7 +154,6 @@ export class Canvas {
         const displayStartPosition = squareNbToFileRank(this.squareNbToDisplaySquareNb(move.startSquareNb))
         const displayEndPosition = squareNbToFileRank(this.squareNbToDisplaySquareNb(move.endSquareNb))
         const width = this.squareSize / 12
-        const color = 'rgba(50, 150, 50, 1)'
 
         const startCoordinates = {
             fromX: displayStartPosition.file * this.squareSize + this.squareSize / 2,
@@ -168,7 +164,7 @@ export class Canvas {
             toY: (7 - displayEndPosition.rank) * this.squareSize + this.squareSize / 2,
         }
 
-        drawArrow(startCoordinates, endCoordinates, width, color, this.ctx)
+        drawArrow(startCoordinates, endCoordinates, width, bestMoveArrowColor, this.ctx)
     }
 
     private async drawPieces(board: Board) {
@@ -201,3 +197,7 @@ export class Canvas {
 
 const lightSquares = '#e5d7bf'
 const darkSquares = '#b88465'
+const moveSquareColor = 'rgba(0, 0, 0, 0.15)'
+const highlightedSquareColor = 'rgba(255, 70, 70, 0.75)'
+const previousMoveColor = 'rgba(207, 155, 12, 0.5)'
+const bestMoveArrowColor = 'rgba(50, 150, 50, 1)'
