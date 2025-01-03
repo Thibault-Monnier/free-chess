@@ -1,6 +1,7 @@
-import { BestMove } from './models/BestMove';
+import { BestMove } from './models/BestMove'
 import { Board } from './models/Board'
 import { DepthNBot } from './models/bots/DepthNBot'
+import { Move } from './models/Move'
 
 self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeMs: number } }) => {
     const board = new Board(event.data.boardFEN)
@@ -8,12 +9,15 @@ self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeM
     let bot: DepthNBot | null = null
     let botCurrentDepth = event.data.depth
     let bestMove: BestMove | null = null
+    let bestLine: Move[] = []
 
     const startTime = performance.now()
     let totalTime = 0
     while (totalTime < event.data.maxRedoTimeMs) {
         bot = new DepthNBot(board, botCurrentDepth)
-        bestMove = bot.run()
+        const result = bot.run()
+        bestMove = result?.bestMove || null
+        bestLine = result?.bestLine || []
 
         totalTime += performance.now() - startTime
         botCurrentDepth++
@@ -22,7 +26,7 @@ self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeM
     if (bot) {
         console.log(
             'Time:',
-            Math.round(bot!.perfTotalTime),
+            Math.round(bot.perfTotalTime),
             'ms' + ' - Minimax calls:',
             bot.nbMinimax,
             ' - Avg time per minimax (microsecs):',
@@ -37,6 +41,8 @@ self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeM
         console.log('Best move:', bestMove, 'Evaluation:', bestMove?.evaluation)
         console.log('Calculated to depth', botCurrentDepth - 1)
     }
+
+    console.log('Best line:', bestLine)
 
     postMessage(bestMove?.serialize())
 }

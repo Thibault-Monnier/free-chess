@@ -1,10 +1,9 @@
 import { BestMove } from '../BestMove'
 import { Board } from '../Board'
 import { Move } from '../Move'
-import { Bot } from './Bot'
 import { Evaluator } from './evaluator/Evaluator'
 
-export class DepthNBot extends Bot {
+export class DepthNBot {
     private checkmateScore = 999999999
 
     // The following properties are only used for performance analysis
@@ -15,7 +14,9 @@ export class DepthNBot extends Bot {
     perfNbPossibleMoves = 0
     perfTimePossibleMoves = 0
 
-    run(): BestMove | null {
+    constructor(public board: Board, public depth: number) {}
+
+    run(): { bestMove: BestMove; bestLine: Move[] } | null {
         this.nbMinimax = 0
 
         const startTimestamp = performance.now()
@@ -24,8 +25,13 @@ export class DepthNBot extends Bot {
         this.perfTotalTime = endTimestamp - startTimestamp
 
         const bestEvaluation = result.evaluation
-        const bestMove: Move | null = result.moves?.[0] || null
-        return bestMove ? new BestMove(bestMove, bestEvaluation) : null
+        if (result.moves) {
+            return {
+                bestMove: new BestMove(result.moves[0], bestEvaluation),
+                bestLine: result.moves,
+            }
+        }
+        return null
     }
 
     private minimax(
