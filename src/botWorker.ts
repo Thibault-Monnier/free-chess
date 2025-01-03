@@ -1,12 +1,12 @@
 import { BestMove } from './models/BestMove'
 import { Board } from './models/Board'
-import { DepthNBot } from './models/bots/DepthNBot'
+import { Bot } from './models/bot/Bot';
 import { Move } from './models/Move'
 
 self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeMs: number } }) => {
     const board = new Board(event.data.boardFEN)
 
-    let bot: DepthNBot | null = null
+    let bot: Bot | null = null
     let botCurrentDepth = event.data.depth
     let bestMove: BestMove | null = null
     let bestLine: Move[] = []
@@ -14,7 +14,7 @@ self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeM
     const startTime = performance.now()
     let totalTime = 0
     while (totalTime < event.data.maxRedoTimeMs) {
-        bot = new DepthNBot(board, botCurrentDepth)
+        bot = new Bot(board, botCurrentDepth)
         const result = bot.run()
         bestMove = result?.bestMove || null
         bestLine = result?.bestLine || []

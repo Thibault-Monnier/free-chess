@@ -3,7 +3,7 @@ import { Board } from '../Board'
 import { Move } from '../Move'
 import { Evaluator } from './evaluator/Evaluator'
 
-export class DepthNBot {
+export class Bot {
     private checkmateScore = 999999999
 
     // The following properties are only used for performance analysis
