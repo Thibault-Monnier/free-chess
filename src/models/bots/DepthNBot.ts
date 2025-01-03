@@ -17,32 +17,23 @@ export class DepthNBot extends Bot {
 
     run(): BestMove | null {
         this.nbMinimax = 0
+
         const startTimestamp = performance.now()
-
-        const moves = this.board.possibleMoves()
-        const colorMultiplier = this.board.colorToMove === 'white' ? 1 : -1
-
-        let bestMove: Move | null = null
-        let bestEvaluation = -Infinity
-        for (let move of moves) {
-            const evaluation =
-                this.minimax(move.endBoard, this.depth! - 1, -this.checkmateScore, this.checkmateScore) *
-                colorMultiplier
-
-            if (evaluation >= bestEvaluation) {
-                bestMove = move
-                bestEvaluation = evaluation
-            }
-        }
-        bestEvaluation *= colorMultiplier
-
+        const result = this.minimax(this.board, this.depth, -this.checkmateScore, this.checkmateScore)
         const endTimestamp = performance.now()
         this.perfTotalTime = endTimestamp - startTimestamp
 
+        const bestEvaluation = result.evaluation
+        const bestMove: Move | null = result.moves?.[0] || null
         return bestMove ? new BestMove(bestMove, bestEvaluation) : null
     }
 
-    private minimax(board: Board, remainingDepth: number, alpha: number, beta: number): number {
+    private minimax(
+        board: Board,
+        remainingDepth: number,
+        alpha: number,
+        beta: number
+    ): { evaluation: number; moves: Move[] | null } {
         this.nbMinimax++
 
         if (remainingDepth === 0) {
@@ -51,7 +42,7 @@ export class DepthNBot extends Bot {
             //const endTimestamp = performance.now()
             //this.perfTimeEvals += endTimestamp - startTimestamp
             this.perfNbEvals++
-            return evaluation
+            return { evaluation, moves: null }
         }
 
         //const startTimestamp = performance.now()
@@ -62,31 +53,51 @@ export class DepthNBot extends Bot {
 
         const endOfGame = board.endOfGame(moves)
         if (endOfGame === 'checkmate') {
-            return board.colorToMove === 'white'
-                ? -this.checkmateScore - remainingDepth
-                : this.checkmateScore + remainingDepth
+            const evaluation =
+                (this.checkmateScore - (this.depth - remainingDepth - 1)) * (board.colorToMove === 'white' ? -1 : 1)
+            return { evaluation, moves: null }
         } else if (endOfGame === 'stalemate') {
-            return 0
+            return { evaluation: 0, moves: null }
         }
 
         if (board.colorToMove === 'white') {
             let bestEvaluation = -Infinity
+            let bestMove: Move | null = null
+            let bestMoves: Move[] = []
             for (let move of moves) {
-                const evaluation = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
-                bestEvaluation = Math.max(bestEvaluation, evaluation)
-                alpha = Math.max(alpha, evaluation)
+                const result = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
+                if (result.evaluation > bestEvaluation) {
+                    bestEvaluation = result.evaluation
+                    bestMove = move
+                    bestMoves = result.moves || []
+                    bestMoves.unshift(move)
+                }
+                alpha = Math.max(alpha, result.evaluation)
                 if (beta <= alpha) break
             }
-            return bestEvaluation
+            return {
+                evaluation: bestEvaluation,
+                moves: bestMove ? bestMoves : null,
+            }
         } else {
             let bestEvaluation = Infinity
+            let bestMove: Move | null = null
+            let bestMoves: Move[] = []
             for (let move of moves) {
-                const evaluation = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
-                bestEvaluation = Math.min(bestEvaluation, evaluation)
-                beta = Math.min(beta, evaluation)
+                const result = this.minimax(move.endBoard, remainingDepth - 1, alpha, beta)
+                if (result.evaluation < bestEvaluation) {
+                    bestEvaluation = result.evaluation
+                    bestMove = move
+                    bestMoves = result.moves || []
+                    bestMoves.unshift(move)
+                }
+                beta = Math.min(beta, result.evaluation)
                 if (beta <= alpha) break
             }
-            return bestEvaluation
+            return {
+                evaluation: bestEvaluation,
+                moves: bestMove ? bestMoves : null,
+            }
         }
     }
 }

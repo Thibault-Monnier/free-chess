@@ -1,12 +1,13 @@
+import { BestMove } from './models/BestMove';
 import { Board } from './models/Board'
 import { DepthNBot } from './models/bots/DepthNBot'
 
 self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeMs: number } }) => {
     const board = new Board(event.data.boardFEN)
 
-    let bot
+    let bot: DepthNBot | null = null
     let botCurrentDepth = event.data.depth
-    let bestMove
+    let bestMove: BestMove | null = null
 
     const startTime = performance.now()
     let totalTime = 0

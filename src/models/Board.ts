@@ -140,9 +140,8 @@ export class Board {
         return moves
     }
 
-    endOfGame(possibleMoves?: Move[]): EndOfGame | null {
-        const moves = possibleMoves || this.possibleMoves()
-        if (moves.length === 0) {
+    endOfGame(possibleMoves = this.possibleMoves()): EndOfGame | null {
+        if (possibleMoves.length === 0) {
             return this.isInCheck() ? 'checkmate' : 'stalemate'
         } else return null
     }
