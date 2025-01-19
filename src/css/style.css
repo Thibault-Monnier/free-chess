@@ -74,9 +74,13 @@ button:disabled {
 
     @media (min-width: 50rem) {
         height: 100%;
-        width: 25rem;
+        width: 20rem;
         order: 3;
         gap: 1rem;
+    }
+
+    @media (min-width: 80rem) {
+        width: 25rem;
     }
 }
 
@@ -87,8 +91,12 @@ button:disabled {
     gap: 1.5rem;
 
     @media (min-width: 50rem) {
-        width: 18rem;
         order: 1;
+        width: 15rem;
+    }
+
+    @media (min-width: 80rem) {
+        width: 18rem;
     }
 }
 
@@ -242,14 +250,26 @@ button:disabled {
     gap: 0.5rem;
 }
 
+.evaluation {
+    flex-direction: column;
+    @media (min-width: 50rem) {
+        flex-direction: row;
+    }
+}
+
 .next_player .end_of_game {
     gap: 0;
 }
 
 .square {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 0.5rem;
+
+    @media (min-width: 50rem) {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
 }
 .white_to_move .square {
     background-color: whitesmoke;
