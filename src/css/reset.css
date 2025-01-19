@@ -43,6 +43,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button,
+input,
+textarea,
+select {
+    color: inherit;
+    background: none;
+    border: none;
+}
 
 html {
   box-sizing: border-box;

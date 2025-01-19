@@ -15,10 +15,12 @@ export class Chess {
     private bestMove: BestMove | null | undefined
     private botWorker: Worker | undefined
     private playMode: PlayMode
+    private toggleAnalysisOn
 
     constructor(playMode: PlayMode) {
         this.playMode = playMode
         this.canvas = new Canvas(playMode.mode === '1vC' ? playMode.playerColor : 'white')
+        this.toggleAnalysisOn = this.shouldShowEvaluation
     }
 
     private get currentBoard(): Board {
@@ -28,7 +30,9 @@ export class Chess {
     setup() {
         this.canvas.setup()
 
-        this.toggleEvaluationDisplay(this.playMode.mode !== '1vC')
+        this.toggleEvaluationContainerDisplay(this.shouldShowEvaluation)
+        this.toggleEvaluationDisplay(this.shouldShowEvaluation)
+        this.toggleAnalysisButtonActive()
         this.setActivePlayModeButton()
         this.newMove()
     }
@@ -78,9 +82,14 @@ export class Chess {
                     document.getElementById('copied_icon')!.style.display = 'none'
                 }, 4000)
             }
-        }
-
-        if (event.type === 'mousedown') {
+            if (id === 'analysis_toggle' && this.shouldShowEvaluation) {
+                this.toggleAnalysisOn = !this.toggleAnalysisOn
+                const analysisOn = this.toggleAnalysisOn
+                this.toggleAnalysisButtonActive()
+                this.toggleEvaluationDisplay(analysisOn)
+                if (this.shouldShowBestMove) this.calculateBestMove()
+            }
+        } else if (event.type === 'mousedown') {
             const squareNb = this.canvas.squareNbFromMouseEvent(event)
             if (squareNb !== null) {
                 this.clickedSquare(squareNb, event.button === 0 ? 'left' : 'right')
@@ -146,14 +155,11 @@ export class Chess {
         this.highlightedSquareNbs.fill(false)
     }
 
-    private shouldCalculateBestMove(): boolean {
-        if (this.shouldPlayBestMove()) return true
-        if (this.playMode.mode === '1v1') return true
-
-        return false
+    private get shouldCalculateBestMove(): boolean {
+        return this.isBotTurn || this.shouldShowBestMove
     }
 
-    private shouldPlayBestMove(): boolean {
+    private get isBotTurn(): boolean {
         if (this.playMode.mode === 'CvC') return true
         if (this.playMode.mode === '1vC' && this.currentBoard.colorToMove !== this.playMode.playerColor) return true
 
@@ -161,13 +167,12 @@ export class Chess {
     }
 
     private get shouldShowBestMove(): boolean {
-        return this.playMode.mode === '1v1'
+        return this.playMode.mode === '1v1' && this.toggleAnalysisOn
     }
 
     // Calls the possibleMoves() method of the piece on the selected square, returns the move if it exists
     private getPossibleMoves(): Move[] | undefined {
-        if (this.selectedSquareNb === null) return
-        if (this.shouldPlayBestMove()) return
+        if (this.selectedSquareNb === null || this.isBotTurn) return
 
         const piece = this.currentBoard.squares[this.selectedSquareNb]
         if (piece?.color !== this.currentBoard.colorToMove) return
@@ -211,7 +216,7 @@ export class Chess {
 
     private calculateBestMove(): void {
         this.stopBot()
-        if (this.shouldCalculateBestMove()) {
+        if (this.shouldCalculateBestMove) {
             this.runBot(() => this.playBestMove())
         }
     }
@@ -230,12 +235,24 @@ export class Chess {
         }
     }
 
+    private get shouldShowEvaluation(): boolean {
+        return this.playMode.mode !== '1vC'
+    }
+
     private toggleEvaluationDisplay(visible: boolean) {
-        document.getElementById('evaluation')!.style.display = visible ? 'flex' : 'none'
+        document.getElementById('evaluation')!.style.display = visible ? 'unset' : 'none'
+    }
+
+    private toggleEvaluationContainerDisplay(visible: boolean) {
+        document.getElementById('evaluation_container')!.style.display = visible ? 'flex' : 'none'
+    }
+
+    private toggleAnalysisButtonActive() {
+        document.getElementById('analysis_toggle')!.classList.toggle('active', this.toggleAnalysisOn)
     }
 
     private playBestMove() {
-        if (this.shouldPlayBestMove()) {
+        if (this.isBotTurn) {
             if (this.bestMove) {
                 this.game.addMove(this.bestMove.move)
                 this.newMove()

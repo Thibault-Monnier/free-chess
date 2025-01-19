@@ -38,7 +38,10 @@
                             <span id="end_of_game_text"></span>
                         </div>
                     </div>
-                    <div id="evaluation" class="evaluation"></div>
+                    <div id="evaluation_container" class="evaluation">
+                        <span id="evaluation"></span>
+                        <button id="analysis_toggle" class="toggle_button active" title="Toggle analysis"></button>
+                    </div>
                 </div>
 
                 <canvas id="board" class="board"></canvas>
@@ -46,7 +49,7 @@
 
             <div class="moves_panel">
                 <div class="moves_container">
-                    <button id="copy_moves" class="copy_moves" title="Copy moves">
+                    <button id="copy_moves" class="copy_moves generic_button" title="Copy moves">
                         <svg
                             class="copy_moves_icon"
                             id="copy_moves_icon"
@@ -93,9 +96,9 @@
                     <div id="moves" class="moves"></div>
                 </div>
                 <div class="actions">
-                    <button id="undo" disabled>&lt;</button>
-                    <button id="redo" disabled>&gt;</button>
-                    <button id="reset">
+                    <button id="undo" class="generic_button" disabled>&lt;</button>
+                    <button id="redo" class="generic_button" disabled>&gt;</button>
+                    <button id="reset" class="generic_button">
                         <svg
                             class="reset_icon"
                             width="100"
@@ -133,27 +136,27 @@
 
             <div class="control_panel">
                 <div class="playmode">
-                    <button class="playmode_selector" id="player_vs_player">
+                    <button class="playmode_selector generic_button" id="player_vs_player">
                         <span class="playmode_arrow" id="player_vs_player_arrow">▶</span>
                         <span>Player vs Player</span>
                     </button>
                     <div class="playmode_player_vs_bot">
-                        <button class="playmode_selector" id="player_vs_bot">
+                        <button class="playmode_selector generic_button" id="player_vs_bot">
                             <span class="playmode_arrow" id="player_vs_bot_arrow">▶</span>
                             <span>Player vs Bot</span>
                         </button>
                         <div class="playmode_player_vs_bot_color">
-                            <button id="player_vs_bot_white" class="playing_color_selector">
+                            <button id="player_vs_bot_white" class="playing_color_selector generic_button">
                                 <img class="playing_color_selector_icon" src="src/assets/free-chess/white_knight.svg" />
                                 <span>White</span>
                             </button>
-                            <button id="player_vs_bot_black" class="playing_color_selector">
+                            <button id="player_vs_bot_black" class="playing_color_selector generic_button">
                                 <img class="playing_color_selector_icon" src="src/assets/free-chess/black_knight.svg" />
                                 <span>Black</span>
                             </button>
                         </div>
                     </div>
-                    <button class="playmode_selector" id="bot_vs_bot">
+                    <button class="playmode_selector generic_button" id="bot_vs_bot">
                         <span class="playmode_arrow" id="bot_vs_bot_arrow">▶</span>
                         <span>Bot vs Bot</span>
                     </button>
@@ -163,7 +166,6 @@
                     <h1>TODO:</h1>
                     <ul>
                         <li>Switch Piece Set</li>
-                        <li>Switch Bot Analysis ON/OFF</li>
                     </ul>
                     <ul>
                         <li>Pawn Promotion: Variants</li>
