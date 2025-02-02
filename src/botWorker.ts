@@ -19,11 +19,12 @@ self.onmessage = (event: { data: { boardFEN: string; depth: number; maxRedoTimeM
         bestMove = result?.bestMove || null
         bestLine = result?.bestLine || []
 
-        totalTime += performance.now() - startTime
+        totalTime = performance.now() - startTime
         botCurrentDepth++
     }
 
     if (bot) {
+        console.log('Total time:', Math.round(totalTime), 'ms')
         console.log(
             'Time:',
             Math.round(bot.perfTotalTime),
