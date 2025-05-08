@@ -1,4 +1,6 @@
-# What is Free Chess?
+# Free Chess
+
+[![jest](https://github.com/Thibault-Monnier/free-chess/actions/workflows/jest.yml/badge.svg)](https://github.com/Thibault-Monnier/free-chess/actions/workflows/jest.yml)
 
 Free Chess is an open source chess game and engine developed in Typescript by Thibault Monnier as a study project.
 
