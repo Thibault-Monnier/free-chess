@@ -1,6 +1,11 @@
+# Ignore node modules and lock files
 node_modules
 package-lock.json
+
+# IDE specific files
 .vscode
-.prettierrc.json
+.idea
+
+# Build directories
 dist
 build
