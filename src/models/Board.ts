@@ -25,6 +25,7 @@ export class Board {
         black: { queenSide: false, kingSide: false },
     }
     enPassantTargetSquareNb: number | null = null
+    fiftyMovesRuleCounter: number = 0
 
     // Test if constructor can be called in each of the following ways
     constructor()
@@ -41,6 +42,7 @@ export class Board {
             this.colorToMove = options?.switchColor ? invertColor(board.colorToMove) : board.colorToMove
             this.canCastle = { white: { ...board.canCastle.white }, black: { ...board.canCastle.black } }
             this.enPassantTargetSquareNb = options?.resetEnPassant ? null : board.enPassantTargetSquareNb
+            this.fiftyMovesRuleCounter = board.fiftyMovesRuleCounter
         } else {
             this.squares = new Array(64).fill(null)
             this.importFEN(Board.startBoardFEN)
@@ -53,7 +55,7 @@ export class Board {
 
     importFEN(FEN: string) {
         const piecesId = { r: Rook, n: Knight, b: Bishop, q: Queen, k: King, p: Pawn }
-        const [placement, colorToMove, canCastle, enPassantTargetSquare] = FEN.split(' ')
+        const [placement, colorToMove, canCastle, enPassantTargetSquare, fiftyMovesRuleCounter] = FEN.split(' ')
 
         this.squares = new Array(64).fill(null)
         placement.split('/').forEach((rowPlacement, index) => {
@@ -88,6 +90,8 @@ export class Board {
 
         this.enPassantTargetSquareNb =
             enPassantTargetSquare === '-' ? null : coordinatesToSquareNb(enPassantTargetSquare as Coordinates)
+
+        this.fiftyMovesRuleCounter = Number(fiftyMovesRuleCounter)
     }
 
     exportFEN(): string {
@@ -124,7 +128,7 @@ export class Board {
         FEN += castlingOptions || '-'
 
         FEN += ` ${this.enPassantTargetSquareNb ? squareNbToCoordinates(this.enPassantTargetSquareNb) : '-'}`
-        FEN += ` ${0} ${0}`
+        FEN += ` ${this.fiftyMovesRuleCounter} ${0}`
         return FEN
     }
 
@@ -142,7 +146,7 @@ export class Board {
 
     endOfGame(possibleMoves = this.possibleMoves()): EndOfGame | null {
         if (possibleMoves.length === 0) {
-            return this.isInCheck() ? 'checkmate' : 'stalemate'
+            return this.isInCheck() ? 'checkmate' : 'draw'
         } else return null
     }
 

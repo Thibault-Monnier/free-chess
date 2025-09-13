@@ -15,7 +15,7 @@ export type CanCastle = {
     white: { queenSide: boolean; kingSide: boolean }
     black: { queenSide: boolean; kingSide: boolean }
 }
-export type EndOfGame = 'checkmate' | 'stalemate'
+export type EndOfGame = 'checkmate' | 'draw'
 export type AttackTable = {
     attackedSquares: Bitboard
     pinnedPieces: Array<PinnedPiece>

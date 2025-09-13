@@ -4,7 +4,7 @@ import { Piece } from './pieces/Piece'
 import { squareNbToCoordinates, squareNbToFileRank } from './utils'
 
 export class Game {
-    private startingBoard: Board
+    private readonly startingBoard: Board
     private _moves: Move[] = []
     private _moveNb: number = 0
 
@@ -135,7 +135,7 @@ export class Game {
             notation += '#'
         } else if (endBoard.isInCheck()) {
             notation += '+'
-        } else if (endBoard.endOfGame() === 'stalemate') {
+        } else if (endBoard.endOfGame() === 'draw') {
             notation += '½'
         }
 

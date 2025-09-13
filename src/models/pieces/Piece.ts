@@ -5,7 +5,7 @@ import { FileRank, AttackTable, PieceColor, PieceName, MoveType } from '../types
 import { calculateAxisOffset, isBetweenSquares, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
-    constructor(public name: PieceName, public color: PieceColor) {}
+    protected constructor(public name: PieceName, public color: PieceColor) {}
 
     abstract possibleMoves(startSquareNb: number, board: Board, opponentAttackTable: AttackTable): Move[]
     abstract updateAttackTable(startSquareNb: number, board: Board, table: AttackTable): void
@@ -84,6 +84,11 @@ export abstract class Piece {
             if (postMove) postMove(endBoard)
 
             if (this.inCheckAfterMove(startSquareNb, endSquareNb, board, endBoard, opponentAttackTable)) return
+
+            let fiftyMovesRuleCounter = board.fiftyMovesRuleCounter + 1
+            if (fiftyMovesRuleCounter >= 100) return
+            if (this.name === 'pawn' || moveType === 'capture') fiftyMovesRuleCounter = 0 // Capture promotions are pawn moves anyway
+            endBoard.fiftyMovesRuleCounter = fiftyMovesRuleCounter
 
             const move = new Move(this, startSquareNb, endSquareNb, endBoard, moveType)
             moves.push(move)
@@ -177,8 +182,7 @@ export abstract class Piece {
                     rank: endFileRank.rank - startFileRank.rank,
                 }
                 const pinDirection = pinnedPiece.offset
-                if (moveOffset.file * pinDirection.rank !== moveOffset.rank * pinDirection.file)
-                    return true
+                if (moveOffset.file * pinDirection.rank !== moveOffset.rank * pinDirection.file) return true
             }
 
             if (kingAttackers.length > 1) return true

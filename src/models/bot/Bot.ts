@@ -62,7 +62,7 @@ export class Bot {
             const evaluation =
                 (this.checkmateScore - (this.depth - remainingDepth - 1)) * (board.colorToMove === 'white' ? -1 : 1)
             return { evaluation, moves: null }
-        } else if (endOfGame === 'stalemate') {
+        } else if (endOfGame === 'draw') {
             return { evaluation: 0, moves: null }
         }
 

@@ -161,9 +161,7 @@ export class Chess {
 
     private get isBotTurn(): boolean {
         if (this.playMode.mode === 'CvC') return true
-        if (this.playMode.mode === '1vC' && this.currentBoard.colorToMove !== this.playMode.playerColor) return true
-
-        return false
+        return this.playMode.mode === '1vC' && this.currentBoard.colorToMove !== this.playMode.playerColor
     }
 
     private get shouldShowBestMove(): boolean {
@@ -203,8 +201,8 @@ export class Chess {
                 } wins by checkmate!`
                 endOfGameElement.setAttribute('style', '')
                 break
-            case 'stalemate':
-                endOfGameText.innerText = 'Stalemate!'
+            case 'draw':
+                endOfGameText.innerText = 'Draw!'
                 endOfGameElement.setAttribute('style', '')
                 break
             case null:

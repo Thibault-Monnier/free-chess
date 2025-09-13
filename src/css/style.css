@@ -417,4 +417,5 @@ button:disabled {
 .reset_icon {
     height: 0.8em;
     width: 0.8em;
+    fill: none;
 }
