@@ -1,8 +1,8 @@
 import { Board } from '../Board'
 import { SerializedPiece } from '../serializedTypes'
 import { Move } from '../Move'
-import { FileRank, AttackTable, PieceColor, PieceLetter, PieceName, MoveType } from '../types'
-import { calculateAxisOffset, fileRankToSquareNb, isBetweenSquares, squareNbToFileRank } from '../utils'
+import { FileRank, AttackTable, PieceColor, PieceName, MoveType } from '../types'
+import { calculateAxisOffset, isBetweenSquares, squareNbToFileRank } from '../utils'
 
 export abstract class Piece {
     constructor(public name: PieceName, public color: PieceColor) {}
@@ -168,7 +168,18 @@ export abstract class Piece {
             const pinnedPiece = opponentAttackTable.pinnedPieces.find(
                 (pinnedPiece) => pinnedPiece.squareNb === startSquareNb
             )
-            if (pinnedPiece && (startSquareNb - endSquareNb) % fileRankToSquareNb(pinnedPiece.offset) !== 0) return true
+
+            if (pinnedPiece) {
+                const startFileRank = squareNbToFileRank(startSquareNb)
+                const endFileRank = squareNbToFileRank(endSquareNb)
+                const moveOffset = {
+                    file: endFileRank.file - startFileRank.file,
+                    rank: endFileRank.rank - startFileRank.rank,
+                }
+                const pinDirection = pinnedPiece.offset
+                if (moveOffset.file * pinDirection.rank !== moveOffset.rank * pinDirection.file)
+                    return true
+            }
 
             if (kingAttackers.length > 1) return true
 

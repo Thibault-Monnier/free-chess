@@ -77,6 +77,7 @@ describe('possibleMoves', () => {
 
     describe('pins', () => {
         it('detects a pin', () => expect(nbMoves('k7/8/8/n7/8/8/R7/K7 b - - 0 0')).toEqual(3))
+        it('detects a pin', () => expect(nbMoves('Q2bk/8/8/8/8/8/8/7K b - - 0 0')).toEqual(4))
 
         it('detects unpin when the pinned piece has the same movement offset as the pinning piece', () => {
             expect(nbMoves('k7/8/r7/8/Q7/8/8/K7 b - - 0 0')).toEqual(6)
