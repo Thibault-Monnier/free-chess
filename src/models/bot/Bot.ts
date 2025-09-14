@@ -4,6 +4,8 @@ import { Move } from '../Move'
 import { Evaluator } from './evaluator/Evaluator'
 
 export class Bot {
+    private evaluator = new Evaluator(this.board)
+
     private checkmateScore = 999999999
 
     // The following properties are only used for performance analysis
@@ -44,7 +46,8 @@ export class Bot {
 
         if (remainingDepth === 0) {
             //const startTimestamp = performance.now()
-            const evaluation = new Evaluator(board).run()
+            this.evaluator.updateBoard(board)
+            const evaluation = this.evaluator.run()
             //const endTimestamp = performance.now()
             //this.perfTimeEvals += endTimestamp - startTimestamp
             this.perfNbEvals++

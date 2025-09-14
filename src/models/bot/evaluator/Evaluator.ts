@@ -7,6 +7,10 @@ import { squareNbToFileRank } from '../../utils'
 export class Evaluator {
     constructor(public board: Board) {}
 
+    updateBoard(board: Board) {
+        this.board = board
+    }
+
     run(): number {
         let evaluation = 0
 
@@ -45,10 +49,13 @@ export class Evaluator {
             switch (piece.name) {
                 case 'bishop':
                     material = bishopValue
+                    break
                 case 'knight':
                     material = knightValue
+                    break
                 case 'queen':
                     material = queenValue
+                    break
                 case 'rook':
                     material = rookValue
             }
