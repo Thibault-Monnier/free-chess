@@ -87,7 +87,6 @@ export class Chess {
                 const analysisOn = this.toggleAnalysisOn
                 this.toggleAnalysisButtonActive()
                 this.toggleEvaluationDisplay(analysisOn)
-                if (this.shouldShowBestMove) this.calculateBestMove()
             }
         } else if (event.type === 'mousedown') {
             const squareNb = this.canvas.squareNbFromMouseEvent(event)
