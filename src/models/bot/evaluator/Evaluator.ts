@@ -58,6 +58,7 @@ export class Evaluator {
                     break
                 case 'rook':
                     material = rookValue
+                    break
             }
 
             if (piece.color === 'white') {

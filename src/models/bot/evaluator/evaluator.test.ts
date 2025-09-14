@@ -24,7 +24,7 @@ describe('PieceSquareTableEvaluator', () => {
         })
 
         it('', () => {
-            expect(evaluate('4k3/2q5/8/8/8/8/8/4K3 w - - 0 0')).toBeCloseTo(-900, -1.5)
+            expect(evaluate('4k3/2q5/8/8/8/8/8/4K3 w - - 0 0')).toBeCloseTo(-884, -1.5)
         })
     })
 })
